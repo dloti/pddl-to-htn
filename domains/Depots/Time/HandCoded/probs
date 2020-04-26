@@ -1,0 +1,34 @@
+# Hand-coded - scale things up.
+# seed depots distributors trucks pallets hoists crates
+
+# larger problems
+dgen 1818 -t 10 10 6 30 30 20 > pfile1
+dgen 7512 -t 10 10 6 30 30 40 > pfile2
+dgen 1935 -t 10 10 6 30 30 60 > pfile3
+dgen 6512 -t 10 10 6 30 30 80 > pfile4
+dgen 1212 -t 10 10 6 30 30 100 > pfile5
+dgen 5656 -t 10 10 6 30 30 150 > pfile6
+
+# Tighten resources
+dgen 1234 -t 10 10 6 40 20 40 > pfile7
+dgen 4321 -t 10 10 5 30 20 40 > pfile8
+dgen 5451 -t 10 10 4 20 20 40 > pfile9
+
+# Large stacks
+dgen 7654 -t 3 3 4 6 6 40 > pfile10
+dgen 8765 -t 3 3 4 6 6 60 > pfile11
+dgen 9876 -t 3 3 4 6 6 80 > pfile12
+dgen 5646 -t 3 3 6 10 10 60 > pfile13
+dgen 7654 -t 3 3 8 10 12 80 > pfile14
+dgen 4534 -t 3 3 8 10 12 100 > pfile15
+
+# Lots of surfaces - more like blocks world
+dgen 4398 -t 2 2 4 40 4 80 > pfile16
+dgen 6587 -t 2 2 4 40 6 100 > pfile17
+dgen 1916 -t 2 2 4 40 8 120 > pfile18
+
+# Increase scale
+dgen 6178 -t 10 10 10 50 30 80 > pfile19
+dgen 7615 -t 10 10 10 50 30 100 > pfile20
+dgen 8715 -t 10 10 10 50 30 150 > pfile21
+dgen 1817 -t 10 10 10 50 30 200 > pfile22

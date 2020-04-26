@@ -1,0 +1,1052 @@
+Opening interactive session...
+Loading file: tlplan-original-freecell.tlp
+"move" operator successor formula:
+(forall
+  (?card) 
+  (clear ?card) 
+  (forall
+    (?newcard) 
+    (clear ?newcard) 
+    (implies 
+      (canstack ?card ?newcard) 
+      (forall
+        (?oldcard) 
+        (on ?card ?oldcard) 
+        (modify-world 
+          (move ?card ?newcard) 
+          (and 
+            (del 
+              (on ?card ?oldcard) 
+              (clear ?newcard)) 
+            (add 
+              (on ?card ?newcard) 
+              (clear ?oldcard))))))))
+
+"sendtofree" operator successor formula:
+(and cansendtofree 
+  (forall
+    (?card) 
+    (clear ?card) 
+    (forall
+      (?oldcard) 
+      (on ?card ?oldcard) 
+      (forall
+        (?n) 
+        (cellspace ?n) 
+        (modify-world 
+          (sendtofree ?card) 
+          (and 
+            (del 
+              (on ?card ?oldcard) 
+              (clear ?card) 
+              (cellspace ?n)) 
+            (add 
+              (incell ?card) 
+              (clear ?oldcard) 
+              (cellspace 
+                (- ?n 1)))))))))
+
+"sendtonewcol" operator successor formula:
+(and cansendtonewcol 
+  (forall
+    (?card) 
+    (clear ?card) 
+    (implies 
+      (not 
+        (groundedstackbelow ?card)) 
+      (forall
+        (?oldcard) 
+        (on ?card ?oldcard) 
+        (forall
+          (?n) 
+          (colspace ?n) 
+          (modify-world 
+            (sendtonewcol ?card) 
+            (and 
+              (del 
+                (on ?card ?oldcard) 
+                (colspace ?n)) 
+              (add 
+                (bottomcol ?card) 
+                (clear ?oldcard) 
+                (colspace 
+                  (- ?n 1))))))))))
+
+"sendtohome" operator successor formula:
+(forall
+  (?card) 
+  (clear ?card) 
+  (forall
+    (?oldcard) 
+    (on ?card ?oldcard) 
+    (forall
+      (?homecard) 
+      (home ?homecard) 
+      (implies 
+        (cansendhome ?card ?homecard) 
+        (modify-world 
+          (sendtohome ?card ?homecard) 
+          (and 
+            (del 
+              (on ?card ?oldcard) 
+              (home ?homecard) 
+              (clear ?card)) 
+            (add 
+              (home ?card) 
+              (clear ?oldcard))))))))
+
+"move-b" operator successor formula:
+(forall
+  (?card) 
+  (clear ?card) 
+  (implies 
+    (bottomcol ?card) 
+    (forall
+      (?newcard) 
+      (clear ?newcard) 
+      (implies 
+        (canstack ?card ?newcard) 
+        (forall
+          (?n) 
+          (colspace ?n) 
+          (modify-world 
+            (move-b ?card ?newcard) 
+            (and 
+              (del 
+                (bottomcol ?card) 
+                (clear ?newcard) 
+                (colspace ?n)) 
+              (add 
+                (on ?card ?newcard) 
+                (colspace 
+                  (+ ?n 1))))))))))
+
+"sendtofree-b" operator successor formula:
+(and cansendtofree 
+  (forall
+    (?card) 
+    (clear ?card) 
+    (implies 
+      (bottomcol ?card) 
+      (forall
+        (?n1) 
+        (colspace ?n1) 
+        (forall
+          (?n2) 
+          (cellspace ?n2) 
+          (modify-world 
+            (sendtofree-b ?card) 
+            (and 
+              (del 
+                (bottomcol ?card) 
+                (clear ?card) 
+                (colspace ?n1) 
+                (cellspace ?n2)) 
+              (add 
+                (incell ?card) 
+                (colspace 
+                  (+ ?n1 1)) 
+                (cellspace 
+                  (- ?n2 1))))))))))
+
+"sendtohome-b" operator successor formula:
+(forall
+  (?card) 
+  (clear ?card) 
+  (implies 
+    (bottomcol ?card) 
+    (forall
+      (?homecard) 
+      (home ?homecard) 
+      (implies 
+        (cansendhome ?card ?homecard) 
+        (forall
+          (?n) 
+          (colspace ?n) 
+          (modify-world 
+            (sendtohome-b ?card ?homecard) 
+            (and 
+              (del 
+                (home ?homecard) 
+                (clear ?card) 
+                (bottomcol ?card) 
+                (colspace ?n)) 
+              (add 
+                (home ?card) 
+                (colspace 
+                  (+ ?n 1))))))))))
+
+"homefromfreecell" operator successor formula:
+(forall
+  (?card) 
+  (incell ?card) 
+  (forall
+    (?homecard) 
+    (home ?homecard) 
+    (implies 
+      (cansendhome ?card ?homecard) 
+      (forall
+        (?n) 
+        (cellspace ?n) 
+        (modify-world 
+          (homefromfreecell ?card) 
+          (and 
+            (del 
+              (incell ?card) 
+              (cellspace ?n) 
+              (home ?homecard)) 
+            (add 
+              (home ?card) 
+              (cellspace 
+                (+ ?n 1)))))))))
+
+"colfromfreecell" operator successor formula:
+(forall
+  (?card) 
+  (incell ?card) 
+  (forall
+    (?newcard) 
+    (clear ?newcard) 
+    (implies 
+      (canstack ?card ?newcard) 
+      (forall
+        (?n) 
+        (cellspace ?n) 
+        (modify-world 
+          (colfromfreecell ?card ?newcard) 
+          (and 
+            (del 
+              (incell ?card) 
+              (cellspace ?n) 
+              (clear ?newcard)) 
+            (add 
+              (cellspace 
+                (+ ?n 1)) 
+              (clear ?card) 
+              (on ?card ?newcard))))))))
+
+"newcolfromfreecell" operator successor formula:
+(and cansendtonewcol 
+  (forall
+    (?card) 
+    (incell ?card) 
+    (forall
+      (?n1) 
+      (colspace ?n1) 
+      (forall
+        (?n2) 
+        (cellspace ?n2) 
+        (modify-world 
+          (newcolfromfreecell ?card) 
+          (and 
+            (del 
+              (incell ?card) 
+              (colspace ?n1) 
+              (cellspace ?n2)) 
+            (add 
+              (bottomcol ?card) 
+              (clear ?card) 
+              (colspace 
+                (- ?n1 1)) 
+              (cellspace 
+                (+ ?n2 1)))))))))
+
+"movestack" operator successor formula:
+(forall
+  (?to) 
+  (clear ?to) 
+  (forall
+    (?card) 
+    (canstack ?card ?to) 
+    (implies 
+      (instack ?card) 
+      (forall
+        (?cellsp) 
+        (cellspace ?cellsp) 
+        (implies 
+          (> ?cellsp 0) 
+          (forall
+            (?colsp) 
+            (colspace ?colsp) 
+            (forall
+              (?stksize) 
+              (= 
+                (+ 1 
+                  (depth ?card)) ?stksize) 
+              (implies 
+                (> ?stksize 1) 
+                (forall
+                  (?maxstksize) 
+                  (= 
+                    (max-stack-size ?colsp ?cellsp) ?maxstksize) 
+                  (implies 
+                    (>= ?maxstksize ?stksize) 
+                    (modify-world 
+                      (movestack ?card ?to) 
+                      (and 
+                        (add 
+                          (on ?card ?to)) 
+                        (forall
+                          (?from) 
+                          (on ?card ?from) 
+                          (add 
+                            (clear ?from))) 
+                        (implies 
+                          (bottomcol ?card) 
+                          (add 
+                            (colspace 
+                              (+ 1 ?colsp)))) 
+                        (del 
+                          (clear ?to)) 
+                        (forall
+                          (?from) 
+                          (on ?card ?from) 
+                          (del 
+                            (on ?card ?from))) 
+                        (implies 
+                          (bottomcol ?card) 
+                          (del 
+                            (bottomcol ?card) 
+                            (colspace ?colsp)))))))))))))))
+
+"movestack-to-newcol" operator successor formula:
+(forall
+  (?colsp) 
+  (colspace ?colsp) 
+  (implies 
+    (> ?colsp 0) 
+    (forall
+      (?cellsp) 
+      (cellspace ?cellsp) 
+      (implies 
+        (> ?cellsp 0) 
+        (forall
+          (?card ?oldcard) 
+          (on ?card ?oldcard) 
+          (implies 
+            (and 
+              (instack ?card) 
+              (not 
+                (groundedstackbelow ?card))) 
+            (forall
+              (?stksize) 
+              (= 
+                (+ 1 
+                  (depth ?card)) ?stksize) 
+              (implies 
+                (> ?stksize 1) 
+                (forall
+                  (?maxstksize) 
+                  (= 
+                    (max-stack-size 
+                      (- ?colsp 1) ?cellsp) ?maxstksize) 
+                  (implies 
+                    (and 
+                      (>= ?maxstksize ?stksize) 
+                      (not 
+                        (and 
+                          (canstack ?card ?oldcard) 
+                          (>= ?maxstksize 
+                            (+ 1 ?stksize))))) 
+                    (modify-world 
+                      (movestack-to-newcol ?card) 
+                      (and 
+                        (add 
+                          (clear ?oldcard) 
+                          (bottomcol ?card) 
+                          (colspace 
+                            (- ?colsp 1))) 
+                        (del 
+                          (on ?card ?oldcard) 
+                          (colspace ?colsp))))))))))))))
+
+Planning "Game 1"
+--------------------------------------------------------------------------------
+Initial world: 
+Free Cells: 
+Home Cells: c0  d0  h0  s0  
+
+    c7  cj  d2  d5  dj  h5  h7  h9 
+    hk  s5  ck  da  dk  h3  cq  s9 
+    ha  dq  sk  sj  s2  c3  sa  d9 
+    d4  hq  c5  h4  c4  s7  ca  s10
+    hj  h10 d10 h8  s3  d7  c2  s4 
+    c8  sq  s8  c6  d6  c10 d3  d8 
+        h6  c9      s6          h2 
+
+
+Initial control formula is: 
+(always true)
+
+Goal formula is: 
+(and 
+  (home ck) 
+  (home dk) 
+  (home hk) 
+  (home sk))
+
+--------------------------------------------------------------------------------
+Planning completed.  Elapsed CPU time 2.350 sec.
+Plan found.
+Final world:
+
+Free Cells: 
+Home Cells: ck  dk  hk  sk  
+
+
+Worlds generated = 1079
+Worlds searched = 97
+Worlds pruned by temporal control = 0
+Worlds discarded by cycle check = 39
+Worlds unexamined = 942
+Plan length = 94
+At time 0.000000: 7 (sendtofree d3)
+At time 1.000000: 12 (sendtofree c2)
+At time 2.000000: 28 (sendtohome ca c0)
+At time 3.000000: 39 (homefromfreecell c2)
+At time 4.000000: 49 (sendtohome sa s0)
+At time 5.000000: 52 (sendtofree c8)
+At time 6.000000: 59 (move hj cq)
+At time 7.000000: 68 (move c10 hj)
+At time 8.000000: 82 (sendtofree d4)
+At time 9.000000: 97 (sendtohome ha h0)
+At time 10.000000: 108 (sendtohome h2 ha)
+At time 11.000000: 110 (move d8 c9)
+At time 12.000000: 130 (colfromfreecell d3 s4)
+At time 13.000000: 136 (sendtofree d7)
+At time 14.000000: 143 (move s7 d8)
+At time 15.000000: 161 (sendtohome c3 c2)
+At time 16.000000: 171 (sendtohome h3 h2)
+At time 17.000000: 172 (move h6 s7)
+At time 18.000000: 184 (move sq hk)
+At time 19.000000: 206 (sendtofree-b h5)
+At time 20.000000: 218 (newcolfromfreecell c8)
+At time 21.000000: 230 (colfromfreecell d7 c8)
+At time 22.000000: 234 (move c6 d7)
+At time 23.000000: 252 (sendtofree h8)
+At time 24.000000: 267 (sendtohome h4 h3)
+At time 25.000000: 280 (homefromfreecell h5)
+At time 26.000000: 293 (sendtohome h6 h5)
+At time 27.000000: 300 (sendtofree s6)
+At time 28.000000: 306 (move d6 s7)
+At time 29.000000: 326 (movestack hj sq)
+At time 30.000000: 327 (move h10 sj)
+At time 31.000000: 346 (movestack sj hq)
+At time 32.000000: 354 (sendtofree s3)
+At time 33.000000: 368 (sendtohome c4 c3)
+At time 34.000000: 373 (sendtohome s2 sa)
+At time 35.000000: 376 (homefromfreecell s3)
+At time 36.000000: 377 (move cq dk)
+At time 37.000000: 398 (sendtohome-b h7 h6)
+At time 38.000000: 415 (homefromfreecell h8)
+At time 39.000000: 443 (movestack c9 h10)
+At time 40.000000: 462 (sendtohome da d0)
+At time 41.000000: 476 (sendtofree s8)
+At time 42.000000: 496 (sendtofree d10)
+At time 43.000000: 522 (sendtohome c5 c4)
+At time 44.000000: 534 (sendtohome c6 c5)
+At time 45.000000: 545 (colfromfreecell s6 d7)
+At time 46.000000: 566 (movestack hj cq)
+At time 47.000000: 588 (movestack s4 d5)
+At time 48.000000: 612 (movestack-to-newcol hk)
+At time 49.000000: 623 (sendtohome-b c7 c6)
+At time 50.000000: 630 (sendtofree sk)
+At time 51.000000: 647 (newcolfromfreecell d10)
+At time 52.000000: 659 (movestack hj sq)
+At time 53.000000: 667 (sendtofree-b d10)
+At time 54.000000: 675 (newcolfromfreecell s8)
+At time 55.000000: 695 (movestack d7 s8)
+At time 56.000000: 704 (sendtohome-b c8 c7)
+At time 57.000000: 708 (sendtofree ck)
+At time 58.000000: 728 (sendtohome-b d2 da)
+At time 59.000000: 736 (sendtohome d3 d2)
+At time 60.000000: 745 (homefromfreecell d4)
+At time 61.000000: 759 (sendtohome s4 s3)
+At time 62.000000: 777 (sendtohome-b d5 d4)
+At time 63.000000: 792 (sendtohome d6 d5)
+At time 64.000000: 812 (movestack-to-newcol hq)
+At time 65.000000: 815 (sendtofree dq)
+At time 66.000000: 831 (sendtohome s5 s4)
+At time 67.000000: 838 (sendtohome s6 s5)
+At time 68.000000: 847 (sendtohome s7 s6)
+At time 69.000000: 855 (sendtohome d7 d6)
+At time 70.000000: 863 (sendtohome d8 d7)
+At time 71.000000: 872 (sendtohome c9 c8)
+At time 72.000000: 882 (sendtohome c10 c9)
+At time 73.000000: 894 (sendtohome-b cj c10)
+At time 74.000000: 905 (sendtohome cq cj)
+At time 75.000000: 915 (homefromfreecell ck)
+At time 76.000000: 928 (sendtohome-b s8 s7)
+At time 77.000000: 933 (move s10 hj)
+At time 78.000000: 951 (sendtohome d9 d8)
+At time 79.000000: 963 (sendtohome s9 s8)
+At time 80.000000: 976 (sendtohome-b h9 h8)
+At time 81.000000: 986 (sendtohome h10 h9)
+At time 82.000000: 997 (sendtohome s10 s9)
+At time 83.000000: 1008 (sendtohome hj h10)
+At time 84.000000: 1021 (sendtohome sj s10)
+At time 85.000000: 1033 (sendtohome-b hq hj)
+At time 86.000000: 1042 (sendtohome sq sj)
+At time 87.000000: 1050 (sendtohome-b hk hq)
+At time 88.000000: 1059 (homefromfreecell sk)
+At time 89.000000: 1065 (homefromfreecell d10)
+At time 90.000000: 1068 (sendtofree dk)
+At time 91.000000: 1072 (sendtohome-b dj d10)
+At time 92.000000: 1075 (homefromfreecell dq)
+At time 93.000000: 1078 (homefromfreecell dk)
+At time 94.000000: Plan completed
+Plan cost: 9400.000000
+--------------------------------------------------------------------------------
+Planning "Game 2"
+--------------------------------------------------------------------------------
+Initial world: 
+Free Cells: 
+Home Cells: c0  d0  h0  s0  
+
+    c2  c3  c4  c5  ck  cq  dk  dq 
+    d6  h6  sq  c9  sj  dj  d2  d4 
+    s4  c6  s8  hq  c8  cj  d5  d10
+    h4  c7  s6  h8  sk  d9  ca  s7 
+    s10 s2  s3  h2  c10 s9  h9  ha 
+    d8  d3  h5  d7  h7  da  hk  h3 
+        hj          h10 s5      sa 
+
+
+Initial control formula is: 
+(always true)
+
+Goal formula is: 
+(and 
+  (home ck) 
+  (home dk) 
+  (home hk) 
+  (home sk))
+
+--------------------------------------------------------------------------------
+Planning completed.  Elapsed CPU time 2.250 sec.
+Plan found.
+Final world:
+
+Free Cells: 
+Home Cells: ck  dk  hk  sk  
+
+
+Worlds generated = 1081
+Worlds searched = 95
+Worlds pruned by temporal control = 0
+Worlds discarded by cycle check = 38
+Worlds unexamined = 949
+Plan length = 87
+At time 0.000000: 9 (sendtohome sa s0)
+At time 1.000000: 13 (sendtofree h3)
+At time 2.000000: 26 (sendtohome ha h0)
+At time 3.000000: 34 (sendtofree s5)
+At time 4.000000: 45 (sendtohome da d0)
+At time 5.000000: 54 (sendtofree hk)
+At time 6.000000: 57 (move d8 s9)
+At time 7.000000: 68 (move h9 s10)
+At time 8.000000: 89 (sendtohome ca c0)
+At time 9.000000: 101 (movestack s9 h10)
+At time 10.000000: 112 (move s7 d8)
+At time 11.000000: 124 (sendtofree d7)
+At time 12.000000: 167 (sendtohome h2 ha)
+At time 13.000000: 169 (homefromfreecell h3)
+At time 14.000000: 179 (movestack s10 hj)
+At time 15.000000: 189 (sendtohome h4 h3)
+At time 16.000000: 201 (sendtohome h5 h4)
+At time 17.000000: 202 (move s4 d5)
+At time 18.000000: 212 (move d6 s7)
+At time 19.000000: 232 (colfromfreecell s5 d6)
+At time 20.000000: 237 (sendtofree h9)
+At time 21.000000: 253 (sendtohome-b c2 ca)
+At time 22.000000: 277 (movestack-to-newcol hj)
+At time 23.000000: 278 (move d3 s4)
+At time 24.000000: 299 (sendtohome s2 sa)
+At time 25.000000: 311 (sendtohome s3 s2)
+At time 26.000000: 314 (move c7 h8)
+At time 27.000000: 335 (colfromfreecell h9 s10)
+At time 28.000000: 347 (movestack d5 s6)
+At time 29.000000: 356 (sendtohome d2 da)
+At time 30.000000: 366 (sendtohome d3 d2)
+At time 31.000000: 377 (sendtohome s4 s3)
+At time 32.000000: 389 (sendtohome s5 s4)
+At time 33.000000: 394 (sendtofree c6)
+At time 34.000000: 411 (sendtohome h6 h5)
+At time 35.000000: 422 (sendtohome-b c3 c2)
+At time 36.000000: 441 (movestack-to-newcol s6)
+At time 37.000000: 444 (move s8 d9)
+At time 38.000000: 457 (move sq dk)
+At time 39.000000: 478 (sendtohome-b c4 c3)
+At time 40.000000: 500 (movestack-to-newcol h8)
+At time 41.000000: 512 (colfromfreecell d7 s8)
+At time 42.000000: 513 (move d6 c7)
+At time 43.000000: 535 (colfromfreecell c6 d7)
+At time 44.000000: 540 (move d5 c6)
+At time 45.000000: 563 (sendtohome-b s6 s5)
+At time 46.000000: 579 (sendtohome s7 s6)
+At time 47.000000: 602 (movestack-to-newcol h10)
+At time 48.000000: 612 (sendtohome h7 h6)
+At time 49.000000: 628 (movestack c7 d8)
+At time 50.000000: 640 (sendtohome-b h8 h7)
+At time 51.000000: 657 (sendtohome h9 h8)
+At time 52.000000: 665 (sendtofree d10)
+At time 53.000000: 692 (sendtohome d4 d3)
+At time 54.000000: 708 (sendtohome d5 d4)
+At time 55.000000: 725 (sendtohome d6 d5)
+At time 56.000000: 734 (sendtofree c6)
+At time 57.000000: 758 (sendtohome d7 d6)
+At time 58.000000: 777 (sendtohome s8 s7)
+At time 59.000000: 789 (sendtofree c7)
+At time 60.000000: 807 (sendtohome d8 d7)
+At time 61.000000: 819 (sendtohome s9 s8)
+At time 62.000000: 831 (sendtohome-b h10 h9)
+At time 63.000000: 841 (sendtohome d9 d8)
+At time 64.000000: 853 (homefromfreecell d10)
+At time 65.000000: 869 (sendtohome s10 s9)
+At time 66.000000: 888 (sendtohome-b hj h10)
+At time 67.000000: 901 (sendtohome hq hj)
+At time 68.000000: 915 (homefromfreecell hk)
+At time 69.000000: 921 (sendtofree c9)
+At time 70.000000: 938 (sendtohome-b c5 c4)
+At time 71.000000: 949 (homefromfreecell c6)
+At time 72.000000: 960 (homefromfreecell c7)
+At time 73.000000: 964 (sendtofree c10)
+At time 74.000000: 973 (sendtofree sk)
+At time 75.000000: 987 (sendtohome c8 c7)
+At time 76.000000: 999 (sendtohome sj s10)
+At time 77.000000: 1009 (sendtohome sq sj)
+At time 78.000000: 1025 (homefromfreecell sk)
+At time 79.000000: 1036 (homefromfreecell c9)
+At time 80.000000: 1046 (homefromfreecell c10)
+At time 81.000000: 1051 (sendtohome cj c10)
+At time 82.000000: 1057 (sendtohome dj d10)
+At time 83.000000: 1069 (sendtohome-b cq cj)
+At time 84.000000: 1075 (sendtohome-b ck cq)
+At time 85.000000: 1079 (sendtohome-b dq dj)
+At time 86.000000: 1081 (sendtohome-b dk dq)
+At time 87.000000: Plan completed
+Plan cost: 8700.000000
+--------------------------------------------------------------------------------
+Planning "Game 3"
+--------------------------------------------------------------------------------
+Initial world: 
+Free Cells: 
+Home Cells: c0  d0  h0  s0  
+
+    ck  cq  d2  d4  h10 h7  h8  s6 
+    d7  d9  hj  dq  c9  sj  s8  sq 
+    c10 s10 hq  da  c7  d5  sk  h6 
+    h4  dj  sa  hk  d3  d8  d6  ca 
+    c6  s2  d10 s3  s7  c3  dk  h9 
+    s9  h3  c2  h5  cj  c4  h2  ha 
+    c8  s5  s4          c5         
+
+
+Initial control formula is: 
+(always true)
+
+Goal formula is: 
+(and 
+  (home ck) 
+  (home dk) 
+  (home hk) 
+  (home sk))
+
+--------------------------------------------------------------------------------
+Planning completed.  Elapsed CPU time 3.510 sec.
+Plan found.
+Final world:
+
+Free Cells: 
+Home Cells: ck  dk  hk  sk  
+
+
+Worlds generated = 1577
+Worlds searched = 148
+Worlds pruned by temporal control = 0
+Worlds discarded by cycle check = 115
+Worlds unexamined = 1315
+Plan length = 89
+At time 0.000000: 10 (sendtohome ha h0)
+At time 1.000000: 21 (sendtohome h2 ha)
+At time 2.000000: 29 (sendtofree h9)
+At time 3.000000: 41 (sendtohome ca c0)
+At time 4.000000: 51 (sendtofree s4)
+At time 5.000000: 63 (sendtohome c2 ca)
+At time 6.000000: 66 (move d10 cj)
+At time 7.000000: 87 (sendtohome sa s0)
+At time 8.000000: 90 (move s5 h6)
+At time 9.000000: 109 (sendtohome h3 h2)
+At time 10.000000: 120 (sendtohome s2 sa)
+At time 11.000000: 128 (sendtofree h5)
+At time 12.000000: 141 (sendtohome s3 s2)
+At time 13.000000: 151 (homefromfreecell s4)
+At time 14.000000: 161 (sendtohome s5 s4)
+At time 15.000000: 170 (sendtofree hk)
+At time 16.000000: 182 (sendtohome da d0)
+At time 17.000000: 184 (move c5 h6)
+At time 18.000000: 203 (movestack cj dq)
+At time 19.000000: 214 (movestack h6 s7)
+At time 20.000000: 216 (move sq dk)
+At time 21.000000: 235 (sendtohome-b s6 s5)
+At time 22.000000: 259 (movestack-to-newcol h6)
+At time 23.000000: 269 (sendtohome s7 s6)
+At time 24.000000: 273 (move dj sq)
+At time 25.000000: 293 (colfromfreecell h9 s10)
+At time 26.000000: 295 (move c8 h9)
+At time 27.000000: 308 (move s9 d10)
+At time 28.000000: 320 (sendtofree c4)
+At time 29.000000: 349 (sendtohome c3 c2)
+At time 30.000000: 360 (homefromfreecell c4)
+At time 31.000000: 371 (sendtohome c5 c4)
+At time 32.000000: 383 (sendtohome c6 c5)
+At time 33.000000: 396 (sendtohome h4 h3)
+At time 34.000000: 410 (homefromfreecell h5)
+At time 35.000000: 424 (sendtohome-b h6 h5)
+At time 36.000000: 448 (movestack-to-newcol dk)
+At time 37.000000: 459 (sendtofree hq)
+At time 38.000000: 466 (move d8 s9)
+At time 39.000000: 487 (sendtofree hj)
+At time 40.000000: 500 (sendtohome-b d2 da)
+At time 41.000000: 516 (sendtohome d3 d2)
+At time 42.000000: 540 (sendtohome c7 c6)
+At time 43.000000: 562 (sendtohome c8 c7)
+At time 44.000000: 585 (sendtohome c9 c8)
+At time 45.000000: 605 (sendtohome c10 c9)
+At time 46.000000: 630 (movestack s9 h10)
+At time 47.000000: 633 (sendtofree d10)
+At time 48.000000: 899 (sendtohome cj c10)
+At time 49.000000: 910 (newcolfromfreecell d10)
+At time 50.000000: 922 (movestack s9 d10)
+At time 51.000000: 1035 (sendtofree-b h10)
+At time 52.000000: 1045 (newcolfromfreecell hk)
+At time 53.000000: 1066 (movestack sq hk)
+At time 54.000000: 1075 (movestack s10 dj)
+At time 55.000000: 1084 (sendtofree-b dk)
+At time 56.000000: 1091 (newcolfromfreecell h10)
+At time 57.000000: 1102 (movestack s9 h10)
+At time 58.000000: 1110 (sendtofree-b d10)
+At time 59.000000: 1119 (newcolfromfreecell hj)
+At time 60.000000: 1137 (movestack s10 hj)
+At time 61.000000: 1144 (sendtofree dq)
+At time 62.000000: 1305 (sendtohome-b d4 d3)
+At time 63.000000: 1310 (sendtohome d5 d4)
+At time 64.000000: 1319 (sendtohome d6 d5)
+At time 65.000000: 1329 (sendtohome d7 d6)
+At time 66.000000: 1340 (sendtohome d8 d7)
+At time 67.000000: 1353 (sendtohome d9 d8)
+At time 68.000000: 1367 (homefromfreecell d10)
+At time 69.000000: 1388 (sendtohome-b cq cj)
+At time 70.000000: 1408 (sendtohome-b ck cq)
+At time 71.000000: 1425 (sendtohome dj d10)
+At time 72.000000: 1440 (homefromfreecell dq)
+At time 73.000000: 1455 (homefromfreecell dk)
+At time 74.000000: 1463 (sendtofree sj)
+At time 75.000000: 1478 (sendtohome-b h7 h6)
+At time 76.000000: 1485 (sendtofree sk)
+At time 77.000000: 1498 (sendtohome s8 s7)
+At time 78.000000: 1509 (sendtohome-b h8 h7)
+At time 79.000000: 1517 (sendtohome h9 h8)
+At time 80.000000: 1526 (sendtohome s9 s8)
+At time 81.000000: 1533 (sendtohome s10 s9)
+At time 82.000000: 1544 (sendtohome-b h10 h9)
+At time 83.000000: 1552 (sendtohome-b hj h10)
+At time 84.000000: 1559 (homefromfreecell sj)
+At time 85.000000: 1564 (sendtohome sq sj)
+At time 86.000000: 1570 (homefromfreecell sk)
+At time 87.000000: 1574 (homefromfreecell hq)
+At time 88.000000: 1577 (sendtohome-b hk hq)
+At time 89.000000: Plan completed
+Plan cost: 8900.000000
+--------------------------------------------------------------------------------
+Planning "Game 4"
+--------------------------------------------------------------------------------
+Initial world: 
+Free Cells: 
+Home Cells: c0  d0  h0  s0  
+
+    cq  d3  d5  dk  s3  s6  sj  sk 
+    ca  hk  ha  d9  c5  c6  c8  c2 
+    s10 sq  h4  s2  s7  hq  d4  d6 
+    s5  sa  d8  c4  c3  h5  h8  s9 
+    h10 c7  h7  h2  d10 hj  h3  c10
+    dq  ck  s8  h6  dj  h9  d2  cj 
+    d7  s4                  da  c9 
+
+
+Initial control formula is: 
+(always true)
+
+Goal formula is: 
+(and 
+  (home ck) 
+  (home dk) 
+  (home hk) 
+  (home sk))
+
+--------------------------------------------------------------------------------
+Planning completed.  Elapsed CPU time 3.870 sec.
+Plan found.
+Final world:
+
+Free Cells: 
+Home Cells: ck  dk  hk  sk  
+
+
+Worlds generated = 1600
+Worlds searched = 155
+Worlds pruned by temporal control = 0
+Worlds discarded by cycle check = 196
+Worlds unexamined = 1250
+Plan length = 98
+At time 0.000000: 11 (sendtohome da d0)
+At time 1.000000: 22 (sendtohome d2 da)
+At time 2.000000: 32 (sendtofree s4)
+At time 3.000000: 37 (sendtofree ck)
+At time 4.000000: 47 (sendtofree c7)
+At time 5.000000: 65 (sendtohome sa s0)
+At time 6.000000: 68 (move s8 h9)
+At time 7.000000: 79 (move h7 s8)
+At time 8.000000: 88 (move d8 c9)
+At time 9.000000: 108 (colfromfreecell c7 d8)
+At time 10.000000: 110 (move h6 c7)
+At time 11.000000: 124 (sendtofree h4)
+At time 12.000000: 137 (sendtohome ha h0)
+At time 13.000000: 146 (sendtohome h2 ha)
+At time 14.000000: 159 (sendtohome h3 h2)
+At time 15.000000: 172 (homefromfreecell h4)
+At time 16.000000: 175 (move c4 d5)
+At time 17.000000: 196 (sendtohome s2 sa)
+At time 18.000000: 207 (movestack s8 d9)
+At time 19.000000: 216 (sendtofree h9)
+At time 20.000000: 318 (movestack c7 h8)
+At time 21.000000: 320 (move hj sq)
+At time 22.000000: 410 (sendtohome h5 h4)
+At time 23.000000: 421 (sendtohome h6 h5)
+At time 24.000000: 432 (sendtohome h7 h6)
+At time 25.000000: 434 (move d7 s8)
+At time 26.000000: 443 (move c7 d8)
+At time 27.000000: 461 (sendtohome h8 h7)
+At time 28.000000: 470 (homefromfreecell h9)
+At time 29.000000: 476 (sendtofree dq)
+At time 30.000000: 487 (sendtohome h10 h9)
+At time 31.000000: 497 (sendtohome hj h10)
+At time 32.000000: 508 (sendtohome hq hj)
+At time 33.000000: 520 (movestack d5 c6)
+At time 34.000000: 543 (movestack-to-newcol hk)
+At time 35.000000: 556 (sendtohome-b d3 d2)
+At time 36.000000: 558 (move dj sq)
+At time 37.000000: 587 (sendtofree s5)
+At time 38.000000: 603 (move s10 dj)
+At time 39.000000: 621 (sendtohome ca c0)
+At time 40.000000: 632 (sendtohome d4 d3)
+At time 41.000000: 637 (move d7 c8)
+At time 42.000000: 653 (newcolfromfreecell ck)
+At time 43.000000: 666 (colfromfreecell dq ck)
+At time 44.000000: 671 (sendtofree c7)
+At time 45.000000: 693 (movestack c9 d10)
+At time 46.000000: 695 (move cj dq)
+At time 47.000000: 720 (movestack d9 s10)
+At time 48.000000: 728 (move-b cq dk)
+At time 49.000000: 750 (movestack d10 cj)
+At time 50.000000: 757 (sendtofree c10)
+At time 51.000000: 783 (colfromfreecell c7 d8)
+At time 52.000000: 795 (sendtofree s9)
+At time 53.000000: 808 (move d6 c7)
+At time 54.000000: 824 (sendtohome c2 ca)
+At time 55.000000: 834 (sendtohome c3 c2)
+At time 56.000000: 845 (sendtohome c4 c3)
+At time 57.000000: 856 (sendtohome d5 d4)
+At time 58.000000: 869 (sendtohome d6 d5)
+At time 59.000000: 880 (sendtohome d7 d6)
+At time 60.000000: 888 (newcolfromfreecell c10)
+At time 61.000000: 899 (sendtofree-b sk)
+At time 62.000000: 904 (newcolfromfreecell s4)
+At time 63.000000: 914 (sendtofree-b c10)
+At time 64.000000: 921 (newcolfromfreecell s5)
+At time 65.000000: 930 (sendtofree-b s4)
+At time 66.000000: 937 (newcolfromfreecell s9)
+At time 67.000000: 947 (movestack d8 s9)
+At time 68.000000: 962 (sendtofree-b s5)
+At time 69.000000: 967 (newcolfromfreecell c10)
+At time 70.000000: 976 (sendtofree s7)
+At time 71.000000: 1337 (sendtohome c5 c4)
+At time 72.000000: 1339 (sendtohome-b s3 s2)
+At time 73.000000: 1343 (homefromfreecell s4)
+At time 74.000000: 1356 (sendtohome c6 c5)
+At time 75.000000: 1371 (sendtohome c7 c6)
+At time 76.000000: 1392 (homefromfreecell s5)
+At time 77.000000: 1410 (sendtohome-b s6 s5)
+At time 78.000000: 1426 (homefromfreecell s7)
+At time 79.000000: 1439 (sendtohome c8 c7)
+At time 80.000000: 1451 (sendtohome c9 c8)
+At time 81.000000: 1469 (sendtohome-b c10 c9)
+At time 82.000000: 1479 (sendtohome d8 d7)
+At time 83.000000: 1489 (sendtohome s8 s7)
+At time 84.000000: 1499 (sendtohome d9 d8)
+At time 85.000000: 1514 (sendtohome-b s9 s8)
+At time 86.000000: 1521 (sendtohome d10 d9)
+At time 87.000000: 1530 (sendtohome s10 s9)
+At time 88.000000: 1538 (sendtohome cj c10)
+At time 89.000000: 1547 (sendtohome cq cj)
+At time 90.000000: 1555 (sendtohome dj d10)
+At time 91.000000: 1569 (sendtohome-b sj s10)
+At time 92.000000: 1574 (sendtohome dq dj)
+At time 93.000000: 1583 (sendtohome-b ck cq)
+At time 94.000000: 1590 (sendtohome-b dk dq)
+At time 95.000000: 1593 (sendtohome sq sj)
+At time 96.000000: 1596 (sendtohome-b hk hq)
+At time 97.000000: 1599 (homefromfreecell sk)
+At time 98.000000: Plan completed
+Plan cost: 9800.000000
+--------------------------------------------------------------------------------
+Planning "Game 5"
+--------------------------------------------------------------------------------
+Initial world: 
+Free Cells: 
+Home Cells: c0  d0  h0  s0  
+
+    c4  d2  d3  h9  ha  s2  s8  sq 
+    d4  c9  s4  c2  c5  c3  sa  hk 
+    dk  ck  d8  h5  s3  s6  d5  h3 
+    h8  dj  d7  hj  d10 cj  s7  h7 
+    sk  c8  ca  dq  s5  h4  hq  d9 
+    h6  h10 sj  c6  h2  cq  c10 d6 
+        c7          s9      da  s10
+
+
+Initial control formula is: 
+(always true)
+
+Goal formula is: 
+(and 
+  (home ck) 
+  (home dk) 
+  (home hk) 
+  (home sk))
+
+--------------------------------------------------------------------------------
+Planning completed.  Elapsed CPU time 3.540 sec.
+Plan found.
+Final world:
+
+Free Cells: 
+Home Cells: ck  dk  hk  sk  
+
+
+Worlds generated = 1465
+Worlds searched = 126
+Worlds pruned by temporal control = 0
+Worlds discarded by cycle check = 109
+Worlds unexamined = 1231
+Plan length = 107
+At time 0.000000: 10 (sendtohome da d0)
+At time 1.000000: 19 (sendtofree sj)
+At time 2.000000: 29 (sendtohome ca c0)
+At time 3.000000: 30 (move c6 d7)
+At time 4.000000: 41 (sendtofree c10)
+At time 5.000000: 54 (sendtofree dq)
+At time 6.000000: 84 (move hj cq)
+At time 7.000000: 96 (move h5 c6)
+At time 8.000000: 119 (sendtohome c2 ca)
+At time 9.000000: 131 (move-b h9 s10)
+At time 10.000000: 157 (movestack-to-newcol cq)
+At time 11.000000: 168 (colfromfreecell c10 hj)
+At time 12.000000: 174 (sendtofree c7)
+At time 13.000000: 227 (move s9 h10)
+At time 14.000000: 237 (move h9 c10)
+At time 15.000000: 256 (colfromfreecell sj hq)
+At time 16.000000: 326 (sendtofree h2)
+At time 17.000000: 337 (move s5 h6)
+At time 18.000000: 348 (move h4 s5)
+At time 19.000000: 360 (move d10 cj)
+At time 20.000000: 376 (move s3 h4)
+At time 21.000000: 399 (colfromfreecell h2 s3)
+At time 22.000000: 405 (sendtofree c5)
+At time 23.000000: 426 (sendtohome-b ha h0)
+At time 24.000000: 444 (sendtohome h2 ha)
+At time 25.000000: 478 (movestack-to-newcol hq)
+At time 26.000000: 490 (movestack h10 sj)
+At time 27.000000: 491 (move c8 h9)
+At time 28.000000: 502 (move s10 dj)
+At time 29.000000: 523 (colfromfreecell c5 d6)
+At time 30.000000: 548 (movestack d7 c8)
+At time 31.000000: 588 (move s7 d8)
+At time 32.000000: 611 (movestack d6 s7)
+At time 33.000000: 617 (sendtofree d5)
+At time 34.000000: 634 (sendtohome sa s0)
+At time 35.000000: 646 (sendtofree-b s8)
+At time 36.000000: 656 (newcolfromfreecell c7)
+At time 37.000000: 671 (movestack h4 c5)
+At time 38.000000: 682 (sendtofree-b c7)
+At time 39.000000: 696 (newcolfromfreecell dq)
+At time 40.000000: 721 (movestack cj dq)
+At time 41.000000: 725 (move s9 d10)
+At time 42.000000: 750 (movestack h4 s5)
+At time 43.000000: 751 (move d9 s10)
+At time 44.000000: 780 (move s6 h7)
+At time 45.000000: 804 (sendtohome c3 c2)
+At time 46.000000: 818 (sendtohome-b s2 sa)
+At time 47.000000: 835 (sendtohome s3 s2)
+At time 48.000000: 868 (movestack d8 s9)
+At time 49.000000: 887 (sendtohome s4 s3)
+At time 50.000000: 897 (move h4 c5)
+At time 51.000000: 929 (sendtohome s5 s4)
+At time 52.000000: 950 (sendtohome s6 s5)
+At time 53.000000: 978 (movestack-to-newcol s10)
+At time 54.000000: 987 (colfromfreecell s8 d9)
+At time 55.000000: 991 (move h7 s8)
+At time 56.000000: 1011 (sendtohome h3 h2)
+At time 57.000000: 1022 (sendtohome h4 h3)
+At time 58.000000: 1034 (sendtohome h5 h4)
+At time 59.000000: 1046 (sendtohome h6 h5)
+At time 60.000000: 1057 (sendtohome h7 h6)
+At time 61.000000: 1067 (sendtofree sk)
+At time 62.000000: 1080 (sendtohome h8 h7)
+At time 63.000000: 1094 (movestack d7 s8)
+At time 64.000000: 1103 (colfromfreecell d5 c6)
+At time 65.000000: 1108 (sendtofree dj)
+At time 66.000000: 1122 (sendtofree-b d3)
+At time 67.000000: 1126 (newcolfromfreecell c7)
+At time 68.000000: 1138 (movestack d6 c7)
+At time 69.000000: 1147 (sendtohome s7 s6)
+At time 70.000000: 1157 (movestack s9 h10)
+At time 71.000000: 1160 (sendtofree ck)
+At time 72.000000: 1167 (move c9 d10)
+At time 73.000000: 1170 (sendtohome-b d2 da)
+At time 74.000000: 1174 (homefromfreecell d3)
+At time 75.000000: 1185 (sendtofree dk)
+At time 76.000000: 1198 (sendtohome d4 d3)
+At time 77.000000: 1207 (sendtohome-b c4 c3)
+At time 78.000000: 1215 (sendtohome d5 d4)
+At time 79.000000: 1222 (sendtohome c5 c4)
+At time 80.000000: 1229 (sendtohome c6 c5)
+At time 81.000000: 1238 (sendtohome d6 d5)
+At time 82.000000: 1246 (sendtohome d7 d6)
+At time 83.000000: 1258 (sendtohome-b c7 c6)
+At time 84.000000: 1265 (sendtohome c8 c7)
+At time 85.000000: 1275 (sendtohome c9 c8)
+At time 86.000000: 1286 (sendtohome h9 h8)
+At time 87.000000: 1294 (sendtohome d8 d7)
+At time 88.000000: 1303 (sendtohome s8 s7)
+At time 89.000000: 1312 (sendtohome d9 d8)
+At time 90.000000: 1322 (sendtohome s9 s8)
+At time 91.000000: 1331 (sendtohome-b s10 s9)
+At time 92.000000: 1338 (sendtohome d10 d9)
+At time 93.000000: 1348 (homefromfreecell dj)
+At time 94.000000: 1359 (sendtohome c10 c9)
+At time 95.000000: 1372 (sendtohome h10 h9)
+At time 96.000000: 1382 (sendtohome cj c10)
+At time 97.000000: 1394 (sendtohome hj h10)
+At time 98.000000: 1406 (sendtohome sj s10)
+At time 99.000000: 1421 (sendtohome-b cq cj)
+At time 100.000000: 1433 (homefromfreecell ck)
+At time 101.000000: 1441 (sendtohome-b dq dj)
+At time 102.000000: 1449 (homefromfreecell dk)
+At time 103.000000: 1455 (sendtohome-b hq hj)
+At time 104.000000: 1459 (sendtohome hk hq)
+At time 105.000000: 1462 (sendtohome-b sq sj)
+At time 106.000000: 1464 (homefromfreecell sk)
+At time 107.000000: Plan completed
+Plan cost: 10700.000000
+--------------------------------------------------------------------------------

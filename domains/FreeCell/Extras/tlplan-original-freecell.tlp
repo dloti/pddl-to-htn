@@ -1,0 +1,846 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; FreeCellWorld.tlp
+;;; TLPlanner Free cell game playing domain, with heuristics.
+;;; Written by Nolan Andres and Robert HillHouse (CS 486/686 Final Project)
+;;; Heuristics and macro moves by Fahiem Bacchus.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Cards are represented by the symbols 
+;;;		ca, c2, ..., cj, cq, ck.
+;;;		da, d2, ..., dj, dq, dk.
+;;;		ha, h2, ..., hj, hq, gk.
+;;;		sa, s2, ..., sj, sq, sk.
+;;;		(c0, d0, h0, s0 indicate an empty card of a certain suit).
+;;; 
+;;; Where:
+;;;		c = clubs, d = diamonds, h = hearts, s = spades.
+;;;		a = ace, j = jack, q = queen, k = king.
+;;;
+;;; Described Functions:
+;;; 
+;;; (value card)  --- the face value of the card. (1, ..., 13)
+;;; (suit card)   --- the suit of the card. (c, d, h, s)
+;;; (colour suit) --- the colour of a suit. (r, b).
+;;;
+;;; Described Predicates:
+;;;
+;;; (on card1 card2)	-- card1 is on card2
+;;; (incell card)		-- card is in a freecell.
+;;; (clear card)		-- card is clear.
+;;; (cellspace n)		-- there are n free freecells.
+;;; (colspace n)		-- there are n free columns.
+;;; (home card)			-- card is a top card in a home stack.
+;;;						we use the special (home c0),
+;;;						(home d0), (home h0), (home s0).
+;;;						to indicate that home is empty for a
+;;;						particular suit.
+;;; (bottomcol card)	-- card is at the bottom of a stack.
+;;; (maxcard card)		-- card is the maximum card of its suit.
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Initialization
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(clear-world-symbols)			;Remove old domain symbols
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 1. The world symbols.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(declare-described-symbols
+ (predicate on 2)
+ (predicate incell 1)
+ (predicate clear 1)
+ (predicate cellspace 1)
+ (predicate colspace 1)
+ (predicate home 1)
+ (predicate bottomcol 1)
+ (predicate maxcard 1)
+ (predicate canstack 2)
+ (function suit 1)
+ (function value 1)
+ (function next-in-suit 1)
+ (function colour 1))
+
+(declare-defined-symbols
+ (predicate cansendhome 2)
+ (predicate cansendtofree 0)
+ (predicate cansendtonewcol 0)
+ (predicate instack 1)
+ (predicate perfectstack 1)
+ (predicate perfectstackbelow 1)
+ (predicate groundedstack 1)
+ (predicate groundedstackbelow 1)
+ (predicate print-freecell-world 1)
+ (predicate print-home-and-free-cells 1)
+ (predicate accumulate-stack 1)
+ (function depth 1)
+ (function num-out-of-sequence 1)
+ (function depth-penalty 2) 
+ (function cards-remaining 0)
+ (function space-penalty 0)
+ (function total-depth-penalty 0)
+ (function home-balance 0)
+ (function out-of-sequence-penalty 0)
+ (function heuristic 0)
+ (function max-stack-size 2))
+
+(declare-external-symbols "/w/12/fbacchus/TLPLAN-V3.0/C-version/tlplan/userlib/freecell"
+			  (predicate stack-card "StackCard" 1)
+			  (predicate end-stack "EndStack" 0)
+			  (predicate print-stacks "PrintStacks" 1)
+			  (function random-freecell-game "RandomFreeCellGame" 2))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 2. Define the described symbols.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Functions and predicates that never change. 
+;;; These nust be specified as part of the initial state!
+
+(define (value-facts)
+   (= (value c0) 0) (= (value cA) 1) (= (value c2) 2) (= (value c3) 3) 
+   (= (value c4) 4) (= (value c5) 5) (= (value c6) 6) (= (value c7) 7) 
+   (= (value c8) 8) (= (value c9) 9) (= (value c10) 10) (= (value cJ) 11) 
+   (= (value cQ) 12) (= (value cK) 13)
+   (= (value d0) 0) (= (value dA) 1) (= (value d2) 2) (= (value d3) 3) 
+   (= (value d4) 4) (= (value d5) 5) (= (value d6) 6) (= (value d7) 7) 
+   (= (value d8) 8) (= (value d9) 9) (= (value d10) 10) (= (value dJ) 11) 
+   (= (value dQ) 12) (= (value dK) 13)
+   (= (value h0) 0) (= (value hA) 1) (= (value h2) 2) (= (value h3) 3) 
+   (= (value h4) 4) (= (value h5) 5) (= (value h6) 6) (= (value h7) 7) 
+   (= (value h8) 8) (= (value h9) 9) (= (value h10) 10) (= (value hJ) 11) 
+   (= (value hQ) 12) (= (value hK) 13)
+   (= (value s0) 0) (= (value sA) 1) (= (value s2) 2) (= (value s3) 3) 
+   (= (value s4) 4) (= (value s5) 5) (= (value s6) 6) (= (value s7) 7) 
+   (= (value s8) 8) (= (value s9) 9) (= (value s10) 10) (= (value sJ) 11) 
+   (= (value sQ) 12) (= (value sK) 13))
+
+(define (suit-facts)
+   (= (suit c0) c) (= (suit cA) c) (= (suit c2) c) (= (suit c3) c) 
+   (= (suit c4) c) (= (suit c5) c) (= (suit c6) c) (= (suit c7) c) 
+   (= (suit c8) c) (= (suit c9) c) (= (suit c10) c) (= (suit cJ) c) 
+   (= (suit cQ) c) (= (suit cK) c)
+   (= (suit d0) d) (= (suit dA) d) (= (suit d2) d) (= (suit d3) d) 
+   (= (suit d4) d) (= (suit d5) d) (= (suit d6) d) (= (suit d7) d) 
+   (= (suit d8) d) (= (suit d9) d) (= (suit d10) d) (= (suit dJ) d) 
+   (= (suit dQ) d) (= (suit dK) d)
+   (= (suit h0) h) (= (suit hA) h) (= (suit h2) h) (= (suit h3) h) 
+   (= (suit h4) h) (= (suit h5) h) (= (suit h6) h) (= (suit h7) h) 
+   (= (suit h8) h) (= (suit h9) h) (= (suit h10) h) (= (suit hJ) h) 
+   (= (suit hQ) h) (= (suit hK) h)
+   (= (suit s0) s) (= (suit sA) s) (= (suit s2) s) (= (suit s3) s) 
+   (= (suit s4) s) (= (suit s5) s) (= (suit s6) s) (= (suit s7) s) 
+   (= (suit s8) s) (= (suit s9) s) (= (suit s10) s) (= (suit sJ) s) 
+   (= (suit sQ) s) (= (suit sK) s))
+
+(define (next-in-suit-facts)
+   (= (next-in-suit c0) cA) (= (next-in-suit cA) c2) 
+   (= (next-in-suit c2) c3) (= (next-in-suit c3) c4) 
+   (= (next-in-suit c4) c5) (= (next-in-suit c5) c6) 
+   (= (next-in-suit c6) c7) (= (next-in-suit c7) c8) 
+   (= (next-in-suit c8) c9) (= (next-in-suit c9) c10) 
+   (= (next-in-suit c10) cJ) (= (next-in-suit cJ) cQ) 
+   (= (next-in-suit cQ) cK)
+   (= (next-in-suit d0) dA) (= (next-in-suit dA) d2) 
+   (= (next-in-suit d2) d3) (= (next-in-suit d3) d4) 
+   (= (next-in-suit d4) d5) (= (next-in-suit d5) d6) 
+   (= (next-in-suit d6) d7) (= (next-in-suit d7) d8) 
+   (= (next-in-suit d8) d9) (= (next-in-suit d9) d10) 
+   (= (next-in-suit d10) dJ) (= (next-in-suit dJ) dQ) 
+   (= (next-in-suit dQ) dK)
+   (= (next-in-suit h0) hA) (= (next-in-suit hA) h2) 
+   (= (next-in-suit h2) h3) (= (next-in-suit h3) h4) 
+   (= (next-in-suit h4) h5) (= (next-in-suit h5) h6) 
+   (= (next-in-suit h6) h7) (= (next-in-suit h7) h8) 
+   (= (next-in-suit h8) h9) (= (next-in-suit h9) h10) 
+   (= (next-in-suit h10) hJ) (= (next-in-suit hJ) hQ) 
+   (= (next-in-suit hQ) hK)
+   (= (next-in-suit s0) sA) (= (next-in-suit sA) s2) 
+   (= (next-in-suit s2) s3) (= (next-in-suit s3) s4) 
+   (= (next-in-suit s4) s5) (= (next-in-suit s5) s6) 
+   (= (next-in-suit s6) s7) (= (next-in-suit s7) s8) 
+   (= (next-in-suit s8) s9) (= (next-in-suit s9) s10) 
+   (= (next-in-suit s10) sJ) (= (next-in-suit sJ) sQ) 
+   (= (next-in-suit sQ) sK))
+
+(define (canstack-facts)
+   (canstack cA h2) (canstack cA d2)
+   (canstack dA s2) (canstack dA c2)
+   (canstack hA s2) (canstack hA c2)
+   (canstack sA h2) (canstack sA d2)
+   (canstack c2 h3) (canstack c2 d3)
+   (canstack d2 s3) (canstack d2 c3)
+   (canstack h2 s3) (canstack h2 c3)
+   (canstack s2 h3) (canstack s2 d3)
+   (canstack c3 h4) (canstack c3 d4)
+   (canstack d3 s4) (canstack d3 c4)
+   (canstack h3 s4) (canstack h3 c4)
+   (canstack s3 h4) (canstack s3 d4)
+   (canstack c4 h5) (canstack c4 d5)
+   (canstack d4 s5) (canstack d4 c5)
+   (canstack h4 s5) (canstack h4 c5)
+   (canstack s4 h5) (canstack s4 d5)
+   (canstack c5 h6) (canstack c5 d6)
+   (canstack d5 s6) (canstack d5 c6)
+   (canstack h5 s6) (canstack h5 c6)
+   (canstack s5 h6) (canstack s5 d6)
+   (canstack c6 h7) (canstack c6 d7)
+   (canstack d6 s7) (canstack d6 c7)
+   (canstack h6 s7) (canstack h6 c7)
+   (canstack s6 h7) (canstack s6 d7)
+   (canstack c7 h8) (canstack c7 d8)
+   (canstack d7 s8) (canstack d7 c8)
+   (canstack h7 s8) (canstack h7 c8)
+   (canstack s7 h8) (canstack s7 d8)
+   (canstack c8 h9) (canstack c8 d9)
+   (canstack d8 s9) (canstack d8 c9)
+   (canstack h8 s9) (canstack h8 c9)
+   (canstack s8 h9) (canstack s8 d9)
+   (canstack c9 h10) (canstack c9 d10)
+   (canstack d9 s10) (canstack d9 c10)
+   (canstack h9 s10) (canstack h9 c10)
+   (canstack s9 h10) (canstack s9 d10)
+   (canstack c10 hJ) (canstack c10 dJ)
+   (canstack d10 sJ) (canstack d10 cJ)
+   (canstack h10 sJ) (canstack h10 cJ)
+   (canstack s10 hJ) (canstack s10 dJ)
+   (canstack cJ hQ) (canstack cJ dQ)
+   (canstack dJ sQ) (canstack dJ cQ)
+   (canstack hJ sQ) (canstack hJ cQ)
+   (canstack sJ hQ) (canstack sJ dQ)
+   (canstack cQ hK) (canstack cQ dK)
+   (canstack dQ sK) (canstack dQ cK)
+   (canstack hQ sK) (canstack hQ cK)
+   (canstack sQ hK) (canstack sQ dK))
+
+(define (colour-facts)
+   (= (colour c) b)
+   (= (colour d) r) 
+   (= (colour h) r) 
+   (= (colour s) b)) 
+
+(define (home-facts)
+   (home c0) (home d0) (home h0) (home s0))
+
+(define (maxcard-facts)
+   (maxcard cK) (maxcard dK) (maxcard hK) (maxcard sK))
+
+(define (space-facts)
+   (cellspace 4) (colspace 0))
+
+(set-initial-facts
+ (value-facts)
+ (suit-facts)
+ (next-in-suit-facts)
+ (canstack-facts)
+ (colour-facts)
+ (home-facts)
+ (space-facts))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 3. The defined predicates.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def-defined-predicate (cansendhome ?card ?homecard)
+  (and 
+   (= (suit ?card) (suit ?homecard))
+   (= (value ?card) (+ (value ?homecard) 1))))
+
+(def-defined-predicate (cansendtofree) 
+  (exists (?n) (cellspace ?n) (> ?n 0)))
+
+(def-defined-predicate (cansendtonewcol) 
+  (exists (?n) (colspace ?n) (> ?n 0)))
+
+(def-defined-predicate (instack ?card) 
+  (or
+   (clear ?card)
+   (exists (?top) (on ?top ?card)
+	   (and
+	    (canstack ?top ?card)
+	    (instack ?top)))))
+
+(def-defined-predicate (perfectstack ?card)
+  (and (clear ?card)
+       (perfectstackbelow ?card)))
+
+(def-defined-predicate (perfectstackbelow ?card)
+  (or
+   (and 
+    (bottomcol ?card) 
+    (maxcard ?card))
+   (exists (?card1) (on ?card ?card1)
+	   (and 
+	    (canstack ?card ?card1)
+	    (perfectstackbelow ?card1)))))
+
+(def-defined-predicate (groundedstack ?card)
+  (and (clear ?card)
+       (groundedstackbelow ?card)))
+
+(def-defined-predicate (groundedstackbelow ?card)
+  ;;Like perfect stack but not a complete stack.
+  (or
+   (bottomcol ?card) 
+   (exists (?card1) (on ?card ?card1)
+	   (and 
+	    (canstack ?card ?card1)
+	    (groundedstackbelow ?card1)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 4. The defined functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Count the number of cards up to the top of the stack.
+
+(def-defined-function (depth ?card)
+  (or
+   (exists (?y) (on ?y ?card)
+	   (:= depth (+ 1 (depth ?y))))
+   (:= depth 0)))
+
+;;; Count the number of cards out of sequence below a particular card.
+
+(def-defined-function (num-out-of-sequence ?card)
+  (if-then-else 
+   (bottomcol ?card)
+   (:= num-out-of-sequence 0)
+   (exists (?card1) (on ?card ?card1)
+	   (and 
+	    (if-then-else
+	     (not (canstack ?card ?card1))
+	     (:= num-out-of-sequence (+ 1 (num-out-of-sequence ?card1)))
+	     (:= num-out-of-sequence (num-out-of-sequence ?card1)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Heuristic functions return a ranking for a plan. 
+;;; The lower value returned, the better is the plan.
+;;;
+;;; In this case we want to do two things:
+;;;
+;;; 1.  First the penalty associated with a buried next-to-home card (i.e.,
+;;;		a card that can be sent home) increases as the value of the
+;;;		card decreases.  So that buried aces are worse than buried kings.
+;;;
+;;; 2.  Second we want the penality increment to decrease as the depth
+;;;		of the card increases.  This is to force the planner to try to 
+;;;		unbury cards closer to the top first.
+;;;
+;;; We define a function that can determine the depth and value of the 
+;;; next-to-home cards.  Remember that depth can only decrease by one in any 
+;;; move, so what it counts is the changes in depth.
+;;; The following is very ad-hoc, and almost certainly can be
+;;; improved on (if in fact it is even correct w.r.t. 1 and 2 above).
+;;;
+;;; Compute the inverted value "13-value", so that aces get value 12, 2s
+;;; get value 11 etc.  Multiply this by the depth and then 100.
+;;; This means that we gain 1200 for decreasing the depth of an ace,
+;;; 1100 for decreasing the depth of a 2, etc.  This satisfies 1.
+;;; Next if the depth is > 10 do nothing else (so don't discriminate
+;;; between depth > 10, only by value of the home card).
+;;; Otherwise add the first "depth" terms of the sequence;
+;;; 100 90 80 70 60 50 40 30 20 10:
+;;; 
+;;; 550 - 10 * depth * (depth - 1) /2
+;;;
+;;; I believe this will retain clearing aces as being better than 2s, 
+;;; 2s better than 3s etc, but will make decreasing from depth 2 to 1,
+;;; better than decreasing from depth 3 to 2.
+;;; 
+
+(def-defined-function (depth-penalty ?depth ?value) 
+  (local-vars ?ival ?penalty)
+  (and
+   (:= ?ival (- 13 ?value))
+   (if-then-else
+    (> ?depth 10) 
+    (:= ?penalty (* ?ival ?depth 100))
+    (:= ?penalty 
+	(+ (* ?ival 100 ?depth)
+	   (- 550 (* 10 ?depth
+		     (/ (- ?depth 1) 2))))))
+   ;;(print 0 "depth-penalty ~D~%" ?penalty)
+   (:= depth-penalty ?penalty)))
+
+;;; Count the number of cards remaining, a penality of 5000 for each.
+;;; Note the sum of the home card values = number of cards already home.
+
+(def-defined-function (cards-remaining) 
+  (local-vars ?v1)
+  (and
+   (:= ?v1 0)
+   (forall (?homecard) (home ?homecard) 
+	   (:= ?v1 (+ ?v1 (value ?homecard))))
+   ;;(print 0 "cards-remaining-penalty ~D~%" ?penalty)
+   (:= cards-remaining (- 52 ?v1))))
+
+;; Count the freecell and column space. Choose some large penality
+;; for no space, decreasing as the amount of space increases.
+;; No penalty for space > 4.
+
+(def-defined-function (space-penalty) 
+  (local-vars ?v1 ?penalty)
+  (and
+   (:= ?v1 0)
+   (forall (?n) (cellspace ?n) 
+	   (:= ?v1 (+ ?v1 ?n)))
+   (forall (?n) (colspace ?n)
+	   (:= ?v1 (+ ?v1 ?n)))
+   (if-then-else
+    (> ?v1 4)
+    (:= ?penalty 0)
+    (if-then-else
+     (= ?v1 4)
+     (:= ?penalty 200)
+     (if-then-else
+      (= ?v1 3)
+      (:= ?penalty 500)
+      (if-then-else
+       (= ?v1 2)
+       (:= ?penalty 800)
+       (if-then-else
+	(= ?v1 1)
+	(:= ?penalty 1500)
+	(:= ?penalty 5000))))))
+;;;		(print 0 "space-penalty ~D~%" ?penalty)
+   (:= space-penalty ?penalty)))
+
+;;; Penalty for the depth of cards next to be sent home.
+;;; We use a function generator to avoid having to compute
+;;; depth multiple times.
+
+(def-defined-function (total-depth-penalty) 
+  (local-vars ?v1)
+  (and
+   (:= ?v1 0)
+   (forall (?homecard) (home ?homecard)
+	   (implies 
+	    (not (maxcard ?homecard))
+	    (exists (?d) (= (depth (next-in-suit ?homecard)) ?d)
+		    (:= ?v1 (+ ?v1 
+			       (depth-penalty
+				(+ ?d 1)
+				(value (next-in-suit ?homecard))))))))
+;;;   (print 0 "total-depth-penalty ~D~%" ?v1)
+   (:= total-depth-penalty ?v1)))
+
+;;; Penalty for each out of sequence card.
+
+(def-defined-function (home-balance)
+  (local-vars ?maxr ?minr ?maxb ?minb ?ones ?zeros) 
+  (and
+   (:= ?maxr 0)
+   (:= ?maxb 0)
+   (:= ?minr 13)
+   (:= ?minb 13)
+   (forall
+    (?card) (home ?card)
+    (if-then-else
+     (= (colour (suit ?card)) r)
+     (and
+      (:= ?maxr (max ?maxr (value ?card)))
+      (:= ?minr (min ?minr (value ?card))))
+     (and
+      (:= ?maxb (max ?maxb (value ?card)))
+      (:= ?minb (min ?minb (value ?card))))))
+   ;; Now count number or cards of which 2 of one suit but only one of
+   ;; the other suit exists. For cards in range max--min there are
+   ;; only one of that suit, for cards in range 13--max there are 2
+   ;; cards, for cards in range 0-min there are 0 cards.
+   ;;(print 0 "Home-balance, R [~A,~A], B [~A,~A]~%" ?minr ?maxr ?maxb ?minb)
+   (:= ?ones  (abs (- ?maxr ?maxb)))
+   (:= ?zeros (abs (- ?minr ?minb)))
+   ;;(print 0 "Home-balance, ones ~D, zeros ~D~%" ?ones ?zeros)
+   (:= home-balance (+ ?ones ?zeros))))
+
+(def-defined-function (out-of-sequence-penalty) 
+  (local-vars ?v1)
+  (and
+   (:= ?v1 0)
+   (forall (?card) (clear ?card)
+	   (:= ?v1 (+ ?v1 (num-out-of-sequence ?card))))
+   (:= out-of-sequence-penalty (* ?v1 100))))
+
+(def-defined-function (heuristic) 
+  (local-vars ?value ?v1 ?v2 ?v3 ?v4)
+  (and
+   (:= ?v1 (* 7000 (cards-remaining)))
+   (:= ?v2 (* 1 (space-penalty)))
+   (:= ?v3 (* 1 (total-depth-penalty)))
+   (:= ?v4 (expt 2 (home-balance)))
+   (:= ?value (+ ?v1 ?v2 ?v3 ?v4))
+   (:= heuristic ?value)
+   ;;(print 0 "Heuristic: cards ~D, space ~D, depth ~D, home ~D~%"
+   ;;  ?v1 ?v2 ?v3 ?v4)
+   ;;(print 0 "heuristic ~D~%" ?value)
+   ))
+
+(set-search-strategy best-first)
+(set-heuristic-fn (heuristic))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 6. Operators. The brute force way. 
+;;; This can be done more perspicuously with adl operators.
+;;; Hmm, actually there is no real guarantee that it will always work with
+;;; strips operators. We can fake things out so that they work.
+;;; However, some of these strips operators are using defined-predicates
+;;; in their preconditions. This is not strictly allowed (in particular)
+;;; the resultant formula might try to use the predicate as a generator!
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def-strips-operator (move ?card ?newcard)
+  (pre
+   (clear ?card) 
+   (clear ?newcard)
+   (canstack ?card ?newcard)
+   (on ?card ?oldcard))
+  (add
+   (on ?card ?newcard)
+   (clear ?oldcard))
+  (del
+   (on ?card ?oldcard)
+   (clear ?newcard))
+  (priority 2)
+  (cost 100))
+
+(def-strips-operator (sendtofree ?card)
+  (pre
+   (clear ?card) 
+   (cansendtofree)
+   (on ?card ?oldcard)
+   (cellspace ?n))
+  (add
+   (incell ?card) 
+   (clear ?oldcard)
+   (cellspace (- ?n 1)))
+  (del
+   (on ?card ?oldcard)
+   (clear ?card)
+   (cellspace ?n))
+  (priority 1)
+  (cost 100))
+
+(def-strips-operator (sendtonewcol ?card)
+  (pre
+   (clear ?card)
+   (cansendtonewcol)
+   (not (groundedstackbelow ?card))
+   (on ?card ?oldcard)
+   (colspace ?n))
+  (add
+   (bottomcol ?card) 
+   (clear ?oldcard)
+   (colspace (- ?n 1)))
+  (del
+   (on ?card ?oldcard)
+   (colspace ?n))
+  (priority 1)
+  (cost 100))
+
+(def-strips-operator (sendtohome ?card ?homecard)
+  (pre
+   (clear ?card) 
+   (on ?card ?oldcard)
+   (home ?homecard)
+   (cansendhome ?card ?homecard))
+  (add
+   (home ?card)
+   (clear ?oldcard))
+  (del
+   (on ?card ?oldcard)
+   (home ?homecard)
+   (clear ?card))
+  (priority 1)
+  (cost 100))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Same ops but now the moving card is not on an oldcard.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def-strips-operator (move-b ?card ?newcard)
+  (pre
+   (clear ?card) 
+   (bottomcol ?card)
+   (clear ?newcard)
+   (canstack ?card ?newcard)
+   (colspace ?n))
+  (add
+   (on ?card ?newcard)
+   (colspace (+ ?n 1)))
+  (del
+   (bottomcol ?card)
+   (clear ?newcard)
+   (colspace ?n))
+  (priority 2)
+  (cost 100))
+
+(def-strips-operator (sendtofree-b ?card)
+  (pre
+   (clear ?card) 
+   (bottomcol ?card)
+   (cansendtofree)
+   (colspace ?n1)
+   (cellspace ?n2))
+  (add
+   (incell ?card)
+   (colspace (+ ?n1 1))
+   (cellspace (- ?n2 1)))
+  (del
+   (bottomcol ?card)
+   (clear ?card)
+   (colspace ?n1)
+   (cellspace ?n2))
+  (priority 1)
+  (cost 100))
+
+(def-strips-operator (sendtohome-b ?card ?homecard)
+  (pre
+   (clear ?card) 
+   (bottomcol ?card)
+   (home ?homecard)
+   (cansendhome ?card ?homecard)
+   (colspace ?n))
+  (add
+   (home ?card)
+   (colspace (+ ?n 1)))
+  (del
+   (home ?homecard)
+   (clear ?card)
+   (bottomcol ?card)
+   (colspace ?n))
+  (priority 1)
+  (cost 100))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Move cards in free cell
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def-strips-operator (homefromfreecell ?card)
+  (pre
+   (incell ?card)
+   (home ?homecard) 
+   (cansendhome ?card ?homecard)
+   (cellspace ?n))
+  (add
+   (home ?card)
+   (cellspace (+ ?n 1)))
+  (del
+   (incell ?card)
+   (cellspace ?n)
+   (home ?homecard))
+  (priority 1)
+  (cost 100))
+
+(def-strips-operator (colfromfreecell ?card ?newcard)
+  (pre
+   (incell ?card)
+   (clear ?newcard)
+   (canstack ?card ?newcard)
+   (cellspace ?n))
+  (add
+   (cellspace (+ ?n 1))
+   (clear ?card)
+   (on ?card ?newcard))
+  (del
+   (incell ?card)
+   (cellspace ?n)
+   (clear ?newcard))
+  (priority 1)
+  (cost 100))
+
+(def-strips-operator (newcolfromfreecell ?card)
+  (pre
+   (incell ?card)
+   (cansendtonewcol)
+   (colspace ?n1)
+   (cellspace ?n2))
+  (add
+   (bottomcol ?card) 
+   (clear ?card)
+   (colspace (- ?n1 1))
+   (cellspace (+ ?n2 1)))
+  (del
+   (incell ?card)
+   (colspace ?n1)
+   (cellspace ?n2))
+  (priority 1)
+  (cost 100))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Macro moves
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; We can move ?card to a clear card ?to, if we can stack ?card on
+;; ?to. The key is that card may have a number of other cards on top
+;; of it.
+;; First we compute how many cards are in the stack, this is the card's 
+;; ?stksize = depth + 1.
+
+;; Now we can move card and all above it (even if card is a
+;; bottomcol card!) under the following conditions.
+
+;; 1.  There must be a legal stack above it (i.e., alternating colours,
+;; decreasing values).  This is true if "instack" is true.  
+;; 2.  Then we find out how many free cells there are, (cellspace), and how 
+;; many free columns there are, (colspace). 
+
+;; Observations:
+;; 1.  A stack can be at most 12 cards deep (moving a queen and a full 
+;; sequence below it to a king).  
+;; 2.  If there are no columns free we can move a stack of size one more
+;; than the number of free cells. 
+;; 3.  If there is one column free, we can move a stack of size 
+;; (* 2 (+ (cellspace) 1)).
+;; (First move a stack of size 1 + number of free cells to the free
+;; column, and then a stack of size 1 + number of free cells to the
+;; final location, then the cards put in the free column are move to
+;; complete the stack.)
+;; 4.  If there are two columns free, we can move a stack of size
+;; (* 4 (+ (cellspace) 1)).
+;; (First move (1 + ?cellsp) to col 1, then the next (1 + ?cellsp) to col
+;; 2, then the cards in col 1 to col 2, then (1 + ?cellsp) to col 1,
+;; then (1 + ?cellsp) to the final location.  Then move the cards in col
+;; 1 to the final location, next move (1 + ?cellsp) cards to col 1, and
+;; move the cards in col 2 to the final location, and finally the cards
+;; in column 1 to the final location.)
+;; 5.  If there are three columns free, and no cells free, we can move
+;; a stack of size 7.
+;; 6.  Otherwise, we can move a stack of any size.
+
+(def-defined-function (max-stack-size ?colsp ?cellsp) 
+  (local-vars ?one-move)
+  ;;How many stacked cards can we move?
+  (and
+   (:= ?one-move (+ 1 ?cellsp))
+   (or
+    (and (>= ?colsp 3) (:= max-stack-size 13))
+    (and (= ?colsp 2)  (:= max-stack-size (* 4 ?one-move)))
+    (and (= ?colsp 1)  (:= max-stack-size (* 2 ?one-move)))
+    (:= max-stack-size ?one-move))))
+
+(def-adl-operator (movestack ?card ?to)
+  (pre
+   (?to)         (clear ?to)
+   (?card)       (canstack ?card ?to)
+   (?cellsp)     (cellspace ?cellsp)
+   (?colsp)      (colspace ?colsp)
+   (?stksize)    (= (+ 1 (depth ?card)) ?stksize)
+   (?maxstksize) (= (max-stack-size ?colsp ?cellsp) ?maxstksize)
+
+   (and
+    (instack ?card)
+    (> ?stksize 1)
+    (> ?cellsp 0)
+    (>= ?maxstksize ?stksize)))
+  
+  (and
+   (add
+    (on ?card ?to))
+   (forall (?from) (on ?card ?from)
+	   (add (clear ?from)))
+   (implies
+    (bottomcol ?card)
+    (add (colspace (+ 1 ?colsp))))
+   (del
+    (clear ?to))
+   (forall (?from) (on ?card ?from)
+	   (del (on ?card ?from)))
+   (implies
+    (bottomcol ?card)
+    (del 
+     (bottomcol ?card)
+     (colspace ?colsp))))
+  (priority 3)
+  (cost 100))
+
+(def-adl-operator (movestack-to-newcol ?card)
+  (pre
+   (?colsp)         (colspace ?colsp)
+   (?cellsp)        (cellspace ?cellsp)
+   (?card ?oldcard) (on ?card ?oldcard)
+   (?stksize)       (= (+ 1 (depth ?card)) ?stksize)
+   ;; We must use one column as the final location
+   (?maxstksize)    (= (max-stack-size (- ?colsp 1) ?cellsp) ?maxstksize)
+   
+   (and
+    (> ?cellsp 0)
+    (> ?colsp 0)
+    (instack ?card)
+    (> ?stksize 1)
+    (>= ?maxstksize ?stksize)
+    ;; Don't move grounded stacks to new columns.
+    (not (groundedstackbelow ?card))
+    ;; and don't move a shorter stack if you could
+    ;; move a larger stack.
+    (not (and
+	  (canstack ?card ?oldcard)
+	  (>= ?maxstksize (+ 1 ?stksize))))))
+  
+  (and
+   (add (clear ?oldcard)
+	(bottomcol ?card)
+	(colspace (- ?colsp 1)))
+   (del (on ?card ?oldcard)
+	(colspace ?colsp)))
+  (priority 3)
+  (cost 100))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 6. Print Routines
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def-defined-predicate (print-freecell-world ?stream)
+  (and
+   (print-home-and-free-cells ?stream)
+   (forall (?card) (bottomcol ?card) 
+	   (accumulate-stack ?card))
+   (print-stacks ?stream)))
+
+;; print the home cells and the free cells
+
+(def-defined-predicate (print-home-and-free-cells ?stream)
+  (and
+   (print ?stream "Free Cells: ")
+   (forall (?card) (incell ?card) 
+	   (print ?stream "~3S " ?card))
+   (print ?stream "~%Home Cells: ")
+   (forall (?card) (home ?card) 
+	   (print ?stream "~3S " ?card))
+   (print ?stream "~%~%")))
+
+;; accumulate a list containing a stack of cards
+
+(def-defined-predicate (accumulate-stack ?card)
+  (and 
+   (stack-card ?card)
+   (or 
+    (and (clear ?card) (end-stack))
+    (exists (?newcard) (on ?newcard ?card)
+	    (accumulate-stack ?newcard)))))
+
+(set-print-world-fn print-freecell-world)
+(set-statistics-file "FreeCellStatistics.csl")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 7. animator print routines
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def-defined-predicate (animate-print-freecell-world ?stream)
+  (and
+   (forall (?x ?y) (on ?x ?y)
+	   (print ?stream "(ON ~A ~A)~%" ?x ?y))
+   (forall (?x) (clear ?x)
+	   (print ?stream "(CLEAR ~A)~%" ?x))
+   (forall (?n) (cellspace ?n)
+	   (print ?stream "(CELLSPACE ~A)~%" ?n))
+   (forall (?n) (colspace ?n)
+	   (print ?stream "(COLSPACE ~A)~%" ?n))
+   (forall (?x) (home ?x)
+	   (print ?stream "(HOME ~A)~%" ?x))
+   (forall (?x) (bottomcol ?x)
+	   (print ?stream "(bottomcol ~A)~%" ?x))
+   ))
+
+;(set-print-world-fn animate-print-freecell-world)

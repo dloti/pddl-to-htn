@@ -1,0 +1,27 @@
+# Smaller problems
+satgen -s 4000 1 3 3 3 4 > pfile1
+satgen -s 4123 1 3 3 3 5 > pfile2
+satgen -s 7123 2 3 3 3 5 > pfile3
+satgen -s 7788 2 3 3 3 7 > pfile4
+satgen -s 1212 3 3 3 3 7 > pfile5
+satgen -s 7512 3 3 4 4 7 > pfile6
+satgen -s 8111 4 3 4 5 7 > pfile7
+satgen -s 0099 4 3 4 5 10 > pfile8
+
+# Now for some more serious numbers of observations
+satgen -s 1412 5 3 5 5 10 > pfile9
+satgen -s 1792 5 3 5 5 12 > pfile10
+satgen -s 1891 5 3 5 5 15 > pfile11
+satgen -s 2000 5 3 5 5 20 > pfile12
+satgen -s 2002 5 3 5 5 25 > pfile13
+
+# Check exploitation of parallelism - more satellites
+satgen -s 2222 6 3 5 5 20 > pfile14
+satgen -s 7777 8 3 5 5 20 > pfile15
+satgen -s 8888 10 3 5 5 20 > pfile16
+satgen -s 9999 12 3 5 5 20 > pfile17
+
+# Finally, what if our satellites are bristling with instruments?
+satgen -s 0001 5 5 5 5 20 > pfile18
+satgen -s 0002 5 8 8 5 20 > pfile19
+satgen -s 0003 5 10 10 5 20 > pfile20

@@ -1,0 +1,22 @@
+# Larger problems
+satgen 4000 5 3 3 3 40 > pfile1
+satgen 4123 5 3 3 3 50 > pfile2
+satgen 7123 7 3 3 3 50 > pfile3
+satgen 7788 7 3 3 3 70 > pfile4
+satgen 1212 8 3 3 3 70 > pfile5
+satgen 7512 8 3 4 4 70 > pfile6
+satgen 8111 10 3 4 5 70 > pfile7
+satgen 0099 10 3 4 5 100 > pfile8
+
+# Now for some more serious numbers of observations
+satgen 1412 15 3 5 5 100 > pfile9
+satgen 1792 15 3 5 5 120 > pfile10
+satgen 1891 15 3 5 5 150 > pfile11
+satgen 2000 15 3 5 5 200 > pfile12
+satgen 2002 15 3 5 5 250 > pfile13
+
+# What about if we are short on satellites for large
+# numbers of observations?
+satgen 2222 5 3 5 5 200 > pfile14
+satgen 7777 8 3 5 5 200 > pfile15
+satgen 8888 10 3 5 5 200 > pfile16

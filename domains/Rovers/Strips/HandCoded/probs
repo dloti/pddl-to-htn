@@ -1,0 +1,21 @@
+# Bigger problems
+rovergen 7692 5 15 5 5 5 > pfile1
+rovergen 1628 5 20 6 6 5 > pfile2
+rovergen 6283 5 20 8 8 4 > pfile3
+rovergen 1928 6 15 8 8 4 > pfile4
+rovergen 5783 6 20 6 6 5 > pfile5
+rovergen 9265 6 25 6 6 5 > pfile6
+rovergen 5146 6 25 8 8 5 > pfile7
+rovergen 6523 8 30 10 6 6 > pfile8 
+rovergen 5127 8 30 10 10 6 > pfile9
+rovergen 2435 8 30 10 10 8 > pfile10
+rovergen 1243 6 35 8 8 6 > pfile11
+rovergen 2413 6 40 10 8 6 > pfile12
+rovergen 5142 8 40 10 10 6 > pfile13
+rovergen 1234 8 40 8 8 8 > pfile14
+rovergen 3652 10 25 6 6 8 > pfile15
+rovergen 3965 10 30 6 6 8 > pfile16
+rovergen 7652 10 35 8 10 8 > pfile17
+rovergen 7182 10 40 8 12 8 > pfile18
+rovergen 3549 10 45 8 12 9 > pfile19
+rovergen 5621 10 50 8 12 10 > pfile20

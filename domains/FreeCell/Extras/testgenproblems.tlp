@@ -1,0 +1,299 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; See if generated problems work by adding only the number of home
+;;; cards so that we can compute a best first heuristic.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(clear-world-symbols)			;Remove old domain symbols
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 1. The world symbols.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(declare-described-symbols
+ (predicate on 2)
+ (predicate incell 1)
+ (predicate clear 1)
+ (predicate cellspace 1)
+ (predicate colspace 1)
+ (predicate home 1)
+ (predicate bottomcol 1)
+ (predicate canstack 2)
+ (predicate suit 2)
+ (predicate value 2)
+ (predicate successor 2)
+ (predicate maxcard 1)
+ (function number-home 0)
+ )
+
+(declare-defined-symbols
+ (predicate accumulate-stack 1)
+ (predicate print-home-and-free-cells 1)
+ )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 2. Define the static symbols.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(set-initial-facts
+ (= (number-home) 0)
+ )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 6. Operators. These can be  compacted with functions 
+;;; and simple arithmetic numbers! In a better possible world we would
+;;; run two separate versions of this domain adl and strips, too bad
+;;; we don't live there....
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Move card between columns. Two versions dependent on whether or
+;;; not we generate a new stack.
+
+(def-strips-operator (move ?card ?oldcard ?newcard)
+  (pre
+   (clear ?card) 
+   (clear ?newcard)
+   (canstack ?card ?newcard)
+   (on ?card ?oldcard))
+  (add
+   (on ?card ?newcard)
+   (clear ?oldcard))
+  (del
+   (on ?card ?oldcard)
+   (clear ?newcard))
+  (priority 1))
+
+(def-strips-operator (move-b ?card ?newcard ?cols ?ncols)
+  (pre
+   (clear ?card) 
+   (bottomcol ?card)
+   (clear ?newcard)
+   (canstack ?card ?newcard)
+   (colspace ?cols)
+   (successor ?ncols ?cols))
+  (add
+   (on ?card ?newcard)
+   (colspace ?ncols))
+  (del
+   (bottomcol ?card)
+   (clear ?newcard)
+   (colspace ?cols))
+  (priority 1))
+
+;; Send a card to a freecell. Two versions dependent on whether or not
+;; we generate a new stack.
+
+(def-strips-operator (sendtofree ?card ?oldcard ?cells ?ncells)
+  (pre
+   (clear ?card) 
+   (on ?card ?oldcard)
+   (cellspace ?cells)
+   (successor ?cells ?ncells))
+  (add
+   (incell ?card) 
+   (clear ?oldcard)
+   (cellspace ?ncells))
+  (del
+   (on ?card ?oldcard)
+   (clear ?card)
+   (cellspace ?cells))
+  (priority 1))
+
+(def-strips-operator (sendtofree-b ?card ?cells ?ncells ?cols ?ncols)
+  (pre
+   (clear ?card) 
+   (bottomcol ?card)
+   (cellspace ?cells)
+   (successor ?cells ?ncells)
+   (colspace ?cols)
+   (successor ?ncols ?cols))
+  (add
+   (incell ?card)
+   (colspace ?ncols)
+   (cellspace ?ncells))
+  (del
+   (bottomcol ?card)
+   (clear ?card)
+   (colspace ?cols)
+   (cellspace ?cells))
+  (priority 1))
+
+;; Send a card a new column
+
+(def-strips-operator (sendtonewcol ?card ?oldcard ?cols ?ncols)
+  (pre
+   (clear ?card)
+   (colspace ?cols)
+   (successor ?cols ?ncols)
+   (on ?card ?oldcard))
+  (add
+   (bottomcol ?card) 
+   (clear ?oldcard)
+   (colspace ?ncols))
+  (del
+   (on ?card ?oldcard)
+   (colspace ?cols))
+  (priority 1))
+
+;;Send a card home
+
+(def-strips-operator (sendtohome ?card ?suit ?vcard ?homecard ?vhomecard)
+  (pre
+   (clear ?card) 
+   (on ?card ?oldcard)
+   (home ?homecard)
+   (suit ?card ?suit)
+   (suit ?homecard ?suit)
+   (value ?card ?vcard)
+   (value ?homecard ?vhomecard)
+   (successor ?vcard ?vhomecard))
+  (add
+   (home ?card)
+   (clear ?oldcard)
+   (= (number-home) (+ 1 (number-home)))
+   )
+  (del
+   (on ?card ?oldcard)
+   (home ?homecard)
+   (clear ?card))
+  (priority 100))
+
+
+(def-strips-operator (sendtohome-b ?card ?suit ?vcard ?homecard
+				   ?vhomecard ?cols ?ncols)
+  (pre
+   (clear ?card) 
+   (bottomcol ?card)
+   (home ?homecard)
+   (suit ?card ?suit)
+   (suit ?homecard ?suit)
+   (value ?card ?vcard)
+   (value ?homecard ?vhomecard)
+   (successor ?vcard ?vhomecard)
+   (colspace ?cols)
+   (successor ?ncols ?cols))
+  (add
+   (home ?card)
+   (= (number-home) (+ 1 (number-home)))
+   (colspace ?ncols))
+  (del
+   (home ?homecard)
+   (clear ?card)
+   (bottomcol ?card)
+   (colspace ?cols))
+  (priority 100))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Move cards in free cell
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def-strips-operator (homefromfreecell ?card ?suit ?vcard
+				       ?homecard ?vhomecard ?cells ?ncells)
+    ;;Send a card home from a free cell.
+  (pre
+   (incell ?card)
+   (home ?homecard) 
+   (suit ?card ?suit)
+   (suit ?homecard ?suit)
+   (value ?card ?vcard)
+   (value ?homecard ?vhomecard)
+   (successor ?vcard ?vhomecard)
+   (cellspace ?cells)
+   (successor ?ncells ?cells))
+  (add
+   (home ?card)
+   (= (number-home) (+ 1 (number-home)))
+   (cellspace ?ncells))
+  (del
+   (incell ?card)
+   (cellspace ?cells)
+   (home ?homecard))
+  (priority 100))
+
+(def-strips-operator (colfromfreecell ?card ?newcard ?cells ?ncells)
+  (pre
+   (incell ?card)
+   (clear ?newcard)
+   (canstack ?card ?newcard)
+   (cellspace ?cells)
+   (successor ?ncells ?cells))
+  (add
+   (cellspace ?ncells)
+   (clear ?card)
+   (on ?card ?newcard))
+  (del
+   (incell ?card)
+   (cellspace ?cells)
+   (clear ?newcard))
+    (priority 1))
+
+(def-strips-operator (newcolfromfreecell ?card ?cols ?ncols ?cells ?ncells)
+  (pre
+   (incell ?card)
+   (colspace ?cols)
+   (cellspace ?cells)
+   (successor ?cols ?ncols)
+   (successor ?ncells ?cells)
+   )
+  (add
+   (bottomcol ?card) 
+   (clear ?card)
+   (colspace ?ncols)
+   (cellspace ?ncells))
+  (del
+   (incell ?card)
+   (colspace ?cols)
+   (cellspace ?cells))
+  (priority 1))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(declare-external-symbols "../userlib/freecell"
+  (predicate stack-card "StackCard" 1)
+  (predicate end-stack "EndStack" 0)
+  (predicate print-stacks "PrintStacks" 1)
+  (function random-freecell-game "RandomFreeCellGame" 2))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; 6. Print Routines
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def-defined-predicate (print-freecell-world ?stream)
+  (and
+   (exists (?cells) (cellspace ?cells)
+	   (?cols)  (colspace ?cols)
+	   (print ?stream "Colspace = ~3S Cellspace = ~3S~%"
+		  ?cols ?cells))
+   (print-home-and-free-cells ?stream)
+   (forall (?card) (bottomcol ?card) 
+	   (accumulate-stack ?card))
+   (print-stacks ?stream)))
+
+;; print the home cells and the free cells
+
+(def-defined-predicate (print-home-and-free-cells ?stream)
+  (and
+   (print ?stream "Free Cells: ")
+   (forall (?card) (incell ?card) 
+	   (print ?stream "~3S " ?card))
+   (print ?stream "~%Home Cells: ")
+   (forall (?card) (home ?card) 
+	   (print ?stream "~3S " ?card))
+   (print ?stream "~%~%")))
+
+;; accumulate a list containing a stack of cards
+
+(def-defined-predicate (accumulate-stack ?card)
+  (and 
+   (stack-card ?card)
+   (or 
+    (and (clear ?card) (end-stack))
+    (exists (?newcard) (on ?newcard ?card)
+	    (accumulate-stack ?newcard)))))
+
+
+(set-print-world-fn print-freecell-world)
+
+(set-heuristic-fn (- (number-home)))
+(set-search-strategy best-first)

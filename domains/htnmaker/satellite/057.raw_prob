@@ -1,0 +1,27 @@
+( define ( problem probname )
+  ( :domain satellite )
+  ( :objects Sat000 GroundLoc000 Phenomenon001 Image Spectrograph Infrared Instrument000-000 )
+  ( :init
+    ( satellite Sat000 )
+    ( instrument Instrument000-000 )
+    ( mode Image )
+    ( mode Spectrograph )
+    ( mode Infrared )
+    ( direction GroundLoc000 )
+    ( direction Phenomenon001 )
+    ( pointing Sat000 Phenomenon001 )
+    ( power_avail Sat000 )
+    ( on_board Instrument000-000 Sat000 )
+    ( supports Instrument000-000 Infrared )
+    ( calibration_target Instrument000-000 Phenomenon001 )
+    ( not_calibrated Instrument000-000 )
+    ( different GroundLoc000 Phenomenon001 )
+    ( different Phenomenon001 GroundLoc000 )
+  )
+  ( :goal
+    ( and
+      ( have_image Phenomenon001 Infrared )
+    )
+  )
+)
+

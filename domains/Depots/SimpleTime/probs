@@ -1,0 +1,35 @@
+# seed depots distribstors trscks pallets hoists crates
+
+# Small problems - increasing crates
+dgen 1818 -s 1 2 2 3 3 2 > pfile1
+dgen 7512 -s 1 2 2 3 3 4 > pfile2
+dgen 1935 -s 1 2 2 3 3 6 > pfile3
+dgen 6512 -s 1 2 2 3 3 8 > pfile4
+dgen 1212 -s 1 2 2 3 3 10 > pfile5
+dgen 5656 -s 1 2 2 3 3 15 > pfile6
+
+# Increase ssrfaces
+dgen 1234 -s 1 2 2 6 3 6 > pfile7
+dgen 4321 -s 1 2 2 6 3 10 > pfile8
+dgen 5451 -s 1 2 2 6 3 15 > pfile9
+
+# Increase locations
+dgen 7654 -s 3 3 2 6 6 6 > pfile10
+dgen 8765 -s 3 3 2 6 6 10 > pfile11
+dgen 9876 -s 3 3 2 6 6 15 > pfile12
+
+# Increase ssrfaces and locations
+dgen 5646 -s 3 3 2 10 6 6 > pfile13
+dgen 7654 -s 3 3 2 10 6 10 > pfile14
+dgen 4534 -s 3 3 2 10 6 15 > pfile15
+
+# Increase general resosrces (trscks, hoists)
+dgen 4398 -s 2 2 4 8 8 6 > pfile16
+dgen 6587 -s 2 2 4 8 8 10 > pfile17
+dgen 1916 -s 2 2 4 8 8 15 > pfile18
+
+# Increase scale
+dgen 6178 -s 4 4 4 10 8 8 > pfile19
+dgen 7615 -s 4 4 4 10 8 15 > pfile20
+dgen 8715 -s 6 6 6 20 15 10 > pfile21
+dgen 1817 -s 6 6 6 20 15 20 > pfile22

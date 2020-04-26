@@ -1,0 +1,35 @@
+# seed depots distributors trucks pallets hoists crates
+
+# small problems - increasing crates
+dgen 1818 -t -w 100 -c 400 1 2 2 3 3 2 > pfile1
+dgen 7512 -t -w 100 -c 400 1 2 2 3 3 4 > pfile2
+dgen 1935 -t -w 100 -c 400 1 2 2 3 3 6 > pfile3
+dgen 6512 -t -w 100 -c 400 1 2 2 3 3 8 > pfile4
+dgen 1212 -t -w 100 -c 400 1 2 2 3 3 10 > pfile5
+dgen 5656 -t -w 100 -c 400 1 2 2 3 3 15 > pfile6
+
+# Increase surfaces
+dgen 1234 -t -w 100 -c 400 1 2 2 6 3 6 > pfile7
+dgen 4321 -t -w 100 -c 400 1 2 2 6 3 10 > pfile8
+dgen 5451 -t -w 100 -c 400 1 2 2 6 3 15 > pfile9
+
+# Increase locations
+dgen 7654 -t -w 100 -c 400 3 3 2 6 6 6 > pfile10
+dgen 8765 -t -w 100 -c 400 3 3 2 6 6 10 > pfile11
+dgen 9876 -t -w 100 -c 400 3 3 2 6 6 15 > pfile12
+
+# Increase surfaces and locations
+dgen 5646 -t -w 100 -c 400 3 3 2 10 6 6 > pfile13
+dgen 7654 -t -w 100 -c 400 3 3 2 10 6 10 > pfile14
+dgen 4534 -t -w 100 -c 400 3 3 2 10 6 15 > pfile15
+
+# Increase general resources (trucks, hoists)
+dgen 4398 -t -w 100 -c 400 2 2 4 8 8 6 > pfile16
+dgen 6587 -t -w 100 -c 400 2 2 4 8 8 10 > pfile17
+dgen 1916 -t -w 100 -c 400 2 2 4 8 8 15 > pfile18
+
+# Increase scale
+dgen 6178 -t -w 100 -c 400 4 4 4 10 8 8 > pfile19
+dgen 7615 -t -w 100 -c 400 4 4 4 10 8 15 > pfile20
+dgen 8715 -t -w 100 -c 400 6 6 6 20 15 10 > pfile21
+dgen 1817 -t -w 100 -c 400 6 6 6 20 15 20 > pfile22
