@@ -1,0 +1,21 @@
+digraph invs {
+ label=Invs;
+ labelloc=top;
+ labeljust=left;
+ rank=same;
+00	[label=<AT(<u>OB</u>,LO)>]
+10	[label=<IN(<u>OB</u>,TR)>]
+00 -> 10	[label="LOAD-TRUCK(OB,TR,LO)"]
+10 -> 00	[label="UNLOAD-TRUCK(OB,TR,LO)"]
+01	[label=<AT(<u>DR</u>,LO)>]
+11	[label=<DRIVING(<u>DR</u>,TR)>]
+01 -> 01	[label="WALK(DR,LO,LO)"]
+01 -> 11	[label="BOARD-TRUCK(DR,TR,LO)"]
+11 -> 01	[label="DISEMBARK-TRUCK(DR,TR,LO)"]
+02	[label=<AT(<u>TR</u>,LO)>]
+02 -> 02	[label="DRIVE-TRUCK(TR,LO,LO,DR)"]
+03	[label=<EMPTY(<u>TR</u>)>]
+13	[label=<DRIVING(DR,<u>TR</u>)>]
+03 -> 13	[label="BOARD-TRUCK(DR,TR,LO)"]
+13 -> 03	[label="DISEMBARK-TRUCK(DR,TR,LO)"]
+}

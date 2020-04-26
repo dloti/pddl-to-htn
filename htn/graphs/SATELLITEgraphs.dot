@@ -1,0 +1,23 @@
+digraph invs {
+ label=Invs;
+ labelloc=top;
+ labeljust=left;
+ rank=same;
+00	[label=<POINTING(<u>SA</u>,DI)>]
+00 -> 00	[label="TURN_TO(SA,DI,DI)"]
+01	[label=<POWER_AVAIL(<u>SA</u>)>]
+11	[label=<POWER_AVAIL(<u>SA</u>)>]
+01 -> 11	[label="SWITCH_ON(IN,SA)"]
+11 -> 01	[label="SWITCH_OFF(IN,SA)"]
+02	[label=<POWER_ON(<u>IN</u>)>]
+12	[label=<POWER_ON(<u>IN</u>)>]
+02 -> 12	[label="SWITCH_OFF(IN,SA)"]
+12 -> 02	[label="SWITCH_ON(IN,SA)"]
+03	[label=<CALIBRATED(<u>IN</u>)>]
+13	[label=<CALIBRATED(<u>IN</u>)>]
+03 -> 13	[label="SWITCH_ON(IN,SA)"]
+13 -> 03	[label="CALIBRATE(SA,IN,DI)"]
+04	[label=<HAVE_IMAGE(<u>DI</u>,<u>MO</u>)>]
+14	[label=<HAVE_IMAGE(<u>DI</u>,<u>MO</u>)>]
+14 -> 04	[label="TAKE_IMAGE(SA,DI,IN,MO)"]
+}

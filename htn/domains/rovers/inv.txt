@@ -1,0 +1,12 @@
+31 initial candidates
+{at 0 [1]}
+{at_soil_sample 0}
+{at_soil_sample  [0]}
+{at_rock_sample 0}
+{at_rock_sample  [0]}
+{empty 0, full 0}
+{empty  [0], full  [0]}
+{at_rock_sample 0, have_rock_analysis 1 [0]}
+{at_soil_sample 0, have_soil_analysis 1 [0]}
+{empty  [0], at_soil_sample  [0], full  [0]}
+{at_rock_sample  [0], at_soil_sample  [0], full  [0]}

@@ -1,0 +1,4 @@
+10 initial candidates
+{holding  [0], handempty }
+{holding 0, on 1 [0], clear 0}
+{holding 0, ontable 0, on 0 [1]}

@@ -1,0 +1,3 @@
+9 initial candidates
+{fuel-level 0 [1]}
+{in 0 [1], at 0 [1]}

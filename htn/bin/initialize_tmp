@@ -1,0 +1,50 @@
+
+#include "create_htn.h"
+#define INIT_DEBUG false
+#define UNORDERED false
+
+int main( int argc, char *argv[] ) {
+	if ( argc < 4 ) {
+		std::cout << "Usage: ./initialize <domain_name> <domain_file> <instance_file>\n";
+		exit( 1 );
+	}
+	
+	Domain d( argv[2] );
+	Instance ins( d, argv[3] );
+	createHTN( argv[1], d, ins );
+
+	std::ostream fout(std::cout.rdbuf());
+	
+	fout << "\n(DEFPROBLEM PROBLEM " << argv[1] << "\n    (\n";
+	for ( unsigned i = 0; i < ins.objects.size(); ++i )
+		for ( unsigned j = 0; j < ins.objects[i].size(); ++j )
+			fout << "        (" << d.types[i].name << " " << ins.objects[i][j] << ")\n";
+	for ( unsigned i = 0; i < ins.init.size(); ++i ) {
+		fout << "        (" << ins.init[i].name;
+		Condition c = d.preds[d.pmap[ins.init[i].name]];
+		for ( unsigned j = 0; j < c.params.size(); ++j )
+			fout << " " << ins.objects[c.params[j]][ins.init[i].params[j]];
+		fout << ")\n";
+	}
+	fout << "    )\n    ";
+	fout << "("+std::string(UNORDERED?" :UNORDERED":"")+"\n";
+		for ( unsigned j = 0; j < grorder.size(); ++j ) {
+			Condition c = d.preds[d.pmap[grorder[j].name]];
+				bool z = true;
+				for ( unsigned k = 0; k < c.params.size(); ++k ) {
+					std::string token = ins.objects[c.params[k]][ins.goal[j].params[k]];
+					TokenMap::iterator it = ins.omap[c.params[k]].find( token );
+					z &= it != ins.omap[c.params[k]].end();
+				}
+				if ( z ) {
+				    
+					fout << "        (achieve-" << c.name;
+					for ( unsigned k = 0; k < c.params.size(); ++k )
+						fout << " " << ins.objects[c.params[k]][grorder[j].params[k]];
+					fout << ")\n";
+				   
+				}
+	}
+	fout << "    )\n)\n\n";
+	fout << "(find-plans 'PROBLEM :verbose :plans)\n";
+}

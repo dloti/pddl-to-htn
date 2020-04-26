@@ -1,0 +1,3 @@
+12 initial candidates
+{pointing 0 [1]}
+{power_avail  [0], power_on  [0]}

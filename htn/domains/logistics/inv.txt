@@ -1,0 +1,2 @@
+6 initial candidates
+{in 0 [1], at 0 [1]}

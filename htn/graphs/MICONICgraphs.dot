@@ -1,0 +1,16 @@
+digraph invs {
+ label=Invs;
+ labelloc=top;
+ labeljust=left;
+ rank=same;
+00	[label=<LIFT-AT(FL)>]
+00 -> 00	[label="UP(FL,FL)"]
+00 -> 00	[label="DOWN(FL,FL)"]
+01	[label=<BOARDED(<u>PA</u>)>]
+11	[label=<BOARDED(<u>PA</u>)>]
+01 -> 11	[label="DEPART(FL,PA)"]
+11 -> 01	[label="BOARD(FL,PA)"]
+02	[label=<SERVED(<u>PA</u>)>]
+12	[label=<SERVED(<u>PA</u>)>]
+12 -> 02	[label="DEPART(FL,PA)"]
+}

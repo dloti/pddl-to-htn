@@ -1,0 +1,17 @@
+digraph invs {
+ label=Invs;
+ labelloc=top;
+ labeljust=left;
+ rank=same;
+00	[label=<AT(<u>PA</u>,PL)>]
+10	[label=<IN(<u>PA</u>,TR)>]
+20	[label=<IN(<u>PA</u>,AI)>]
+00 -> 10	[label="LOAD-TRUCK(PA,TR,PL)"]
+00 -> 20	[label="LOAD-AIRPLANE(PA,AI,PL)"]
+10 -> 00	[label="UNLOAD-TRUCK(PA,TR,PL)"]
+20 -> 00	[label="UNLOAD-AIRPLANE(PA,AI,PL)"]
+01	[label=<AT(<u>TR</u>,PL)>]
+01 -> 01	[label="DRIVE-TRUCK(TR,PL,PL,CI)"]
+02	[label=<AT(<u>AI</u>,AI)>]
+02 -> 02	[label="FLY-AIRPLANE(AI,AI,AI)"]
+}

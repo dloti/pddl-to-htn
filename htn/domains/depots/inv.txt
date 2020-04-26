@@ -1,0 +1,6 @@
+16 initial candidates
+{clear  [0]}
+{lifting 0 [1], available 0}
+{in 0 [1], at 0 [1], lifting 1 [0]}
+{in 0 [1], on 0 [1], lifting 1 [0]}
+{clear 0, in 0 [1], on 1 [0], lifting 1 [0]}

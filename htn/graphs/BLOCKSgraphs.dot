@@ -1,0 +1,28 @@
+digraph invs {
+ label=Invs;
+ labelloc=top;
+ labeljust=left;
+ rank=same;
+00	[label=<HOLDING(<u>BL</u>)>]
+10	[label=<ON(<u>BL</u>,BL)>]
+20	[label=<ONTABLE(<u>BL</u>)>]
+00 -> 10	[label="STACK(BL,BL)"]
+00 -> 20	[label="PUT-DOWN(BL)"]
+10 -> 00	[label="UNSTACK(BL,BL)"]
+20 -> 00	[label="PICK-UP(BL)"]
+01	[label=<CLEAR(<u>BL</u>)>]
+11	[label=<ON(BL,<u>BL</u>)>]
+21	[label=<HOLDING(<u>BL</u>)>]
+01 -> 11	[label="STACK(BL,BL)"]
+01 -> 21	[label="PICK-UP(BL)"]
+01 -> 21	[label="UNSTACK(BL,BL)"]
+11 -> 01	[label="UNSTACK(BL,BL)"]
+21 -> 01	[label="PUT-DOWN(BL)"]
+21 -> 01	[label="STACK(BL,BL)"]
+02	[label=<HANDEMPTY()>]
+12	[label=<HOLDING(BL)>]
+02 -> 12	[label="PICK-UP(BL)"]
+02 -> 12	[label="UNSTACK(BL,BL)"]
+12 -> 02	[label="PUT-DOWN(BL)"]
+12 -> 02	[label="STACK(BL,BL)"]
+}

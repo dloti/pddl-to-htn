@@ -1,0 +1,2 @@
+6 initial candidates
+{lift-at  [0]}

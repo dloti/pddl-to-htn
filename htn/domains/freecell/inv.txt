@@ -1,0 +1,8 @@
+15 initial candidates
+{cellspace  [0]}
+{colspace  [0]}
+{home  [0]}
+{on 1 [0], clear 0, incell 0}
+{incell 0, bottomcol 0, on 0 [1]}
+{incell 0, bottomcol 0, home 0, on 0 [1]}
+{incell 0, home 0, clear 0, on 1 [0]}
