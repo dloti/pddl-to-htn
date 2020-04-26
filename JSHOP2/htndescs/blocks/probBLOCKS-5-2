@@ -1,0 +1,25 @@
+
+(DEFPROBLEM PROBLEM blocks
+    (
+        (BLOCK A)
+        (BLOCK C)
+        (BLOCK E)
+        (BLOCK B)
+        (BLOCK D)
+        (CLEAR D)
+        (ONTABLE B)
+        (ON D E)
+        (ON E C)
+        (ON C A)
+        (ON A B)
+        (HANDEMPTY)
+        (TGOAL-ON D C)
+        (TGOAL-ON C B)
+        (TGOAL-ON B E)
+        (TGOAL-ON E A)
+    )
+    (
+        (ORDER 0)
+        (SOLVE 0)	)
+)
+

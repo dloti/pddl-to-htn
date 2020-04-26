@@ -1,0 +1,20 @@
+
+(DEFPROBLEM PROBLEM elevator
+    (
+        (PASSENGER P0)
+        (OBJECT P0)
+        (OBJECT F0)
+        (OBJECT F1)
+        (FLOOR F0)
+        (FLOOR F1)
+        (ABOVE F0 F1)
+        (ORIGIN P0 F0)
+        (DESTIN P0 F1)
+        (LIFT-AT F0)
+        (TGOAL-SERVED P0)
+    )
+    (
+        (ORDER 0)
+        (SOLVE 0)	)
+)
+
