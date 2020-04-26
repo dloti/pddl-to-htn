@@ -6,4 +6,5 @@ This project enables translation of a PDDL domain to HTN (JSHOP format for now).
 * python3
 
 ## How to run the translator
+Change the path to PDDL domains in `htn/domains/` spec file for each domain.
 Running `htn/translate_domains.sh` will translate default domains provided `JSHOP2/htndesc/` paths for each domain are created.
