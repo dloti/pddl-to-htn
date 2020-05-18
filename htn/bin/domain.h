@@ -439,6 +439,43 @@ public:
 		return std::set< int >( v.begin(), v.end() );
 	}
 
+	void PDDLPrintTypes(std::ostream &out, int init_type){
+			auto subtypes = getSubtypes(init_type);
+			std::set<int> fitered_subtypes;
+			for(auto subtype : subtypes){
+				if(subtype == init_type) continue;
+				bool is_subsubtype = false;
+				for(auto other_sub_type : subtypes){
+					if(other_sub_type == subtype || other_sub_type == init_type) continue;
+					if(isSupertype(subtype, other_sub_type)) {is_subsubtype=true; break;}
+				}
+				if(!is_subsubtype) fitered_subtypes.insert(subtype);
+			}
+			if(fitered_subtypes.size()<1) return;
+			for(auto subtype : fitered_subtypes){
+				if(subtype == init_type) continue;
+				out<<types[subtype].name<<" ";
+			}
+			out<<"- "<<types[init_type].name<<std::endl;
+			for(auto subtype : fitered_subtypes){
+				this->PDDLPrintTypes(out, subtype);
+			}
+		
+	}
+
+	void PDDLPrintPredicates(std::ostream &out){
+		for(auto pred : preds){
+			out << "( " << pred.name;
+			for ( unsigned i = 0; i < pred.params.size(); ++i ) {
+			//if ( ts.size() ) s << ts[i];
+			//else 
+			out << " ?" << types[pred.params[i]].name << i;
+			if ( typed ) out << " - " << types[pred.params[i]].name;
+			}
+			out << " )"<<std::endl;
+		}
+	}
+
 	//checks if type is subtype of supertype
 	bool isSupertype(int type, int supertype){
 		if(type == supertype) return false;

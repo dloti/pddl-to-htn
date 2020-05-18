@@ -4,8 +4,8 @@
 #define LISP false
 #define JSHOP2H false
 //optimizations
-#define REACHAB true
-#define GORDER true
+#define REACHAB false
+#define GORDER false
 
 std::vector<int> direct_reachability;
 std::vector<Condition> printed_locks;
@@ -695,9 +695,17 @@ void printTaskToFluent(std::ostream &out){
 
 //Wrapper method for printing HTN
 void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_name) {
-	if (LISP)
-		out << "(in-package :shop2-user)\n\n";
-	out << "(DEFDOMAIN " << domain_name << " (\n";
+	out << "(define (domain " << domain_name <<std::endl;
+	out << "(:requirements :typing)"<<std::endl;
+	out << "(:types"<<std::endl;
+	auto obj_type = std::find_if(d.types.begin(),d.types.end(),[](const Condition& type) {return "OBJECT" == type.name;});
+	d.PDDLPrintTypes(out, std::distance(d.types.begin(), obj_type));
+	out<<")"<<std::endl;
+
+	out<<"(:predicates"<<std::endl;
+	d.PDDLPrintPredicates(out);
+	out<<std::endl;
+
 	if(REACHAB) {
 		preprocessReach(out,d);
 		printAxioms(out, d);
