@@ -593,6 +593,23 @@ public:
 		else stream << q << r << u << empty;
 		stream << "    )\n";
 	}
+
+	void printHDDLAuxAction( Condition &c, std::ostream &os, bool b, bool n,
+	                     const std::string &s, const std::string &t, int invariant_number=-1 ) {
+		std::string p("-");
+		std::string u = parametrizeCondition( c, t + p, b, invariant_number );
+		os<<"( :action "<<s+p<<c.name<<std::endl;
+		os<<"\t:parameters (";
+				for ( unsigned i = 0; i < c.params.size(); ++i )
+					os << " ?" << types[c.params[i]].name << i <<" - "<<types[c.params[i]].name;
+				os<<")"<<std::endl;
+		os<<"\t:precondition ( )"<<std::endl;
+		os<<"\t:effect (and"<<std::endl;
+			os<<"\t\t";
+			os<<u;
+			os << ")"<<std::endl;
+		os<<")"<<std::endl;
+	}
 };
 
 class Instance {

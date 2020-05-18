@@ -635,6 +635,27 @@ void printAuxOps(std::ostream &stream, Domain &d) {
 		}
 }
 
+void printHDDLAuxOps(std::ostream &stream, Domain &d) {
+	for (unsigned i = 0; i < d.preds.size(); ++i)
+		if (d.predActions[i].size() > 0) {
+			d.printHDDLAuxAction(d.preds[i], stream, false, false, "!!LOCK", "LOCKED");
+			d.printHDDLAuxAction(d.preds[i], stream, true, false, "!!UNLOCK", "LOCKED");
+
+			CondPairMap v = predInvs[d.pmap[d.preds[i].name]];
+			std::vector<int> inv_nums;
+			for (CondPairMap::iterator it = v.begin(); it != v.end(); ++it)
+				for (PairSet::iterator it1 = it->second.begin(); it1 != it->second.end(); ++it1)
+					if (std::find(inv_nums.begin(), inv_nums.end(), it1->first) == inv_nums.end())
+						inv_nums.push_back(it1->first);
+			
+            d.printHDDLAuxAction(d.preds[i], stream, false, false, "!!VISIT", "VISITED");
+			d.printHDDLAuxAction(d.preds[i], stream, false, false, "!!FLAG", "FLAGGED");
+			d.printHDDLAuxAction(d.preds[i], stream, true, false, "!!UNFLAG", "FLAGGED");
+			d.printMethod(d.preds[i], stream, "IFUNLOCK", "FLAGGED");
+			
+		}
+}
+
 //PREPROCESS singular invariants
 void preprocessReach(std::ostream &out, Domain &d){
 	for (int i = 0; i < invs.size(); ++i) {
@@ -715,7 +736,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 		printSOLVE(out, d, trorder);
 	}
 	d.printHDDLActions(out);
-	printAuxOps(out, d);
+	printHDDLAuxOps(out, d);
 	printACHIEVEOps(d, out);
 	printSTOPALLOps(d, out);
 	printDOMethods(d, out);
