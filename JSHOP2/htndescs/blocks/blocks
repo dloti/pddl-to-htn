@@ -3,32 +3,40 @@
 (:types
 )
 (:predicates
-( ON ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
-( ONTABLE ?BLOCK0 - BLOCK )
-( CLEAR ?BLOCK0 - BLOCK )
-( HANDEMPTY )
-( HOLDING ?BLOCK0 - BLOCK )
-
-    ( :OPERATOR ( !PICK-UP ?BLOCK0 )
-                ( ( BLOCK ?BLOCK0 ) ( CLEAR ?BLOCK0 ) ( ONTABLE ?BLOCK0 ) ( HANDEMPTY ) ( NOT ( LOCKED-ONTABLE ?BLOCK0 ) ) ( NOT ( LOCKED-CLEAR ?BLOCK0 ) ) ( NOT ( LOCKED-HANDEMPTY ) ) )
-                ( ( ONTABLE ?BLOCK0 ) ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) )
-                ( ( HOLDING ?BLOCK0 ) )
-    )
-    ( :OPERATOR ( !PUT-DOWN ?BLOCK0 )
-                ( ( BLOCK ?BLOCK0 ) ( HOLDING ?BLOCK0 ) ( NOT ( LOCKED-HOLDING ?BLOCK0 ) ) )
-                ( ( HOLDING ?BLOCK0 ) )
-                ( ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( ONTABLE ?BLOCK0 ) )
-    )
-    ( :OPERATOR ( !STACK ?BLOCK0 ?BLOCK1 )
-                ( ( BLOCK ?BLOCK0 ) ( BLOCK ?BLOCK1 ) ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK1 ) ( NOT ( LOCKED-HOLDING ?BLOCK0 ) ) ( NOT ( LOCKED-CLEAR ?BLOCK1 ) ) )
-                ( ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK1 ) )
-                ( ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( ON ?BLOCK0 ?BLOCK1 ) )
-    )
-    ( :OPERATOR ( !UNSTACK ?BLOCK0 ?BLOCK1 )
-                ( ( BLOCK ?BLOCK0 ) ( BLOCK ?BLOCK1 ) ( ON ?BLOCK0 ?BLOCK1 ) ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( NOT ( LOCKED-CLEAR ?BLOCK0 ) ) ( NOT ( LOCKED-HANDEMPTY ) ) ( NOT ( LOCKED-ON ?BLOCK0 ?BLOCK1 ) ) )
-                ( ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( ON ?BLOCK0 ?BLOCK1 ) )
-                ( ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK1 ) )
-    )
+	( ON ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
+	( ONTABLE ?BLOCK0 - BLOCK )
+	( CLEAR ?BLOCK0 - BLOCK )
+	( HANDEMPTY )
+	( HOLDING ?BLOCK0 - BLOCK )
+)
+( :action !PICK-UP
+	:parameters ( ?BLOCK0 - BLOCK)
+	:precondition (and
+		 ( CLEAR ?BLOCK0 ) ( ONTABLE ?BLOCK0 ) ( HANDEMPTY ) ( NOT ( LOCKED-ONTABLE ?BLOCK0 ) ) ( NOT ( LOCKED-CLEAR ?BLOCK0 ) ) ( NOT ( LOCKED-HANDEMPTY ) ))
+	:effect (and
+		 ( NOT ( ONTABLE ?BLOCK0 ) ) ( NOT ( CLEAR ?BLOCK0 ) ) ( NOT ( HANDEMPTY ) ) ( HOLDING ?BLOCK0 ))
+)
+( :action !PUT-DOWN
+	:parameters ( ?BLOCK0 - BLOCK)
+	:precondition (and
+		 ( HOLDING ?BLOCK0 ) ( NOT ( LOCKED-HOLDING ?BLOCK0 ) ))
+	:effect (and
+		 ( NOT ( HOLDING ?BLOCK0 ) ) ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( ONTABLE ?BLOCK0 ))
+)
+( :action !STACK
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
+	:precondition (and
+		 ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK1 ) ( NOT ( LOCKED-HOLDING ?BLOCK0 ) ) ( NOT ( LOCKED-CLEAR ?BLOCK1 ) ))
+	:effect (and
+		 ( NOT ( HOLDING ?BLOCK0 ) ) ( NOT ( CLEAR ?BLOCK1 ) ) ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( ON ?BLOCK0 ?BLOCK1 ))
+)
+( :action !UNSTACK
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
+	:precondition (and
+		 ( ON ?BLOCK0 ?BLOCK1 ) ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( NOT ( LOCKED-CLEAR ?BLOCK0 ) ) ( NOT ( LOCKED-HANDEMPTY ) ) ( NOT ( LOCKED-ON ?BLOCK0 ?BLOCK1 ) ))
+	:effect (and
+		 ( NOT ( CLEAR ?BLOCK0 ) ) ( NOT ( HANDEMPTY ) ) ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK1 ))
+)
     ( :OPERATOR ( !!LOCK-ON ?BLOCK0 ?BLOCK1 )
                ( )
                ( )

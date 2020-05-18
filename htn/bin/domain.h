@@ -452,6 +452,7 @@ public:
 				if(!is_subsubtype) fitered_subtypes.insert(subtype);
 			}
 			if(fitered_subtypes.size()<1) return;
+			out<<"\t";
 			for(auto subtype : fitered_subtypes){
 				if(subtype == init_type) continue;
 				out<<types[subtype].name<<" ";
@@ -465,10 +466,9 @@ public:
 
 	void PDDLPrintPredicates(std::ostream &out){
 		for(auto pred : preds){
+			out<<"\t";
 			out << "( " << pred.name;
 			for ( unsigned i = 0; i < pred.params.size(); ++i ) {
-			//if ( ts.size() ) s << ts[i];
-			//else 
 			out << " ?" << types[pred.params[i]].name << i;
 			if ( typed ) out << " - " << types[pred.params[i]].name;
 			}
@@ -521,13 +521,36 @@ public:
 			}
 			printConditionVector( actions[i], actions[i].pre, stream, "", false );
 			printConditionVector( actions[i], actions[i].del, stream, "LOCKED-", true );
-			//killN
-			//printConditionVector( actions[i], actions[i].add, stream, "LOCKEDN-", true );
 			stream << " )\n                (";
 			printConditionVector( actions[i], actions[i].del, stream, "", false );
 			stream << " )\n                (";
 			printConditionVector( actions[i], actions[i].add, stream, "", false );
 			stream << " )\n    )\n";
+		}
+	}
+
+	void printHDDLActions( std::ostream &os ) {
+		for ( unsigned i = 0; i < actions.size(); ++i ) {
+			os<<"( :action !"<<actions[i].name<<std::endl;
+			os<<"\t:parameters (";
+				Condition& c = actions[i];
+				for ( unsigned i = 0; i < c.params.size(); ++i )
+					os << " ?" << types[c.params[i]].name << i <<" - "<<types[c.params[i]].name;
+				os<<")"<<std::endl;
+
+			os<<"\t:precondition (and"<<std::endl;
+				os<<"\t\t";
+				printConditionVector( actions[i], actions[i].pre, os, "", false );
+				printConditionVector( actions[i], actions[i].del, os, "LOCKED-", true );
+				os<<")"<<std::endl;
+				
+			os<<"\t:effect (and"<<std::endl;
+				os<<"\t\t";
+				printConditionVector( actions[i], actions[i].del, os, "", true );
+				printConditionVector( actions[i], actions[i].add, os, "", false );
+				os<<")"<<std::endl;
+			os<<")"<<std::endl;
+		
 		}
 	}
 

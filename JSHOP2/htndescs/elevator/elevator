@@ -1,38 +1,46 @@
 (define (domain elevator
 (:requirements :typing)
 (:types
-PASSENGER FLOOR - OBJECT
+	PASSENGER FLOOR - OBJECT
 )
 (:predicates
-( ORIGIN ?PASSENGER0 - PASSENGER ?FLOOR1 - FLOOR )
-( DESTIN ?PASSENGER0 - PASSENGER ?FLOOR1 - FLOOR )
-( ABOVE ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR )
-( BOARDED ?PASSENGER0 - PASSENGER )
-( NOT-BOARDED ?PASSENGER0 - PASSENGER )
-( SERVED ?PASSENGER0 - PASSENGER )
-( NOT-SERVED ?PASSENGER0 - PASSENGER )
-( LIFT-AT ?FLOOR0 - FLOOR )
-
-    ( :OPERATOR ( !BOARD ?FLOOR0 ?PASSENGER1 )
-                ( ( FLOOR ?FLOOR0 ) ( PASSENGER ?PASSENGER1 ) ( LIFT-AT ?FLOOR0 ) ( ORIGIN ?PASSENGER1 ?FLOOR0 ) )
-                ( )
-                ( ( BOARDED ?PASSENGER1 ) )
-    )
-    ( :OPERATOR ( !DEPART ?FLOOR0 ?PASSENGER1 )
-                ( ( FLOOR ?FLOOR0 ) ( PASSENGER ?PASSENGER1 ) ( LIFT-AT ?FLOOR0 ) ( DESTIN ?PASSENGER1 ?FLOOR0 ) ( BOARDED ?PASSENGER1 ) ( NOT ( LOCKED-BOARDED ?PASSENGER1 ) ) )
-                ( ( BOARDED ?PASSENGER1 ) )
-                ( ( SERVED ?PASSENGER1 ) )
-    )
-    ( :OPERATOR ( !UP ?FLOOR0 ?FLOOR1 )
-                ( ( FLOOR ?FLOOR0 ) ( FLOOR ?FLOOR1 ) ( LIFT-AT ?FLOOR0 ) ( ABOVE ?FLOOR0 ?FLOOR1 ) ( NOT ( LOCKED-LIFT-AT ?FLOOR0 ) ) )
-                ( ( LIFT-AT ?FLOOR0 ) )
-                ( ( LIFT-AT ?FLOOR1 ) )
-    )
-    ( :OPERATOR ( !DOWN ?FLOOR0 ?FLOOR1 )
-                ( ( FLOOR ?FLOOR0 ) ( FLOOR ?FLOOR1 ) ( LIFT-AT ?FLOOR0 ) ( ABOVE ?FLOOR1 ?FLOOR0 ) ( NOT ( LOCKED-LIFT-AT ?FLOOR0 ) ) )
-                ( ( LIFT-AT ?FLOOR0 ) )
-                ( ( LIFT-AT ?FLOOR1 ) )
-    )
+	( ORIGIN ?PASSENGER0 - PASSENGER ?FLOOR1 - FLOOR )
+	( DESTIN ?PASSENGER0 - PASSENGER ?FLOOR1 - FLOOR )
+	( ABOVE ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR )
+	( BOARDED ?PASSENGER0 - PASSENGER )
+	( NOT-BOARDED ?PASSENGER0 - PASSENGER )
+	( SERVED ?PASSENGER0 - PASSENGER )
+	( NOT-SERVED ?PASSENGER0 - PASSENGER )
+	( LIFT-AT ?FLOOR0 - FLOOR )
+)
+( :action !BOARD
+	:parameters ( ?FLOOR0 - FLOOR ?PASSENGER1 - PASSENGER)
+	:precondition (and
+		 ( LIFT-AT ?FLOOR0 ) ( ORIGIN ?PASSENGER1 ?FLOOR0 ))
+	:effect (and
+		 ( BOARDED ?PASSENGER1 ))
+)
+( :action !DEPART
+	:parameters ( ?FLOOR0 - FLOOR ?PASSENGER1 - PASSENGER)
+	:precondition (and
+		 ( LIFT-AT ?FLOOR0 ) ( DESTIN ?PASSENGER1 ?FLOOR0 ) ( BOARDED ?PASSENGER1 ) ( NOT ( LOCKED-BOARDED ?PASSENGER1 ) ))
+	:effect (and
+		 ( NOT ( BOARDED ?PASSENGER1 ) ) ( SERVED ?PASSENGER1 ))
+)
+( :action !UP
+	:parameters ( ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR)
+	:precondition (and
+		 ( LIFT-AT ?FLOOR0 ) ( ABOVE ?FLOOR0 ?FLOOR1 ) ( NOT ( LOCKED-LIFT-AT ?FLOOR0 ) ))
+	:effect (and
+		 ( NOT ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ))
+)
+( :action !DOWN
+	:parameters ( ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR)
+	:precondition (and
+		 ( LIFT-AT ?FLOOR0 ) ( ABOVE ?FLOOR1 ?FLOOR0 ) ( NOT ( LOCKED-LIFT-AT ?FLOOR0 ) ))
+	:effect (and
+		 ( NOT ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ))
+)
     ( :OPERATOR ( !!LOCK-BOARDED ?PASSENGER0 )
                ( )
                ( )

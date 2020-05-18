@@ -704,7 +704,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 
 	out<<"(:predicates"<<std::endl;
 	d.PDDLPrintPredicates(out);
-	out<<std::endl;
+	out<<")"<<std::endl;
 
 	if(REACHAB) {
 		preprocessReach(out,d);
@@ -714,7 +714,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 		printORDER(out, d, trorder);
 		printSOLVE(out, d, trorder);
 	}
-	d.printSHOPOperators(out);
+	d.printHDDLActions(out);
 	printAuxOps(out, d);
 	printACHIEVEOps(d, out);
 	printSTOPALLOps(d, out);
