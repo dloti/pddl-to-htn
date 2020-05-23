@@ -1,5 +1,6 @@
 #include "create_htn.h"
 #include "time.hxx"
+#include <cassert>
 #define UNORDERED false
 #define LISP false
 #define JSHOP2H false
@@ -139,6 +140,64 @@ void printDOMethods(Domain &d, std::ostream &out) {
 				out << d.parametrizeCondition(a, "!", false);
 			
 				out << " )\n    )\n";
+			}
+	}
+}
+
+void printHDDLDOMethods(Domain &d, std::ostream &out) {
+	for (TripMacroMap::iterator i = macros.begin(); i != macros.end(); ++i) {
+//		std::cout << "\nMacros from " << invs[i->first.a].conds[i->first.b] << " to " << invs[i->first.a].conds[i->first.c] << "\n";
+
+		for (unsigned j = 0; j < i->second.size(); ++j)
+			if (i->second[j].variable.size() > 0) {
+				macro m = i->second[j];
+				Action a = d.actions[m.t.a];
+				Condition c = a.getCondition(m.t.b);
+				Condition t = a.getCondition(m.t.c);
+				out<<"(:task "<< d.parametrizeHDDLCondition(a, "DO-" + c.name + "-", i->first.a)<<std::endl
+				   <<")"<<std::endl;
+				out<<"(:method ";
+				std::ostringstream ts;
+				ts << d.parametrizeHDDLCondition(a, "M-DO-" + c.name + "-", i->first.a);
+				out <<ts.str()<< "\n";
+				taskToInvariantMap[ts.str()] = i->first.a;
+				taskToFluentMap[i->first.a][ts.str()] =  d.parametrizeCondition(a, t, "", false);
+				ts.str("");
+				ts.clear();
+
+				out<<"\t:task"<<d.parametrizeCondition(a, "DO-" + c.name + "-",false, i->first.a)<<std::endl;
+
+				out<<"\t:precondition (and ";
+					if (isPosNegInvariant(i->first.a))
+						out << " ( NOT";
+					out << d.parametrizeCondition(a, c, "", false);
+					if (isPosNegInvariant(i->first.a))
+						out << " )";
+				out<<")"<<std::endl;
+				
+				assert(!(m.unordered_precs && m.rorder.size() > 0));
+
+				out<<"\t:ordered-subtasks (and ";
+				for (int k = m.rorder.size() - 1; k >= 0; --k) {
+					CondPairSet::iterator it = m.variable.begin();
+					for (int l = 0; l < m.rorder[k]; ++l, ++it)
+						;
+					Condition c2 = a.pre[it->second.first];
+					//std::cout << k << "," << c2.name << "\n";
+					std::string s(c2.neg ? "" : "ACHIEVE-");
+
+					out << d.parametrizeCondition(a, c2, s, false);
+				}
+				out << std::string((UNORDERED || (m.unordered_precs && m.rorder.size() > 0)) ? ")" : "");
+				// for (CondPairSet::iterator it = m.variable.begin(); it != m.variable.end(); ++it) {
+				// 	Condition c2 = a.pre[it->second.first];
+				// 	std::string s(c2.neg ? "" : "IFUNLOCK-");
+				// 	out << d.parametrizeCondition(a, c2, s, false);
+				// }
+				out << d.parametrizeCondition(a, "!", false);
+			
+				out << " )"<<std::endl;
+				out<<")"<<std::endl;
 			}
 	}
 }
@@ -736,10 +795,11 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 		printSOLVE(out, d, trorder);
 	}
 	d.printHDDLActions(out);
-	printHDDLAuxOps(out, d);
-	printACHIEVEOps(d, out);
-	printSTOPALLOps(d, out);
-	printDOMethods(d, out);
+	//printHDDLAuxOps(out, d);
+	//printACHIEVEOps(d, out);
+	//printSTOPALLOps(d, out);
+	printHDDLDOMethods(d, out);
+	//printDOMethods(d,out);
 
 	for (unsigned i = 0; i < invs.size(); ++i) {
 		bool isDirReachable = false;

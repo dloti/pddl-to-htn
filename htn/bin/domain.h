@@ -494,6 +494,19 @@ public:
 		return os.str();
 	}
 
+	std::string parametrizeHDDLCondition( Condition &c, const std::string &s, int invariant_number=-1) {
+		std::ostringstream os;
+		os << s << c.name;
+		if(invariant_number>-1)
+			os << invariant_number;
+	 	os<<std::endl;
+		os<<"\t:parameters (";
+		for ( unsigned i = 0; i < c.params.size(); ++i )
+			os << " ?" << types[c.params[i]].name << i << " - " << types[c.params[i]].name;
+		os << " )";
+		return os.str();
+	}
+
 	std::string parametrizeCondition( Action &a, Condition &c, const std::string &s, bool b ) {
 		std::ostringstream os;
 		os << " ( " << ( b ? "NOT ( " : "" ) << s << c.name;
@@ -541,7 +554,7 @@ public:
 			os<<"\t:precondition (and"<<std::endl;
 				os<<"\t\t";
 				printConditionVector( actions[i], actions[i].pre, os, "", false );
-				printConditionVector( actions[i], actions[i].del, os, "LOCKED-", true );
+				//printConditionVector( actions[i], actions[i].del, os, "LOCKED-", true );
 				os<<")"<<std::endl;
 				
 			os<<"\t:effect (and"<<std::endl;

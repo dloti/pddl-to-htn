@@ -15,257 +15,108 @@
 ( :action !LOAD-TRUCK
 	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION)
 	:precondition (and
-		 ( AT ?TRUCK1 ?LOCATION2 ) ( AT ?OBJ0 ?LOCATION2 ) ( NOT ( LOCKED-AT ?OBJ0 ?LOCATION2 ) ))
+		 ( AT ?TRUCK1 ?LOCATION2 ) ( AT ?OBJ0 ?LOCATION2 ))
 	:effect (and
 		 ( NOT ( AT ?OBJ0 ?LOCATION2 ) ) ( IN ?OBJ0 ?TRUCK1 ))
 )
 ( :action !UNLOAD-TRUCK
 	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION)
 	:precondition (and
-		 ( AT ?TRUCK1 ?LOCATION2 ) ( IN ?OBJ0 ?TRUCK1 ) ( NOT ( LOCKED-IN ?OBJ0 ?TRUCK1 ) ))
+		 ( AT ?TRUCK1 ?LOCATION2 ) ( IN ?OBJ0 ?TRUCK1 ))
 	:effect (and
 		 ( NOT ( IN ?OBJ0 ?TRUCK1 ) ) ( AT ?OBJ0 ?LOCATION2 ))
 )
 ( :action !BOARD-TRUCK
 	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION)
 	:precondition (and
-		 ( AT ?TRUCK1 ?LOCATION2 ) ( AT ?DRIVER0 ?LOCATION2 ) ( EMPTY ?TRUCK1 ) ( NOT ( LOCKED-AT ?DRIVER0 ?LOCATION2 ) ) ( NOT ( LOCKED-EMPTY ?TRUCK1 ) ))
+		 ( AT ?TRUCK1 ?LOCATION2 ) ( AT ?DRIVER0 ?LOCATION2 ) ( EMPTY ?TRUCK1 ))
 	:effect (and
 		 ( NOT ( AT ?DRIVER0 ?LOCATION2 ) ) ( NOT ( EMPTY ?TRUCK1 ) ) ( DRIVING ?DRIVER0 ?TRUCK1 ))
 )
 ( :action !DISEMBARK-TRUCK
 	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION)
 	:precondition (and
-		 ( AT ?TRUCK1 ?LOCATION2 ) ( DRIVING ?DRIVER0 ?TRUCK1 ) ( NOT ( LOCKED-DRIVING ?DRIVER0 ?TRUCK1 ) ))
+		 ( AT ?TRUCK1 ?LOCATION2 ) ( DRIVING ?DRIVER0 ?TRUCK1 ))
 	:effect (and
 		 ( NOT ( DRIVING ?DRIVER0 ?TRUCK1 ) ) ( AT ?DRIVER0 ?LOCATION2 ) ( EMPTY ?TRUCK1 ))
 )
 ( :action !DRIVE-TRUCK
 	:parameters ( ?TRUCK0 - TRUCK ?LOCATION1 - LOCATION ?LOCATION2 - LOCATION ?DRIVER3 - DRIVER)
 	:precondition (and
-		 ( AT ?TRUCK0 ?LOCATION1 ) ( DRIVING ?DRIVER3 ?TRUCK0 ) ( LINK ?LOCATION1 ?LOCATION2 ) ( NOT ( LOCKED-AT ?TRUCK0 ?LOCATION1 ) ))
+		 ( AT ?TRUCK0 ?LOCATION1 ) ( DRIVING ?DRIVER3 ?TRUCK0 ) ( LINK ?LOCATION1 ?LOCATION2 ))
 	:effect (and
 		 ( NOT ( AT ?TRUCK0 ?LOCATION1 ) ) ( AT ?TRUCK0 ?LOCATION2 ))
 )
 ( :action !WALK
 	:parameters ( ?DRIVER0 - DRIVER ?LOCATION1 - LOCATION ?LOCATION2 - LOCATION)
 	:precondition (and
-		 ( AT ?DRIVER0 ?LOCATION1 ) ( PATH ?LOCATION1 ?LOCATION2 ) ( NOT ( LOCKED-AT ?DRIVER0 ?LOCATION1 ) ))
+		 ( AT ?DRIVER0 ?LOCATION1 ) ( PATH ?LOCATION1 ?LOCATION2 ))
 	:effect (and
 		 ( NOT ( AT ?DRIVER0 ?LOCATION1 ) ) ( AT ?DRIVER0 ?LOCATION2 ))
 )
-( :action !!LOCK-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?LOCATION1 - LOCATION)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-AT ?LOCATABLE0 ?LOCATION1 ))
+(:task DO-AT-LOAD-TRUCK0
+	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
 )
-( :action !!UNLOCK-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?LOCATION1 - LOCATION)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-AT ?LOCATABLE0 ?LOCATION1 ) ))
+(:method M-DO-AT-LOAD-TRUCK0
+	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
+	:task ( DO-AT-LOAD-TRUCK0 ?OBJ0 ?TRUCK1 ?LOCATION2 )
+	:precondition (and  ( AT ?OBJ0 ?LOCATION2 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK1 ?LOCATION2 ) ( !LOAD-TRUCK ?OBJ0 ?TRUCK1 ?LOCATION2 ) )
 )
-( :action !!VISIT-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?LOCATION1 - LOCATION)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-AT ?LOCATABLE0 ?LOCATION1 ))
+(:task DO-IN-UNLOAD-TRUCK0
+	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
 )
-( :action !!FLAG-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?LOCATION1 - LOCATION)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-AT ?LOCATABLE0 ?LOCATION1 ))
+(:method M-DO-IN-UNLOAD-TRUCK0
+	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
+	:task ( DO-IN-UNLOAD-TRUCK0 ?OBJ0 ?TRUCK1 ?LOCATION2 )
+	:precondition (and  ( IN ?OBJ0 ?TRUCK1 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK1 ?LOCATION2 ) ( !UNLOAD-TRUCK ?OBJ0 ?TRUCK1 ?LOCATION2 ) )
 )
-( :action !!UNFLAG-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?LOCATION1 - LOCATION)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-AT ?LOCATABLE0 ?LOCATION1 ) ))
+(:task DO-AT-BOARD-TRUCK1
+	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
 )
-    ( :METHOD ( IFUNLOCK-AT ?LOCATABLE0 ?LOCATION1 )
-               ( ( FLAGGED-AT ?LOCATABLE0 ?LOCATION1 ) )
-               ( ( !!UNFLAG-AT ?LOCATABLE0 ?LOCATION1 ) )
-               ( ( NOT ( FLAGGED-AT ?LOCATABLE0 ?LOCATION1 ) ) )
-               ( ( !!UNLOCK-AT ?LOCATABLE0 ?LOCATION1 ) )
-    )
-( :action !!LOCK-IN
-	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-IN ?OBJ0 ?TRUCK1 ))
+(:method M-DO-AT-BOARD-TRUCK1
+	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
+	:task ( DO-AT-BOARD-TRUCK1 ?DRIVER0 ?TRUCK1 ?LOCATION2 )
+	:precondition (and  ( AT ?DRIVER0 ?LOCATION2 ))
+	:ordered-subtasks (and  ( !BOARD-TRUCK ?DRIVER0 ?TRUCK1 ?LOCATION2 ) )
 )
-( :action !!UNLOCK-IN
-	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-IN ?OBJ0 ?TRUCK1 ) ))
+(:task DO-DRIVING-DISEMBARK-TRUCK1
+	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
 )
-( :action !!VISIT-IN
-	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-IN ?OBJ0 ?TRUCK1 ))
+(:method M-DO-DRIVING-DISEMBARK-TRUCK1
+	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
+	:task ( DO-DRIVING-DISEMBARK-TRUCK1 ?DRIVER0 ?TRUCK1 ?LOCATION2 )
+	:precondition (and  ( DRIVING ?DRIVER0 ?TRUCK1 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK1 ?LOCATION2 ) ( !DISEMBARK-TRUCK ?DRIVER0 ?TRUCK1 ?LOCATION2 ) )
 )
-( :action !!FLAG-IN
-	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-IN ?OBJ0 ?TRUCK1 ))
+(:task DO-AT-DRIVE-TRUCK2
+	:parameters ( ?TRUCK0 - TRUCK ?LOCATION1 - LOCATION ?LOCATION2 - LOCATION ?DRIVER3 - DRIVER )
 )
-( :action !!UNFLAG-IN
-	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-IN ?OBJ0 ?TRUCK1 ) ))
+(:method M-DO-AT-DRIVE-TRUCK2
+	:parameters ( ?TRUCK0 - TRUCK ?LOCATION1 - LOCATION ?LOCATION2 - LOCATION ?DRIVER3 - DRIVER )
+	:task ( DO-AT-DRIVE-TRUCK2 ?TRUCK0 ?LOCATION1 ?LOCATION2 ?DRIVER3 )
+	:precondition (and  ( AT ?TRUCK0 ?LOCATION1 ))
+	:ordered-subtasks (and  ( ACHIEVE-DRIVING ?DRIVER3 ?TRUCK0 ) ( !DRIVE-TRUCK ?TRUCK0 ?LOCATION1 ?LOCATION2 ?DRIVER3 ) )
 )
-    ( :METHOD ( IFUNLOCK-IN ?OBJ0 ?TRUCK1 )
-               ( ( FLAGGED-IN ?OBJ0 ?TRUCK1 ) )
-               ( ( !!UNFLAG-IN ?OBJ0 ?TRUCK1 ) )
-               ( ( NOT ( FLAGGED-IN ?OBJ0 ?TRUCK1 ) ) )
-               ( ( !!UNLOCK-IN ?OBJ0 ?TRUCK1 ) )
-    )
-( :action !!LOCK-DRIVING
-	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-DRIVING ?DRIVER0 ?TRUCK1 ))
+(:task DO-EMPTY-BOARD-TRUCK3
+	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
 )
-( :action !!UNLOCK-DRIVING
-	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-DRIVING ?DRIVER0 ?TRUCK1 ) ))
+(:method M-DO-EMPTY-BOARD-TRUCK3
+	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
+	:task ( DO-EMPTY-BOARD-TRUCK3 ?DRIVER0 ?TRUCK1 ?LOCATION2 )
+	:precondition (and  ( EMPTY ?TRUCK1 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?DRIVER0 ?LOCATION2 ) ( !BOARD-TRUCK ?DRIVER0 ?TRUCK1 ?LOCATION2 ) )
 )
-( :action !!VISIT-DRIVING
-	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-DRIVING ?DRIVER0 ?TRUCK1 ))
+(:task DO-DRIVING-DISEMBARK-TRUCK3
+	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
 )
-( :action !!FLAG-DRIVING
-	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-DRIVING ?DRIVER0 ?TRUCK1 ))
+(:method M-DO-DRIVING-DISEMBARK-TRUCK3
+	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK ?LOCATION2 - LOCATION )
+	:task ( DO-DRIVING-DISEMBARK-TRUCK3 ?DRIVER0 ?TRUCK1 ?LOCATION2 )
+	:precondition (and  ( DRIVING ?DRIVER0 ?TRUCK1 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK1 ?LOCATION2 ) ( !DISEMBARK-TRUCK ?DRIVER0 ?TRUCK1 ?LOCATION2 ) )
 )
-( :action !!UNFLAG-DRIVING
-	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-DRIVING ?DRIVER0 ?TRUCK1 ) ))
-)
-    ( :METHOD ( IFUNLOCK-DRIVING ?DRIVER0 ?TRUCK1 )
-               ( ( FLAGGED-DRIVING ?DRIVER0 ?TRUCK1 ) )
-               ( ( !!UNFLAG-DRIVING ?DRIVER0 ?TRUCK1 ) )
-               ( ( NOT ( FLAGGED-DRIVING ?DRIVER0 ?TRUCK1 ) ) )
-               ( ( !!UNLOCK-DRIVING ?DRIVER0 ?TRUCK1 ) )
-    )
-( :action !!LOCK-EMPTY
-	:parameters ( ?TRUCK0 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-EMPTY ?TRUCK0 ))
-)
-( :action !!UNLOCK-EMPTY
-	:parameters ( ?TRUCK0 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-EMPTY ?TRUCK0 ) ))
-)
-( :action !!VISIT-EMPTY
-	:parameters ( ?TRUCK0 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-EMPTY ?TRUCK0 ))
-)
-( :action !!FLAG-EMPTY
-	:parameters ( ?TRUCK0 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-EMPTY ?TRUCK0 ))
-)
-( :action !!UNFLAG-EMPTY
-	:parameters ( ?TRUCK0 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-EMPTY ?TRUCK0 ) ))
-)
-    ( :METHOD ( IFUNLOCK-EMPTY ?TRUCK0 )
-               ( ( FLAGGED-EMPTY ?TRUCK0 ) )
-               ( ( !!UNFLAG-EMPTY ?TRUCK0 ) )
-               ( ( NOT ( FLAGGED-EMPTY ?TRUCK0 ) ) )
-               ( ( !!UNLOCK-EMPTY ?TRUCK0 ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE0 ?OBJ0 )
-                ( )
-                ( )
-                ( ( FORALL  ( ?LOCATION1 ) ( LOCATION ?LOCATION1 ) ( ( ACHIEVING-AT ?OBJ0 ?LOCATION1 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-IN ?OBJ0 ?TRUCK1 ) ) ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE1 ?DRIVER0 )
-                ( )
-                ( )
-                ( ( FORALL  ( ?LOCATION1 ) ( LOCATION ?LOCATION1 ) ( ( ACHIEVING-AT ?DRIVER0 ?LOCATION1 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-DRIVING ?DRIVER0 ?TRUCK1 ) ) ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE2 ?TRUCK0 )
-                ( )
-                ( )
-                ( ( FORALL  ( ?LOCATION1 ) ( LOCATION ?LOCATION1 ) ( ( ACHIEVING-AT ?TRUCK0 ?LOCATION1 ) ) ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE3 ?TRUCK0 )
-                ( )
-                ( )
-                ( ( ACHIEVING-EMPTY ?TRUCK0 ) ( FORALL  ( ?DRIVER1 ) ( DRIVER ?DRIVER1 ) ( ( ACHIEVING-DRIVING ?DRIVER1 ?TRUCK0 ) ) ) )
-    )
-    ( :OPERATOR ( !!STOPALL0 ?OBJ0 )
-                ( )
-                ( ( FORALL  ( ?LOCATION1 ) ( LOCATION ?LOCATION1 ) ( ( ACHIEVING-AT ?OBJ0 ?LOCATION1 ) ( VISITED-AT ?OBJ0 ?LOCATION1 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-IN ?OBJ0 ?TRUCK1 ) ( VISITED-IN ?OBJ0 ?TRUCK1 ) ) ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL1 ?DRIVER0 )
-                ( )
-                ( ( FORALL  ( ?LOCATION1 ) ( LOCATION ?LOCATION1 ) ( ( ACHIEVING-AT ?DRIVER0 ?LOCATION1 ) ( VISITED-AT ?DRIVER0 ?LOCATION1 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-DRIVING ?DRIVER0 ?TRUCK1 ) ( VISITED-DRIVING ?DRIVER0 ?TRUCK1 ) ) ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL2 ?TRUCK0 )
-                ( )
-                ( ( FORALL  ( ?LOCATION1 ) ( LOCATION ?LOCATION1 ) ( ( ACHIEVING-AT ?TRUCK0 ?LOCATION1 ) ( VISITED-AT ?TRUCK0 ?LOCATION1 ) ) ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL3 ?TRUCK0 )
-                ( )
-                ( ( ACHIEVING-EMPTY ?TRUCK0 ) ( VISITED-EMPTY ?TRUCK0 ) ( FORALL  ( ?DRIVER1 ) ( DRIVER ?DRIVER1 ) ( ( ACHIEVING-DRIVING ?DRIVER1 ?TRUCK0 ) ( VISITED-DRIVING ?DRIVER1 ?TRUCK0 ) ) ) )
-                ( )
-    )
-    ( :METHOD ( DO-AT-LOAD-TRUCK0 ?OBJ0 ?TRUCK1 ?LOCATION2 )
-              ( ( AT ?OBJ0 ?LOCATION2 ) )
-              ( ( ACHIEVE-AT ?TRUCK1 ?LOCATION2 ) ( IFUNLOCK-AT ?TRUCK1 ?LOCATION2 ) ( !LOAD-TRUCK ?OBJ0 ?TRUCK1 ?LOCATION2 ) )
-    )
-    ( :METHOD ( DO-IN-UNLOAD-TRUCK0 ?OBJ0 ?TRUCK1 ?LOCATION2 )
-              ( ( IN ?OBJ0 ?TRUCK1 ) )
-              ( ( ACHIEVE-AT ?TRUCK1 ?LOCATION2 ) ( IFUNLOCK-AT ?TRUCK1 ?LOCATION2 ) ( !UNLOAD-TRUCK ?OBJ0 ?TRUCK1 ?LOCATION2 ) )
-    )
-    ( :METHOD ( DO-AT-BOARD-TRUCK1 ?DRIVER0 ?TRUCK1 ?LOCATION2 )
-              ( ( AT ?DRIVER0 ?LOCATION2 ) )
-              ( ( IFUNLOCK-EMPTY ?TRUCK1 ) ( IFUNLOCK-AT ?TRUCK1 ?LOCATION2 ) ( !BOARD-TRUCK ?DRIVER0 ?TRUCK1 ?LOCATION2 ) )
-    )
-    ( :METHOD ( DO-DRIVING-DISEMBARK-TRUCK1 ?DRIVER0 ?TRUCK1 ?LOCATION2 )
-              ( ( DRIVING ?DRIVER0 ?TRUCK1 ) )
-              ( ( ACHIEVE-AT ?TRUCK1 ?LOCATION2 ) ( IFUNLOCK-AT ?TRUCK1 ?LOCATION2 ) ( !DISEMBARK-TRUCK ?DRIVER0 ?TRUCK1 ?LOCATION2 ) )
-    )
-    ( :METHOD ( DO-AT-DRIVE-TRUCK2 ?TRUCK0 ?LOCATION1 ?LOCATION2 ?DRIVER3 )
-              ( ( AT ?TRUCK0 ?LOCATION1 ) )
-              ( ( ACHIEVE-DRIVING ?DRIVER3 ?TRUCK0 ) ( IFUNLOCK-DRIVING ?DRIVER3 ?TRUCK0 ) ( !DRIVE-TRUCK ?TRUCK0 ?LOCATION1 ?LOCATION2 ?DRIVER3 ) )
-    )
-    ( :METHOD ( DO-EMPTY-BOARD-TRUCK3 ?DRIVER0 ?TRUCK1 ?LOCATION2 )
-              ( ( EMPTY ?TRUCK1 ) )
-              ( ( ACHIEVE-AT ?DRIVER0 ?LOCATION2 ) ( IFUNLOCK-AT ?DRIVER0 ?LOCATION2 ) ( !BOARD-TRUCK ?DRIVER0 ?TRUCK1 ?LOCATION2 ) )
-    )
-    ( :METHOD ( DO-DRIVING-DISEMBARK-TRUCK3 ?DRIVER0 ?TRUCK1 ?LOCATION2 )
-              ( ( DRIVING ?DRIVER0 ?TRUCK1 ) )
-              ( ( ACHIEVE-AT ?TRUCK1 ?LOCATION2 ) ( IFUNLOCK-AT ?TRUCK1 ?LOCATION2 ) ( !DISEMBARK-TRUCK ?DRIVER0 ?TRUCK1 ?LOCATION2 ) )
-    )
     ( :METHOD ( ACHIEVE-AT ?OBJ0 ?LOCATION1 )
               ( ( LOCKED-AT ?OBJ0 ?LOCATION1 ) ( OBJ ?OBJ0 )  ( LOCATION ?LOCATION1 )  )
               ( ( !!FLAG-AT ?OBJ0 ?LOCATION1 ) )

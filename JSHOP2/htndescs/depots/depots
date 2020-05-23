@@ -17,386 +17,200 @@
 ( :action !DRIVE
 	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE ?PLACE2 - PLACE)
 	:precondition (and
-		 ( AT ?TRUCK0 ?PLACE1 ) ( NOT ( LOCKED-AT ?TRUCK0 ?PLACE1 ) ))
+		 ( AT ?TRUCK0 ?PLACE1 ))
 	:effect (and
 		 ( NOT ( AT ?TRUCK0 ?PLACE1 ) ) ( AT ?TRUCK0 ?PLACE2 ))
 )
 ( :action !LIFT
 	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE)
 	:precondition (and
-		 ( AT ?HOIST0 ?PLACE3 ) ( AVAILABLE ?HOIST0 ) ( AT ?CRATE1 ?PLACE3 ) ( ON ?CRATE1 ?SURFACE2 ) ( CLEAR ?CRATE1 ) ( NOT ( LOCKED-AT ?CRATE1 ?PLACE3 ) ) ( NOT ( LOCKED-CLEAR ?CRATE1 ) ) ( NOT ( LOCKED-AVAILABLE ?HOIST0 ) ) ( NOT ( LOCKED-ON ?CRATE1 ?SURFACE2 ) ))
+		 ( AT ?HOIST0 ?PLACE3 ) ( AVAILABLE ?HOIST0 ) ( AT ?CRATE1 ?PLACE3 ) ( ON ?CRATE1 ?SURFACE2 ) ( CLEAR ?CRATE1 ))
 	:effect (and
 		 ( NOT ( AT ?CRATE1 ?PLACE3 ) ) ( NOT ( CLEAR ?CRATE1 ) ) ( NOT ( AVAILABLE ?HOIST0 ) ) ( NOT ( ON ?CRATE1 ?SURFACE2 ) ) ( LIFTING ?HOIST0 ?CRATE1 ) ( CLEAR ?SURFACE2 ))
 )
 ( :action !DROP
 	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE)
 	:precondition (and
-		 ( AT ?HOIST0 ?PLACE3 ) ( AT ?SURFACE2 ?PLACE3 ) ( CLEAR ?SURFACE2 ) ( LIFTING ?HOIST0 ?CRATE1 ) ( NOT ( LOCKED-LIFTING ?HOIST0 ?CRATE1 ) ) ( NOT ( LOCKED-CLEAR ?SURFACE2 ) ))
+		 ( AT ?HOIST0 ?PLACE3 ) ( AT ?SURFACE2 ?PLACE3 ) ( CLEAR ?SURFACE2 ) ( LIFTING ?HOIST0 ?CRATE1 ))
 	:effect (and
 		 ( NOT ( LIFTING ?HOIST0 ?CRATE1 ) ) ( NOT ( CLEAR ?SURFACE2 ) ) ( AVAILABLE ?HOIST0 ) ( AT ?CRATE1 ?PLACE3 ) ( CLEAR ?CRATE1 ) ( ON ?CRATE1 ?SURFACE2 ))
 )
 ( :action !LOAD
 	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE)
 	:precondition (and
-		 ( AT ?HOIST0 ?PLACE3 ) ( AT ?TRUCK2 ?PLACE3 ) ( LIFTING ?HOIST0 ?CRATE1 ) ( NOT ( LOCKED-LIFTING ?HOIST0 ?CRATE1 ) ))
+		 ( AT ?HOIST0 ?PLACE3 ) ( AT ?TRUCK2 ?PLACE3 ) ( LIFTING ?HOIST0 ?CRATE1 ))
 	:effect (and
 		 ( NOT ( LIFTING ?HOIST0 ?CRATE1 ) ) ( IN ?CRATE1 ?TRUCK2 ) ( AVAILABLE ?HOIST0 ))
 )
 ( :action !UNLOAD
 	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE)
 	:precondition (and
-		 ( AT ?HOIST0 ?PLACE3 ) ( AT ?TRUCK2 ?PLACE3 ) ( AVAILABLE ?HOIST0 ) ( IN ?CRATE1 ?TRUCK2 ) ( NOT ( LOCKED-IN ?CRATE1 ?TRUCK2 ) ) ( NOT ( LOCKED-AVAILABLE ?HOIST0 ) ))
+		 ( AT ?HOIST0 ?PLACE3 ) ( AT ?TRUCK2 ?PLACE3 ) ( AVAILABLE ?HOIST0 ) ( IN ?CRATE1 ?TRUCK2 ))
 	:effect (and
 		 ( NOT ( IN ?CRATE1 ?TRUCK2 ) ) ( NOT ( AVAILABLE ?HOIST0 ) ) ( LIFTING ?HOIST0 ?CRATE1 ))
 )
-( :action !!LOCK-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?PLACE1 - PLACE)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-AT ?LOCATABLE0 ?PLACE1 ))
+(:task DO-AT-LIFT1
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
 )
-( :action !!UNLOCK-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?PLACE1 - PLACE)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-AT ?LOCATABLE0 ?PLACE1 ) ))
+(:method M-DO-AT-LIFT1
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-AT-LIFT1 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( AT ?CRATE1 ?PLACE3 ))
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CRATE1 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
 )
-( :action !!VISIT-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?PLACE1 - PLACE)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-AT ?LOCATABLE0 ?PLACE1 ))
+(:task DO-LIFTING-DROP1
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
 )
-( :action !!FLAG-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?PLACE1 - PLACE)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-AT ?LOCATABLE0 ?PLACE1 ))
+(:method M-DO-LIFTING-DROP1
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-LIFTING-DROP1 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( LIFTING ?HOIST0 ?CRATE1 ))
+	:ordered-subtasks (and  ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
 )
-( :action !!UNFLAG-AT
-	:parameters ( ?LOCATABLE0 - LOCATABLE ?PLACE1 - PLACE)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-AT ?LOCATABLE0 ?PLACE1 ) ))
+(:task DO-LIFTING-LOAD1
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
 )
-    ( :METHOD ( IFUNLOCK-AT ?LOCATABLE0 ?PLACE1 )
-               ( ( FLAGGED-AT ?LOCATABLE0 ?PLACE1 ) )
-               ( ( !!UNFLAG-AT ?LOCATABLE0 ?PLACE1 ) )
-               ( ( NOT ( FLAGGED-AT ?LOCATABLE0 ?PLACE1 ) ) )
-               ( ( !!UNLOCK-AT ?LOCATABLE0 ?PLACE1 ) )
-    )
-( :action !!LOCK-ON
-	:parameters ( ?CRATE0 - CRATE ?SURFACE1 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-ON ?CRATE0 ?SURFACE1 ))
+(:method M-DO-LIFTING-LOAD1
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+	:task ( DO-LIFTING-LOAD1 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
+	:precondition (and  ( LIFTING ?HOIST0 ?CRATE1 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( !LOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
 )
-( :action !!UNLOCK-ON
-	:parameters ( ?CRATE0 - CRATE ?SURFACE1 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-ON ?CRATE0 ?SURFACE1 ) ))
+(:task DO-IN-UNLOAD1
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
 )
-( :action !!VISIT-ON
-	:parameters ( ?CRATE0 - CRATE ?SURFACE1 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-ON ?CRATE0 ?SURFACE1 ))
+(:method M-DO-IN-UNLOAD1
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+	:task ( DO-IN-UNLOAD1 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
+	:precondition (and  ( IN ?CRATE1 ?TRUCK2 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( !UNLOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
 )
-( :action !!FLAG-ON
-	:parameters ( ?CRATE0 - CRATE ?SURFACE1 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-ON ?CRATE0 ?SURFACE1 ))
+(:task DO-ON-LIFT2
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
 )
-( :action !!UNFLAG-ON
-	:parameters ( ?CRATE0 - CRATE ?SURFACE1 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-ON ?CRATE0 ?SURFACE1 ) ))
+(:method M-DO-ON-LIFT2
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-ON-LIFT2 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( ON ?CRATE1 ?SURFACE2 ))
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CRATE1 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
 )
-    ( :METHOD ( IFUNLOCK-ON ?CRATE0 ?SURFACE1 )
-               ( ( FLAGGED-ON ?CRATE0 ?SURFACE1 ) )
-               ( ( !!UNFLAG-ON ?CRATE0 ?SURFACE1 ) )
-               ( ( NOT ( FLAGGED-ON ?CRATE0 ?SURFACE1 ) ) )
-               ( ( !!UNLOCK-ON ?CRATE0 ?SURFACE1 ) )
-    )
-( :action !!LOCK-IN
-	:parameters ( ?CRATE0 - CRATE ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-IN ?CRATE0 ?TRUCK1 ))
+(:task DO-LIFTING-DROP2
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
 )
-( :action !!UNLOCK-IN
-	:parameters ( ?CRATE0 - CRATE ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-IN ?CRATE0 ?TRUCK1 ) ))
+(:method M-DO-LIFTING-DROP2
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-LIFTING-DROP2 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( LIFTING ?HOIST0 ?CRATE1 ))
+	:ordered-subtasks (and  ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
 )
-( :action !!VISIT-IN
-	:parameters ( ?CRATE0 - CRATE ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-IN ?CRATE0 ?TRUCK1 ))
+(:task DO-LIFTING-LOAD2
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
 )
-( :action !!FLAG-IN
-	:parameters ( ?CRATE0 - CRATE ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-IN ?CRATE0 ?TRUCK1 ))
+(:method M-DO-LIFTING-LOAD2
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+	:task ( DO-LIFTING-LOAD2 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
+	:precondition (and  ( LIFTING ?HOIST0 ?CRATE1 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( !LOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
 )
-( :action !!UNFLAG-IN
-	:parameters ( ?CRATE0 - CRATE ?TRUCK1 - TRUCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-IN ?CRATE0 ?TRUCK1 ) ))
+(:task DO-IN-UNLOAD2
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
 )
-    ( :METHOD ( IFUNLOCK-IN ?CRATE0 ?TRUCK1 )
-               ( ( FLAGGED-IN ?CRATE0 ?TRUCK1 ) )
-               ( ( !!UNFLAG-IN ?CRATE0 ?TRUCK1 ) )
-               ( ( NOT ( FLAGGED-IN ?CRATE0 ?TRUCK1 ) ) )
-               ( ( !!UNLOCK-IN ?CRATE0 ?TRUCK1 ) )
-    )
-( :action !!LOCK-LIFTING
-	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-LIFTING ?HOIST0 ?CRATE1 ))
+(:method M-DO-IN-UNLOAD2
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+	:task ( DO-IN-UNLOAD2 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
+	:precondition (and  ( IN ?CRATE1 ?TRUCK2 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( !UNLOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
 )
-( :action !!UNLOCK-LIFTING
-	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-LIFTING ?HOIST0 ?CRATE1 ) ))
+(:task DO-ON-LIFT3
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
 )
-( :action !!VISIT-LIFTING
-	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-LIFTING ?HOIST0 ?CRATE1 ))
+(:method M-DO-ON-LIFT3
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-ON-LIFT3 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( ON ?CRATE1 ?SURFACE2 ))
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CRATE1 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
 )
-( :action !!FLAG-LIFTING
-	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-LIFTING ?HOIST0 ?CRATE1 ))
+(:task DO-CLEAR-DROP3
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
 )
-( :action !!UNFLAG-LIFTING
-	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-LIFTING ?HOIST0 ?CRATE1 ) ))
+(:method M-DO-CLEAR-DROP3
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-CLEAR-DROP3 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( CLEAR ?SURFACE2 ))
+	:ordered-subtasks (and  ( ACHIEVE-LIFTING ?HOIST0 ?CRATE1 ) ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
 )
-    ( :METHOD ( IFUNLOCK-LIFTING ?HOIST0 ?CRATE1 )
-               ( ( FLAGGED-LIFTING ?HOIST0 ?CRATE1 ) )
-               ( ( !!UNFLAG-LIFTING ?HOIST0 ?CRATE1 ) )
-               ( ( NOT ( FLAGGED-LIFTING ?HOIST0 ?CRATE1 ) ) )
-               ( ( !!UNLOCK-LIFTING ?HOIST0 ?CRATE1 ) )
-    )
-( :action !!LOCK-AVAILABLE
-	:parameters ( ?HOIST0 - HOIST)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-AVAILABLE ?HOIST0 ))
+(:task DO-LIFTING-LOAD4
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
 )
-( :action !!UNLOCK-AVAILABLE
-	:parameters ( ?HOIST0 - HOIST)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-AVAILABLE ?HOIST0 ) ))
+(:method M-DO-LIFTING-LOAD4
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+	:task ( DO-LIFTING-LOAD4 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
+	:precondition (and  ( LIFTING ?HOIST0 ?CRATE1 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( !LOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
 )
-( :action !!VISIT-AVAILABLE
-	:parameters ( ?HOIST0 - HOIST)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-AVAILABLE ?HOIST0 ))
+(:task DO-LIFTING-DROP4
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
 )
-( :action !!FLAG-AVAILABLE
-	:parameters ( ?HOIST0 - HOIST)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-AVAILABLE ?HOIST0 ))
+(:method M-DO-LIFTING-DROP4
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-LIFTING-DROP4 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( LIFTING ?HOIST0 ?CRATE1 ))
+	:ordered-subtasks (and  ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
 )
-( :action !!UNFLAG-AVAILABLE
-	:parameters ( ?HOIST0 - HOIST)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-AVAILABLE ?HOIST0 ) ))
+(:task DO-IN-UNLOAD4
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
 )
-    ( :METHOD ( IFUNLOCK-AVAILABLE ?HOIST0 )
-               ( ( FLAGGED-AVAILABLE ?HOIST0 ) )
-               ( ( !!UNFLAG-AVAILABLE ?HOIST0 ) )
-               ( ( NOT ( FLAGGED-AVAILABLE ?HOIST0 ) ) )
-               ( ( !!UNLOCK-AVAILABLE ?HOIST0 ) )
-    )
-( :action !!LOCK-CLEAR
-	:parameters ( ?SURFACE0 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-CLEAR ?SURFACE0 ))
+(:method M-DO-IN-UNLOAD4
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+	:task ( DO-IN-UNLOAD4 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
+	:precondition (and  ( IN ?CRATE1 ?TRUCK2 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( !UNLOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
 )
-( :action !!UNLOCK-CLEAR
-	:parameters ( ?SURFACE0 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-CLEAR ?SURFACE0 ) ))
+(:task DO-CLEAR-LIFT4
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
 )
-( :action !!VISIT-CLEAR
-	:parameters ( ?SURFACE0 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-CLEAR ?SURFACE0 ))
+(:method M-DO-CLEAR-LIFT4
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-CLEAR-LIFT4 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( CLEAR ?CRATE1 ))
+	:ordered-subtasks (and  ( ACHIEVE-AVAILABLE ?HOIST0 ) ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
 )
-( :action !!FLAG-CLEAR
-	:parameters ( ?SURFACE0 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-CLEAR ?SURFACE0 ))
+(:task DO-AVAILABLE-LIFT5
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
 )
-( :action !!UNFLAG-CLEAR
-	:parameters ( ?SURFACE0 - SURFACE)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-CLEAR ?SURFACE0 ) ))
+(:method M-DO-AVAILABLE-LIFT5
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-AVAILABLE-LIFT5 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( AVAILABLE ?HOIST0 ))
+	:ordered-subtasks (and  ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
 )
-    ( :METHOD ( IFUNLOCK-CLEAR ?SURFACE0 )
-               ( ( FLAGGED-CLEAR ?SURFACE0 ) )
-               ( ( !!UNFLAG-CLEAR ?SURFACE0 ) )
-               ( ( NOT ( FLAGGED-CLEAR ?SURFACE0 ) ) )
-               ( ( !!UNLOCK-CLEAR ?SURFACE0 ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE0 ?TRUCK0 )
-                ( )
-                ( )
-                ( ( FORALL  ( ?PLACE1 ) ( PLACE ?PLACE1 ) ( ( ACHIEVING-AT ?TRUCK0 ?PLACE1 ) ) ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE1 ?CRATE0 )
-                ( )
-                ( )
-                ( ( FORALL  ( ?PLACE1 ) ( PLACE ?PLACE1 ) ( ( ACHIEVING-AT ?CRATE0 ?PLACE1 ) ) ) ( FORALL  ( ?HOIST1 ) ( HOIST ?HOIST1 ) ( ( ACHIEVING-LIFTING ?HOIST1 ?CRATE0 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-IN ?CRATE0 ?TRUCK1 ) ) ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE2 ?CRATE0 )
-                ( )
-                ( )
-                ( ( FORALL  ( ?SURFACE1 ) ( SURFACE ?SURFACE1 ) ( ( ACHIEVING-ON ?CRATE0 ?SURFACE1 ) ) ) ( FORALL  ( ?HOIST1 ) ( HOIST ?HOIST1 ) ( ( ACHIEVING-LIFTING ?HOIST1 ?CRATE0 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-IN ?CRATE0 ?TRUCK1 ) ) ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE3 ?SURFACE0 )
-                ( )
-                ( )
-                ( ( FORALL  ( ?CRATE1 ) ( CRATE ?CRATE1 ) ( ( ACHIEVING-ON ?CRATE1 ?SURFACE0 ) ) ) ( ACHIEVING-CLEAR ?SURFACE0 ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE4 ?CRATE0 )
-                ( )
-                ( )
-                ( ( FORALL  ( ?HOIST1 ) ( HOIST ?HOIST1 ) ( ( ACHIEVING-LIFTING ?HOIST1 ?CRATE0 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-IN ?CRATE0 ?TRUCK1 ) ) ) ( ACHIEVING-CLEAR ?CRATE0 ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE5 ?HOIST0 )
-                ( )
-                ( )
-                ( ( ACHIEVING-AVAILABLE ?HOIST0 ) ( FORALL  ( ?CRATE1 ) ( CRATE ?CRATE1 ) ( ( ACHIEVING-LIFTING ?HOIST0 ?CRATE1 ) ) ) )
-    )
-    ( :OPERATOR ( !!STOPALL0 ?TRUCK0 )
-                ( )
-                ( ( FORALL  ( ?PLACE1 ) ( PLACE ?PLACE1 ) ( ( ACHIEVING-AT ?TRUCK0 ?PLACE1 ) ( VISITED-AT ?TRUCK0 ?PLACE1 ) ) ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL1 ?CRATE0 )
-                ( )
-                ( ( FORALL  ( ?PLACE1 ) ( PLACE ?PLACE1 ) ( ( ACHIEVING-AT ?CRATE0 ?PLACE1 ) ( VISITED-AT ?CRATE0 ?PLACE1 ) ) ) ( FORALL  ( ?HOIST1 ) ( HOIST ?HOIST1 ) ( ( ACHIEVING-LIFTING ?HOIST1 ?CRATE0 ) ( VISITED-LIFTING ?HOIST1 ?CRATE0 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-IN ?CRATE0 ?TRUCK1 ) ( VISITED-IN ?CRATE0 ?TRUCK1 ) ) ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL2 ?CRATE0 )
-                ( )
-                ( ( FORALL  ( ?SURFACE1 ) ( SURFACE ?SURFACE1 ) ( ( ACHIEVING-ON ?CRATE0 ?SURFACE1 ) ( VISITED-ON ?CRATE0 ?SURFACE1 ) ) ) ( FORALL  ( ?HOIST1 ) ( HOIST ?HOIST1 ) ( ( ACHIEVING-LIFTING ?HOIST1 ?CRATE0 ) ( VISITED-LIFTING ?HOIST1 ?CRATE0 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-IN ?CRATE0 ?TRUCK1 ) ( VISITED-IN ?CRATE0 ?TRUCK1 ) ) ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL3 ?SURFACE0 )
-                ( )
-                ( ( FORALL  ( ?CRATE1 ) ( CRATE ?CRATE1 ) ( ( ACHIEVING-ON ?CRATE1 ?SURFACE0 ) ( VISITED-ON ?CRATE1 ?SURFACE0 ) ) ) ( ACHIEVING-CLEAR ?SURFACE0 ) ( VISITED-CLEAR ?SURFACE0 ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL4 ?CRATE0 )
-                ( )
-                ( ( FORALL  ( ?HOIST1 ) ( HOIST ?HOIST1 ) ( ( ACHIEVING-LIFTING ?HOIST1 ?CRATE0 ) ( VISITED-LIFTING ?HOIST1 ?CRATE0 ) ) ) ( FORALL  ( ?TRUCK1 ) ( TRUCK ?TRUCK1 ) ( ( ACHIEVING-IN ?CRATE0 ?TRUCK1 ) ( VISITED-IN ?CRATE0 ?TRUCK1 ) ) ) ( ACHIEVING-CLEAR ?CRATE0 ) ( VISITED-CLEAR ?CRATE0 ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL5 ?HOIST0 )
-                ( )
-                ( ( ACHIEVING-AVAILABLE ?HOIST0 ) ( VISITED-AVAILABLE ?HOIST0 ) ( FORALL  ( ?CRATE1 ) ( CRATE ?CRATE1 ) ( ( ACHIEVING-LIFTING ?HOIST0 ?CRATE1 ) ( VISITED-LIFTING ?HOIST0 ?CRATE1 ) ) ) )
-                ( )
-    )
-    ( :METHOD ( DO-AT-LIFT1 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( AT ?CRATE1 ?PLACE3 ) )
-              ( ( ACHIEVE-CLEAR ?CRATE1 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AVAILABLE ?HOIST0 ) ( IFUNLOCK-CLEAR ?CRATE1 ) ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-LIFTING-DROP1 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( LIFTING ?HOIST0 ?CRATE1 ) )
-              ( ( IFUNLOCK-CLEAR ?SURFACE2 ) ( IFUNLOCK-AT ?SURFACE2 ?PLACE3 ) ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-LIFTING-LOAD1 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
-              ( ( LIFTING ?HOIST0 ?CRATE1 ) )
-              ( ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( IFUNLOCK-AT ?TRUCK2 ?PLACE3 ) ( !LOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-IN-UNLOAD1 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
-              ( ( IN ?CRATE1 ?TRUCK2 ) )
-              ( ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AT ?TRUCK2 ?PLACE3 ) ( !UNLOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-ON-LIFT2 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( ON ?CRATE1 ?SURFACE2 ) )
-              ( ( ACHIEVE-CLEAR ?CRATE1 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AVAILABLE ?HOIST0 ) ( IFUNLOCK-CLEAR ?CRATE1 ) ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-LIFTING-DROP2 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( LIFTING ?HOIST0 ?CRATE1 ) )
-              ( ( IFUNLOCK-AT ?SURFACE2 ?PLACE3 ) ( IFUNLOCK-CLEAR ?SURFACE2 ) ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-LIFTING-LOAD2 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
-              ( ( LIFTING ?HOIST0 ?CRATE1 ) )
-              ( ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( IFUNLOCK-AT ?TRUCK2 ?PLACE3 ) ( !LOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-IN-UNLOAD2 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
-              ( ( IN ?CRATE1 ?TRUCK2 ) )
-              ( ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AT ?TRUCK2 ?PLACE3 ) ( !UNLOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-ON-LIFT3 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( ON ?CRATE1 ?SURFACE2 ) )
-              ( ( ACHIEVE-CLEAR ?CRATE1 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AVAILABLE ?HOIST0 ) ( IFUNLOCK-CLEAR ?CRATE1 ) ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-CLEAR-DROP3 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( CLEAR ?SURFACE2 ) )
-              ( ( ACHIEVE-LIFTING ?HOIST0 ?CRATE1 ) ( IFUNLOCK-LIFTING ?HOIST0 ?CRATE1 ) ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-LIFTING-LOAD4 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
-              ( ( LIFTING ?HOIST0 ?CRATE1 ) )
-              ( ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( IFUNLOCK-AT ?TRUCK2 ?PLACE3 ) ( !LOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-LIFTING-DROP4 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( LIFTING ?HOIST0 ?CRATE1 ) )
-              ( ( IFUNLOCK-AT ?SURFACE2 ?PLACE3 ) ( IFUNLOCK-CLEAR ?SURFACE2 ) ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-IN-UNLOAD4 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
-              ( ( IN ?CRATE1 ?TRUCK2 ) )
-              ( ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( ACHIEVE-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AT ?TRUCK2 ?PLACE3 ) ( !UNLOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-CLEAR-LIFT4 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( CLEAR ?CRATE1 ) )
-              ( ( ACHIEVE-AVAILABLE ?HOIST0 ) ( IFUNLOCK-AVAILABLE ?HOIST0 ) ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-AVAILABLE-LIFT5 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( AVAILABLE ?HOIST0 ) )
-              ( ( IFUNLOCK-AT ?CRATE1 ?PLACE3 ) ( IFUNLOCK-ON ?CRATE1 ?SURFACE2 ) ( IFUNLOCK-CLEAR ?CRATE1 ) ( !LIFT ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-AVAILABLE-UNLOAD5 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
-              ( ( AVAILABLE ?HOIST0 ) )
-              ( ( ACHIEVE-IN ?CRATE1 ?TRUCK2 ) ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( IFUNLOCK-AT ?TRUCK2 ?PLACE3 ) ( IFUNLOCK-IN ?CRATE1 ?TRUCK2 ) ( !UNLOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-LIFTING-DROP5 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
-              ( ( LIFTING ?HOIST0 ?CRATE1 ) )
-              ( ( IFUNLOCK-AT ?SURFACE2 ?PLACE3 ) ( IFUNLOCK-CLEAR ?SURFACE2 ) ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
-    )
-    ( :METHOD ( DO-LIFTING-LOAD5 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
-              ( ( LIFTING ?HOIST0 ?CRATE1 ) )
-              ( ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( IFUNLOCK-AT ?TRUCK2 ?PLACE3 ) ( !LOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
-    )
+(:task DO-AVAILABLE-UNLOAD5
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+)
+(:method M-DO-AVAILABLE-UNLOAD5
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+	:task ( DO-AVAILABLE-UNLOAD5 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
+	:precondition (and  ( AVAILABLE ?HOIST0 ))
+	:ordered-subtasks (and  ( ACHIEVE-IN ?CRATE1 ?TRUCK2 ) ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( !UNLOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
+)
+(:task DO-LIFTING-DROP5
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+)
+(:method M-DO-LIFTING-DROP5
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?SURFACE2 - SURFACE ?PLACE3 - PLACE )
+	:task ( DO-LIFTING-DROP5 ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 )
+	:precondition (and  ( LIFTING ?HOIST0 ?CRATE1 ))
+	:ordered-subtasks (and  ( !DROP ?HOIST0 ?CRATE1 ?SURFACE2 ?PLACE3 ) )
+)
+(:task DO-LIFTING-LOAD5
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+)
+(:method M-DO-LIFTING-LOAD5
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE ?TRUCK2 - TRUCK ?PLACE3 - PLACE )
+	:task ( DO-LIFTING-LOAD5 ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 )
+	:precondition (and  ( LIFTING ?HOIST0 ?CRATE1 ))
+	:ordered-subtasks (and  ( ACHIEVE-AT ?TRUCK2 ?PLACE3 ) ( !LOAD ?HOIST0 ?CRATE1 ?TRUCK2 ?PLACE3 ) )
+)
     ( :METHOD ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
               ( ( LOCKED-AT ?TRUCK0 ?PLACE1 ) ( TRUCK ?TRUCK0 )  ( PLACE ?PLACE1 )  )
               ( ( !!FLAG-AT ?TRUCK0 ?PLACE1 ) )

@@ -12,265 +12,85 @@
 ( :action !PICK-UP
 	:parameters ( ?BLOCK0 - BLOCK)
 	:precondition (and
-		 ( CLEAR ?BLOCK0 ) ( ONTABLE ?BLOCK0 ) ( HANDEMPTY ) ( NOT ( LOCKED-ONTABLE ?BLOCK0 ) ) ( NOT ( LOCKED-CLEAR ?BLOCK0 ) ) ( NOT ( LOCKED-HANDEMPTY ) ))
+		 ( CLEAR ?BLOCK0 ) ( ONTABLE ?BLOCK0 ) ( HANDEMPTY ))
 	:effect (and
 		 ( NOT ( ONTABLE ?BLOCK0 ) ) ( NOT ( CLEAR ?BLOCK0 ) ) ( NOT ( HANDEMPTY ) ) ( HOLDING ?BLOCK0 ))
 )
 ( :action !PUT-DOWN
 	:parameters ( ?BLOCK0 - BLOCK)
 	:precondition (and
-		 ( HOLDING ?BLOCK0 ) ( NOT ( LOCKED-HOLDING ?BLOCK0 ) ))
+		 ( HOLDING ?BLOCK0 ))
 	:effect (and
 		 ( NOT ( HOLDING ?BLOCK0 ) ) ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( ONTABLE ?BLOCK0 ))
 )
 ( :action !STACK
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:precondition (and
-		 ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK1 ) ( NOT ( LOCKED-HOLDING ?BLOCK0 ) ) ( NOT ( LOCKED-CLEAR ?BLOCK1 ) ))
+		 ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK1 ))
 	:effect (and
 		 ( NOT ( HOLDING ?BLOCK0 ) ) ( NOT ( CLEAR ?BLOCK1 ) ) ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( ON ?BLOCK0 ?BLOCK1 ))
 )
 ( :action !UNSTACK
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:precondition (and
-		 ( ON ?BLOCK0 ?BLOCK1 ) ( CLEAR ?BLOCK0 ) ( HANDEMPTY ) ( NOT ( LOCKED-CLEAR ?BLOCK0 ) ) ( NOT ( LOCKED-HANDEMPTY ) ) ( NOT ( LOCKED-ON ?BLOCK0 ?BLOCK1 ) ))
+		 ( ON ?BLOCK0 ?BLOCK1 ) ( CLEAR ?BLOCK0 ) ( HANDEMPTY ))
 	:effect (and
 		 ( NOT ( CLEAR ?BLOCK0 ) ) ( NOT ( HANDEMPTY ) ) ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK1 ))
 )
-( :action !!LOCK-ON
-	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-ON ?BLOCK0 ?BLOCK1 ))
+(:task DO-ON-UNSTACK0
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 )
-( :action !!UNLOCK-ON
-	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-ON ?BLOCK0 ?BLOCK1 ) ))
+(:method M-DO-ON-UNSTACK0
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
+	:task ( DO-ON-UNSTACK0 ?BLOCK0 ?BLOCK1 )
+	:precondition (and  ( ON ?BLOCK0 ?BLOCK1 ))
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?BLOCK0 ) ( ACHIEVE-HANDEMPTY ) ( !UNSTACK ?BLOCK0 ?BLOCK1 ) )
 )
-( :action !!VISIT-ON
-	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-ON ?BLOCK0 ?BLOCK1 ))
+(:task DO-ONTABLE-PICK-UP0
+	:parameters ( ?BLOCK0 - BLOCK )
 )
-( :action !!FLAG-ON
-	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-ON ?BLOCK0 ?BLOCK1 ))
+(:method M-DO-ONTABLE-PICK-UP0
+	:parameters ( ?BLOCK0 - BLOCK )
+	:task ( DO-ONTABLE-PICK-UP0 ?BLOCK0 )
+	:precondition (and  ( ONTABLE ?BLOCK0 ))
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?BLOCK0 ) ( ACHIEVE-HANDEMPTY ) ( !PICK-UP ?BLOCK0 ) )
 )
-( :action !!UNFLAG-ON
-	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-ON ?BLOCK0 ?BLOCK1 ) ))
+(:task DO-CLEAR-STACK1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 )
-    ( :METHOD ( IFUNLOCK-ON ?BLOCK0 ?BLOCK1 )
-               ( ( FLAGGED-ON ?BLOCK0 ?BLOCK1 ) )
-               ( ( !!UNFLAG-ON ?BLOCK0 ?BLOCK1 ) )
-               ( ( NOT ( FLAGGED-ON ?BLOCK0 ?BLOCK1 ) ) )
-               ( ( !!UNLOCK-ON ?BLOCK0 ?BLOCK1 ) )
-    )
-( :action !!LOCK-ONTABLE
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-ONTABLE ?BLOCK0 ))
+(:method M-DO-CLEAR-STACK1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
+	:task ( DO-CLEAR-STACK1 ?BLOCK0 ?BLOCK1 )
+	:precondition (and  ( CLEAR ?BLOCK1 ))
+	:ordered-subtasks (and  ( ACHIEVE-HOLDING ?BLOCK0 ) ( !STACK ?BLOCK0 ?BLOCK1 ) )
 )
-( :action !!UNLOCK-ONTABLE
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-ONTABLE ?BLOCK0 ) ))
+(:task DO-CLEAR-PICK-UP1
+	:parameters ( ?BLOCK0 - BLOCK )
 )
-( :action !!VISIT-ONTABLE
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-ONTABLE ?BLOCK0 ))
+(:method M-DO-CLEAR-PICK-UP1
+	:parameters ( ?BLOCK0 - BLOCK )
+	:task ( DO-CLEAR-PICK-UP1 ?BLOCK0 )
+	:precondition (and  ( CLEAR ?BLOCK0 ))
+	:ordered-subtasks (and  ( ACHIEVE-HANDEMPTY ) ( !PICK-UP ?BLOCK0 ) )
 )
-( :action !!FLAG-ONTABLE
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-ONTABLE ?BLOCK0 ))
+(:task DO-CLEAR-UNSTACK1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 )
-( :action !!UNFLAG-ONTABLE
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-ONTABLE ?BLOCK0 ) ))
+(:method M-DO-CLEAR-UNSTACK1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
+	:task ( DO-CLEAR-UNSTACK1 ?BLOCK0 ?BLOCK1 )
+	:precondition (and  ( CLEAR ?BLOCK0 ))
+	:ordered-subtasks (and  ( ACHIEVE-HANDEMPTY ) ( !UNSTACK ?BLOCK0 ?BLOCK1 ) )
 )
-    ( :METHOD ( IFUNLOCK-ONTABLE ?BLOCK0 )
-               ( ( FLAGGED-ONTABLE ?BLOCK0 ) )
-               ( ( !!UNFLAG-ONTABLE ?BLOCK0 ) )
-               ( ( NOT ( FLAGGED-ONTABLE ?BLOCK0 ) ) )
-               ( ( !!UNLOCK-ONTABLE ?BLOCK0 ) )
-    )
-( :action !!LOCK-CLEAR
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-CLEAR ?BLOCK0 ))
+(:task DO-ON-UNSTACK1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 )
-( :action !!UNLOCK-CLEAR
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-CLEAR ?BLOCK0 ) ))
+(:method M-DO-ON-UNSTACK1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
+	:task ( DO-ON-UNSTACK1 ?BLOCK0 ?BLOCK1 )
+	:precondition (and  ( ON ?BLOCK0 ?BLOCK1 ))
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?BLOCK0 ) ( ACHIEVE-HANDEMPTY ) ( !UNSTACK ?BLOCK0 ?BLOCK1 ) )
 )
-( :action !!VISIT-CLEAR
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-CLEAR ?BLOCK0 ))
-)
-( :action !!FLAG-CLEAR
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-CLEAR ?BLOCK0 ))
-)
-( :action !!UNFLAG-CLEAR
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-CLEAR ?BLOCK0 ) ))
-)
-    ( :METHOD ( IFUNLOCK-CLEAR ?BLOCK0 )
-               ( ( FLAGGED-CLEAR ?BLOCK0 ) )
-               ( ( !!UNFLAG-CLEAR ?BLOCK0 ) )
-               ( ( NOT ( FLAGGED-CLEAR ?BLOCK0 ) ) )
-               ( ( !!UNLOCK-CLEAR ?BLOCK0 ) )
-    )
-( :action !!LOCK-HANDEMPTY
-	:parameters ()
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-HANDEMPTY ))
-)
-( :action !!UNLOCK-HANDEMPTY
-	:parameters ()
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-HANDEMPTY ) ))
-)
-( :action !!VISIT-HANDEMPTY
-	:parameters ()
-	:precondition ( )
-	:effect (and
-		 ( VISITED-HANDEMPTY ))
-)
-( :action !!FLAG-HANDEMPTY
-	:parameters ()
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-HANDEMPTY ))
-)
-( :action !!UNFLAG-HANDEMPTY
-	:parameters ()
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-HANDEMPTY ) ))
-)
-    ( :METHOD ( IFUNLOCK-HANDEMPTY )
-               ( ( FLAGGED-HANDEMPTY ) )
-               ( ( !!UNFLAG-HANDEMPTY ) )
-               ( ( NOT ( FLAGGED-HANDEMPTY ) ) )
-               ( ( !!UNLOCK-HANDEMPTY ) )
-    )
-( :action !!LOCK-HOLDING
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( LOCKED-HOLDING ?BLOCK0 ))
-)
-( :action !!UNLOCK-HOLDING
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( LOCKED-HOLDING ?BLOCK0 ) ))
-)
-( :action !!VISIT-HOLDING
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( VISITED-HOLDING ?BLOCK0 ))
-)
-( :action !!FLAG-HOLDING
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( FLAGGED-HOLDING ?BLOCK0 ))
-)
-( :action !!UNFLAG-HOLDING
-	:parameters ( ?BLOCK0 - BLOCK)
-	:precondition ( )
-	:effect (and
-		 ( NOT ( FLAGGED-HOLDING ?BLOCK0 ) ))
-)
-    ( :METHOD ( IFUNLOCK-HOLDING ?BLOCK0 )
-               ( ( FLAGGED-HOLDING ?BLOCK0 ) )
-               ( ( !!UNFLAG-HOLDING ?BLOCK0 ) )
-               ( ( NOT ( FLAGGED-HOLDING ?BLOCK0 ) ) )
-               ( ( !!UNLOCK-HOLDING ?BLOCK0 ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE0 ?BLOCK0 )
-                ( )
-                ( )
-                ( ( ACHIEVING-HOLDING ?BLOCK0 ) ( FORALL  ( ?BLOCK1 ) ( BLOCK ?BLOCK1 ) ( ( ACHIEVING-ON ?BLOCK0 ?BLOCK1 ) ) ) ( ACHIEVING-ONTABLE ?BLOCK0 ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE1 ?BLOCK0 )
-                ( )
-                ( )
-                ( ( ACHIEVING-CLEAR ?BLOCK0 ) ( FORALL  ( ?BLOCK1 ) ( BLOCK ?BLOCK1 ) ( ( ACHIEVING-ON ?BLOCK1 ?BLOCK0 ) ) ) ( ACHIEVING-HOLDING ?BLOCK0 ) )
-    )
-    ( :OPERATOR ( !!ACHIEVE2 )
-                ( )
-                ( )
-                ( ( ACHIEVING-HANDEMPTY ) ( FORALL  ( ?BLOCK0 ) ( BLOCK ?BLOCK0 ) ( ( ACHIEVING-HOLDING ?BLOCK0 ) ) ) )
-    )
-    ( :OPERATOR ( !!STOPALL0 ?BLOCK0 )
-                ( )
-                ( ( ACHIEVING-HOLDING ?BLOCK0 ) ( VISITED-HOLDING ?BLOCK0 ) ( FORALL  ( ?BLOCK1 ) ( BLOCK ?BLOCK1 ) ( ( ACHIEVING-ON ?BLOCK0 ?BLOCK1 ) ( VISITED-ON ?BLOCK0 ?BLOCK1 ) ) ) ( ACHIEVING-ONTABLE ?BLOCK0 ) ( VISITED-ONTABLE ?BLOCK0 ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL1 ?BLOCK0 )
-                ( )
-                ( ( ACHIEVING-CLEAR ?BLOCK0 ) ( VISITED-CLEAR ?BLOCK0 ) ( FORALL  ( ?BLOCK1 ) ( BLOCK ?BLOCK1 ) ( ( ACHIEVING-ON ?BLOCK1 ?BLOCK0 ) ( VISITED-ON ?BLOCK1 ?BLOCK0 ) ) ) ( ACHIEVING-HOLDING ?BLOCK0 ) ( VISITED-HOLDING ?BLOCK0 ) )
-                ( )
-    )
-    ( :OPERATOR ( !!STOPALL2 )
-                ( )
-                ( ( ACHIEVING-HANDEMPTY ) ( VISITED-HANDEMPTY ) ( FORALL  ( ?BLOCK0 ) ( BLOCK ?BLOCK0 ) ( ( ACHIEVING-HOLDING ?BLOCK0 ) ( VISITED-HOLDING ?BLOCK0 ) ) ) )
-                ( )
-    )
-    ( :METHOD ( DO-ON-UNSTACK0 ?BLOCK0 ?BLOCK1 )
-              ( ( ON ?BLOCK0 ?BLOCK1 ) )
-              ( ( ACHIEVE-CLEAR ?BLOCK0 ) ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( IFUNLOCK-CLEAR ?BLOCK0 ) ( !UNSTACK ?BLOCK0 ?BLOCK1 ) )
-    )
-    ( :METHOD ( DO-ONTABLE-PICK-UP0 ?BLOCK0 )
-              ( ( ONTABLE ?BLOCK0 ) )
-              ( ( ACHIEVE-CLEAR ?BLOCK0 ) ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( IFUNLOCK-CLEAR ?BLOCK0 ) ( !PICK-UP ?BLOCK0 ) )
-    )
-    ( :METHOD ( DO-CLEAR-STACK1 ?BLOCK0 ?BLOCK1 )
-              ( ( CLEAR ?BLOCK1 ) )
-              ( ( ACHIEVE-HOLDING ?BLOCK0 ) ( IFUNLOCK-HOLDING ?BLOCK0 ) ( !STACK ?BLOCK0 ?BLOCK1 ) )
-    )
-    ( :METHOD ( DO-CLEAR-PICK-UP1 ?BLOCK0 )
-              ( ( CLEAR ?BLOCK0 ) )
-              ( ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( !PICK-UP ?BLOCK0 ) )
-    )
-    ( :METHOD ( DO-CLEAR-UNSTACK1 ?BLOCK0 ?BLOCK1 )
-              ( ( CLEAR ?BLOCK0 ) )
-              ( ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( !UNSTACK ?BLOCK0 ?BLOCK1 ) )
-    )
-    ( :METHOD ( DO-ON-UNSTACK1 ?BLOCK0 ?BLOCK1 )
-              ( ( ON ?BLOCK0 ?BLOCK1 ) )
-              ( ( ACHIEVE-CLEAR ?BLOCK0 ) ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( IFUNLOCK-CLEAR ?BLOCK0 ) ( !UNSTACK ?BLOCK0 ?BLOCK1 ) )
-    )
     ( :METHOD ( ACHIEVE-HOLDING ?BLOCK0 )
               ( ( LOCKED-HOLDING ?BLOCK0 ) ( BLOCK ?BLOCK0 )  )
               ( ( !!FLAG-HOLDING ?BLOCK0 ) )
