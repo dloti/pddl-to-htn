@@ -4,7 +4,7 @@
 
 (define (domain BLOCKS)
   (:requirements :strips :typing)
-  (:types block)
+  (:types block - object)
   (:predicates (on ?x - block ?y - block)
 	       (ontable ?x - block)
 	       (clear ?x - block)

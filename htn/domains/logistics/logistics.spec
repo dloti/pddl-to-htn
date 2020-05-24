@@ -1,5 +1,5 @@
 logistics
-/home/dloti/domains/Logistics/Track1/Typed/
+../domains/Logistics/Track1/Typed/
 domain.pddl
 probLOGISTICS-4-0.pddl
 probLOGISTICS-4-0.pddl

@@ -1,5 +1,5 @@
 blocks
-/home/dloti/domains/Blocks/Track1/Typed/
+../domains/Blocks/Track1/Typed/
 domain.pddl
 probBLOCKS-4-0.pddl
 probBLOCKS-9-2.pddl

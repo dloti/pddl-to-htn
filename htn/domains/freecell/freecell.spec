@@ -1,5 +1,5 @@
 freecell
-/home/dloti/domains/FreeCell/Typed/
+../domains/FreeCell/Typed/
 domain.pddl
 probfreecell-2-1.pddl
 probfreecell-2-1.pddl

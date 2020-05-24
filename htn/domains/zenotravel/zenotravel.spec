@@ -1,5 +1,5 @@
 zenotravel
-/home/dloti/domains/ZenoTravel/Strips/
+../domains/ZenoTravel/Strips/
 zenotravelStrips.pddl
 pfile3
 pfile1

@@ -20,7 +20,7 @@ bool hasGoalConflicts = false;
 void printCondition(std::ostream &out, bool b, Condition &c, const std::string &s, bool z, std::vector<std::string> &v,
 		int invariant_number = -1) {
 
-	out << " ( " << (b ? "NOT ( " : "");
+	out << " ( " << (b ? "not ( " : "");
 	out << s << (z ? (c.neg ? "-" : "-") : "") << c.name;
 	if (invariant_number > -1)
 		out << invariant_number;
@@ -30,7 +30,7 @@ void printCondition(std::ostream &out, bool b, Condition &c, const std::string &
 }
 
 void printCondition(std::ostream &out, bool b, Condition &c, std::vector<std::string> &v, std::set<int> &m) {
-	out << " ( " << (b ? "NOT ( " : "");
+	out << " ( " << (b ? "not ( " : "");
 	out << c.name;
 	for (unsigned i = 0; i < c.params.size(); ++i) {
 		m.erase(c.params[i]);
@@ -76,7 +76,7 @@ void printDOMethods(Domain &d, std::ostream &out) {
 
 				out << "              (";
 				if (isPosNegInvariant(i->first.a))
-					out << " ( NOT";
+					out << " ( not";
 				out << d.parametrizeCondition(a, c, "", false);
 				if (isPosNegInvariant(i->first.a))
 					out << " )";
@@ -169,7 +169,7 @@ void printHDDLDOMethods(Domain &d, std::ostream &out) {
 
 				out<<"\t:precondition (and ";
 					if (isPosNegInvariant(i->first.a))
-						out << " ( NOT";
+						out << " ( not";
 					out << d.parametrizeCondition(a, c, "", false);
 					if (isPosNegInvariant(i->first.a))
 						out << " )";
@@ -397,7 +397,7 @@ void printTopACHIEVE(Domain& d, std::ostream &out, std::vector<std::string>& par
 		printCondition(out, false, c, "", false, params);
 		for (int i = 0; i < params.size(); ++i)
 			out << " ( " + param_types[i] + " " + params[i] + " ) ";
-		out << " ( NOT";
+		out << " ( not";
 		printCondition(out, false, c, "LOCKED", true, params);
 		out << " ) )\n";
 		out << "              (";
@@ -414,7 +414,7 @@ void printTopACHIEVE(Domain& d, std::ostream &out, std::vector<std::string>& par
 		for (PairSet::iterator it1 = it->second.begin(); it1 != it->second.end(); ++it1) {
 			if (c.neg != it->first.neg)
 				continue;
-			out << " ( NOT";
+			out << " ( not";
             printCondition(out, false, c, "ACHIEVING", true, params);
 			//printCondition(out, false, c, "ACHIEVING", true, params, it1->first);
 			out << " )";
@@ -427,7 +427,7 @@ void printTopACHIEVE(Domain& d, std::ostream &out, std::vector<std::string>& par
 	for (int i = 0; i < params.size(); ++i)
 		out << " ( " + param_types[i] + " " + params[i] + " ) ";
 
-	out << " ( NOT";
+	out << " ( not";
 	printCondition(out, false, c, "LOCKED", true, params);
 	out << " ) )\n";
 	out << "              (";
@@ -480,7 +480,7 @@ void printHDDLTopACHIEVE(Domain& d, std::ostream &out, std::vector<std::string>&
 	out << "\t:task ";
 	out<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
 	out<<"\t:precondition";
-	out << " ( NOT";
+	out << " ( not";
 	printCondition(out, false, c, "", false, params);
 	out<<")"<<std::endl;
 	out <<"\t:subtasks ";
@@ -835,7 +835,7 @@ void printTaskToFluent(std::ostream &out){
 
 //Wrapper method for printing HTN
 void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_name) {
-	out << "(define (domain " << domain_name <<std::endl;
+	out << "(define (domain " << domain_name << " )" << std::endl;
 	out << "(:requirements :typing)"<<std::endl;
 	out << "(:types"<<std::endl;
 	auto obj_type = std::find_if(d.types.begin(),d.types.end(),[](const Condition& type) {return "OBJECT" == type.name;});
@@ -987,7 +987,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 									else out<<hddlTaskName;
 									out<<std::endl;
 									out << "\t:precondition (and";
-									out << " ( NOT";
+									out << " ( not";
 									printCondition(out, false, c, "", false, params);
 									out << " )";
 									printCondition(out, pred.neg, pred, "", false, p2);
@@ -1062,7 +1062,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 									else out<<hddlTaskName;
 									out<<std::endl;
 									out << "\t:precondition (and";
-								 	out << " ( NOT";
+								 	out << " ( not";
 								 	printCondition(out, false, c, "", false, params);
 								 	out << " )";
 								 	printCondition(out, pred.neg, pred, "", false, p2 );

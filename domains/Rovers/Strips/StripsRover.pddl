@@ -1,6 +1,6 @@
 (define (domain Rover)
 (:requirements :typing)
-(:types rover waypoint store camera mode lander objective)
+(:types rover waypoint store camera mode lander objective - object)
 
 (:predicates (at ?x - rover ?y - waypoint) 
              (at_lander ?x - lander ?y - waypoint)

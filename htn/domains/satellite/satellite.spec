@@ -1,5 +1,5 @@
 satellite
-/home/dloti/domains/Satellite/Strips/
+../domains/Satellite/Strips/
 noEquality.pddl
 pfile4
 pfile1

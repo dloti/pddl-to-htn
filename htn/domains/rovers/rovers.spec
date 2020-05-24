@@ -1,5 +1,5 @@
 rovers
-/home/dloti/domains/Rovers/Strips/
+../domains/Rovers/Strips/
 ChannelFree.pddl
 pfile4
 pfile1

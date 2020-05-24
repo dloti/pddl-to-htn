@@ -1,5 +1,5 @@
 depots
-/home/dloti/domains/Depots/Strips/
+../domains/Depots/Strips/
 Depots.pddl
 pfile1
 pfile1

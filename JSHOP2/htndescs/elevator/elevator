@@ -1,4 +1,4 @@
-(define (domain elevator
+(define (domain elevator )
 (:requirements :typing)
 (:types
 	PASSENGER FLOOR - OBJECT
@@ -25,21 +25,21 @@
 	:precondition (and
 		 ( LIFT-AT ?FLOOR0 ) ( DESTIN ?PASSENGER1 ?FLOOR0 ) ( BOARDED ?PASSENGER1 ))
 	:effect (and
-		 ( NOT ( BOARDED ?PASSENGER1 ) ) ( SERVED ?PASSENGER1 ))
+		 ( not ( BOARDED ?PASSENGER1 ) ) ( SERVED ?PASSENGER1 ))
 )
 ( :action UP
 	:parameters ( ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR)
 	:precondition (and
 		 ( LIFT-AT ?FLOOR0 ) ( ABOVE ?FLOOR0 ?FLOOR1 ))
 	:effect (and
-		 ( NOT ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ))
+		 ( not ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ))
 )
 ( :action DOWN
 	:parameters ( ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR)
 	:precondition (and
 		 ( LIFT-AT ?FLOOR0 ) ( ABOVE ?FLOOR1 ?FLOOR0 ))
 	:effect (and
-		 ( NOT ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ))
+		 ( not ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ))
 )
 (:task DO-BOARDED-DEPART1
 	:parameters ( ?FLOOR0 - FLOOR ?PASSENGER1 - PASSENGER )
@@ -47,7 +47,7 @@
 (:method M-DO-BOARDED-DEPART1
 	:parameters ( ?FLOOR0 - FLOOR ?PASSENGER1 - PASSENGER )
 	:task ( DO-BOARDED-DEPART1 ?FLOOR0 ?PASSENGER1 )
-	:precondition (and  ( NOT ( BOARDED ?PASSENGER1 ) ))
+	:precondition (and  ( not ( BOARDED ?PASSENGER1 ) ))
 	:ordered-subtasks (and  ( ACHIEVE-LIFT-AT ?FLOOR0 ) ( DEPART ?FLOOR0 ?PASSENGER1 ) )
 )
 (:task DO-BOARDED-BOARD1
@@ -56,7 +56,7 @@
 (:method M-DO-BOARDED-BOARD1
 	:parameters ( ?FLOOR0 - FLOOR ?PASSENGER1 - PASSENGER )
 	:task ( DO-BOARDED-BOARD1 ?FLOOR0 ?PASSENGER1 )
-	:precondition (and  ( NOT ( BOARDED ?PASSENGER1 ) ))
+	:precondition (and  ( not ( BOARDED ?PASSENGER1 ) ))
 	:ordered-subtasks (and  ( ACHIEVE-LIFT-AT ?FLOOR0 ) ( BOARD ?FLOOR0 ?PASSENGER1 ) )
 )
 (:task DO-SERVED-DEPART2
@@ -65,7 +65,7 @@
 (:method M-DO-SERVED-DEPART2
 	:parameters ( ?FLOOR0 - FLOOR ?PASSENGER1 - PASSENGER )
 	:task ( DO-SERVED-DEPART2 ?FLOOR0 ?PASSENGER1 )
-	:precondition (and  ( NOT ( SERVED ?PASSENGER1 ) ))
+	:precondition (and  ( not ( SERVED ?PASSENGER1 ) ))
 	:ordered-subtasks (and  ( ACHIEVE-BOARDED ?PASSENGER1 ) ( ACHIEVE-LIFT-AT ?FLOOR0 ) ( DEPART ?FLOOR0 ?PASSENGER1 ) )
 )
 ( :task ACHIEVE-LIFT-AT
@@ -80,7 +80,7 @@
 ( :method M-ACHIEVE-LIFT-AT
 	:parameters ( ?FLOOR0 - FLOOR )
 	:task  ( ACHIEVE-LIFT-AT ?FLOOR0 )
-	:precondition ( NOT ( LIFT-AT ?FLOOR0 ))
+	:precondition ( not ( LIFT-AT ?FLOOR0 ))
 	:subtasks  ( ACHIEVE-LIFT-AT0 ?FLOOR0 )
 )
 ( :task ACHIEVE-LIFT-AT0
@@ -95,13 +95,13 @@
 ( :method M-ACHIEVE-LIFT-AT0
 	:parameters ( ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR ?FLOOR3 - FLOOR)
 	:task  ( ACHIEVE-LIFT-AT0 ?FLOOR0 )
-	:precondition (and ( NOT ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ) ( ABOVE ?FLOOR1 ?FLOOR3 ) )
+	:precondition (and ( not ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ) ( ABOVE ?FLOOR1 ?FLOOR3 ) )
 	:ordered-subtasks (and  ( UP ?FLOOR1 ?FLOOR3 ) ( ACHIEVE-LIFT-AT0 ?FLOOR0 ) )
 )
 ( :method M-ACHIEVE-LIFT-AT0
 	:parameters ( ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR ?FLOOR3 - FLOOR)
 	:task  ( ACHIEVE-LIFT-AT0 ?FLOOR0 )
-	:precondition (and ( NOT ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ) ( ABOVE ?FLOOR3 ?FLOOR1 ) )
+	:precondition (and ( not ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ) ( ABOVE ?FLOOR3 ?FLOOR1 ) )
 	:ordered-subtasks (and  ( DOWN ?FLOOR1 ?FLOOR3 ) ( ACHIEVE-LIFT-AT0 ?FLOOR0 ) )
 )
 ( :task ACHIEVE-BOARDED
@@ -116,7 +116,7 @@
 ( :method M-ACHIEVE-BOARDED
 	:parameters ( ?PASSENGER0 - PASSENGER )
 	:task  ( ACHIEVE-BOARDED ?PASSENGER0 )
-	:precondition ( NOT ( BOARDED ?PASSENGER0 ))
+	:precondition ( not ( BOARDED ?PASSENGER0 ))
 	:subtasks  ( ACHIEVE-BOARDED1 ?PASSENGER0 )
 )
 ( :task ACHIEVE-BOARDED1
@@ -131,7 +131,7 @@
 ( :method M-ACHIEVE-BOARDED1
 	:parameters ( ?FLOOR2 - FLOOR ?PASSENGER0 - PASSENGER)
 	:task  ( ACHIEVE-BOARDED1 ?PASSENGER0 )
-	:precondition (and ( NOT ( BOARDED ?PASSENGER0 ) ) ( NOT ( BOARDED ?PASSENGER0 ) ) ( ORIGIN ?PASSENGER0 ?FLOOR2 ) )
+	:precondition (and ( not ( BOARDED ?PASSENGER0 ) ) ( not ( BOARDED ?PASSENGER0 ) ) ( ORIGIN ?PASSENGER0 ?FLOOR2 ) )
 	:ordered-subtasks (and  ( DO-BOARDED-BOARD1 ?FLOOR2 ?PASSENGER0 ) ( ACHIEVE-BOARDED1 ?PASSENGER0 ) )
 )
 ( :task ACHIEVE-SERVED
@@ -146,7 +146,7 @@
 ( :method M-ACHIEVE-SERVED
 	:parameters ( ?PASSENGER0 - PASSENGER )
 	:task  ( ACHIEVE-SERVED ?PASSENGER0 )
-	:precondition ( NOT ( SERVED ?PASSENGER0 ))
+	:precondition ( not ( SERVED ?PASSENGER0 ))
 	:subtasks  ( ACHIEVE-SERVED2 ?PASSENGER0 )
 )
 ( :task ACHIEVE-SERVED2
@@ -161,7 +161,7 @@
 ( :method M-ACHIEVE-SERVED2
 	:parameters ( ?FLOOR2 - FLOOR ?PASSENGER0 - PASSENGER)
 	:task  ( ACHIEVE-SERVED2 ?PASSENGER0 )
-	:precondition (and ( NOT ( SERVED ?PASSENGER0 ) ) ( NOT ( SERVED ?PASSENGER0 ) ) ( DESTIN ?PASSENGER0 ?FLOOR2 ) )
+	:precondition (and ( not ( SERVED ?PASSENGER0 ) ) ( not ( SERVED ?PASSENGER0 ) ) ( DESTIN ?PASSENGER0 ?FLOOR2 ) )
 	:ordered-subtasks (and  ( DO-SERVED-DEPART2 ?FLOOR2 ?PASSENGER0 ) ( ACHIEVE-SERVED2 ?PASSENGER0 ) )
 )
 ))

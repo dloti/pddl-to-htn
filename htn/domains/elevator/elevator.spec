@@ -1,5 +1,5 @@
 elevator
-/home/dloti/domains/Elevator/m10-strips/
+../domains/Elevator/m10-strips/
 domain.pddl
 s1-0.pddl
 s1-0.pddl

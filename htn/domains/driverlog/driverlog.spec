@@ -1,5 +1,5 @@
 driverlog
-/home/dloti/domains/DriverLog/Strips/
+../domains/DriverLog/Strips/
 driverlog.pddl
 pfile1
 pfile1

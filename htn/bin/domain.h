@@ -509,7 +509,7 @@ public:
 
 	std::string parametrizeCondition( Action &a, Condition &c, const std::string &s, bool b ) {
 		std::ostringstream os;
-		os << " ( " << ( b ? "NOT ( " : "" ) << s << c.name;
+		os << " ( " << ( b ? "not ( " : "" ) << s << c.name;
 		for ( unsigned i = 0; i < c.params.size(); ++i )
 			os << " ?" << types[a.params[c.params[i]]].name << c.params[i];
 		os << ( b ? " )" : "" ) << " )";
