@@ -95,13 +95,12 @@
         (BOTTOMCOL DA)
         (BOTTOMCOL H2)
         (BOTTOMCOL S2)
-        (TGOAL-HOME C2)
-        (TGOAL-HOME D2)
-        (TGOAL-HOME H2)
-        (TGOAL-HOME S2)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME C2)
+        (ACHIEVE-HOME D2)
+        (ACHIEVE-HOME H2)
+        (ACHIEVE-HOME S2)
+	)
 )
 

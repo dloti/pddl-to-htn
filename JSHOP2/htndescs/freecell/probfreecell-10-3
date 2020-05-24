@@ -290,13 +290,12 @@
         (BOTTOMCOL H7)
         (BOTTOMCOL H8)
         (BOTTOMCOL S6)
-        (TGOAL-HOME C10)
-        (TGOAL-HOME D10)
-        (TGOAL-HOME H10)
-        (TGOAL-HOME S10)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME C10)
+        (ACHIEVE-HOME D10)
+        (ACHIEVE-HOME H10)
+        (ACHIEVE-HOME S10)
+	)
 )
 

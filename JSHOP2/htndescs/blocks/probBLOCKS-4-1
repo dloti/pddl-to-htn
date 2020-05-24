@@ -11,12 +11,11 @@
         (ON C A)
         (ON A D)
         (HANDEMPTY)
-        (TGOAL-ON D C)
-        (TGOAL-ON C A)
-        (TGOAL-ON A B)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-ON D C)
+        (ACHIEVE-ON C A)
+        (ACHIEVE-ON A B)
+	)
 )
 

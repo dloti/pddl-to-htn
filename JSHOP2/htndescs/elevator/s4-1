@@ -62,13 +62,12 @@
         (ORIGIN P3 F1)
         (DESTIN P3 F6)
         (LIFT-AT F0)
-        (TGOAL-SERVED P0)
-        (TGOAL-SERVED P1)
-        (TGOAL-SERVED P2)
-        (TGOAL-SERVED P3)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-SERVED P0)
+        (ACHIEVE-SERVED P1)
+        (ACHIEVE-SERVED P2)
+        (ACHIEVE-SERVED P3)
+	)
 )
 

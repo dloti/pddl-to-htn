@@ -13,12 +13,11 @@
         (ONTABLE D)
         (ON C B)
         (HANDEMPTY)
-        (TGOAL-ON A B)
-        (TGOAL-ON B C)
-        (TGOAL-ON C D)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-ON A B)
+        (ACHIEVE-ON B C)
+        (ACHIEVE-ON C D)
+	)
 )
 

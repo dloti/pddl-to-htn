@@ -40,12 +40,11 @@
         (NEXT FL3 FL4)
         (NEXT FL4 FL5)
         (NEXT FL5 FL6)
-        (TGOAL-AT PLANE1 CITY1)
-        (TGOAL-AT PERSON1 CITY0)
-        (TGOAL-AT PERSON2 CITY2)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-AT PLANE1 CITY1)
+        (ACHIEVE-AT PERSON1 CITY0)
+        (ACHIEVE-AT PERSON2 CITY2)
+	)
 )
 

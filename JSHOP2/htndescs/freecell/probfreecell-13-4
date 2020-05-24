@@ -362,13 +362,12 @@
         (BOTTOMCOL S6)
         (BOTTOMCOL SJ)
         (BOTTOMCOL SK)
-        (TGOAL-HOME CK)
-        (TGOAL-HOME DK)
-        (TGOAL-HOME HK)
-        (TGOAL-HOME SK)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME CK)
+        (ACHIEVE-HOME DK)
+        (ACHIEVE-HOME HK)
+        (ACHIEVE-HOME SK)
+	)
 )
 

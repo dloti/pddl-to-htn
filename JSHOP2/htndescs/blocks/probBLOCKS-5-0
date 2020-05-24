@@ -14,13 +14,12 @@
         (ON E B)
         (ON B A)
         (HANDEMPTY)
-        (TGOAL-ON A E)
-        (TGOAL-ON E B)
-        (TGOAL-ON B D)
-        (TGOAL-ON D C)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-ON A E)
+        (ACHIEVE-ON E B)
+        (ACHIEVE-ON B D)
+        (ACHIEVE-ON D C)
+	)
 )
 

@@ -121,13 +121,12 @@
         (BOTTOMCOL H2)
         (BOTTOMCOL HA)
         (BOTTOMCOL S3)
-        (TGOAL-HOME C3)
-        (TGOAL-HOME D3)
-        (TGOAL-HOME H3)
-        (TGOAL-HOME S3)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME C3)
+        (ACHIEVE-HOME D3)
+        (ACHIEVE-HOME H3)
+        (ACHIEVE-HOME S3)
+	)
 )
 

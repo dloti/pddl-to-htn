@@ -338,13 +338,12 @@
         (BOTTOMCOL S3)
         (BOTTOMCOL S6)
         (BOTTOMCOL SJ)
-        (TGOAL-HOME CQ)
-        (TGOAL-HOME DQ)
-        (TGOAL-HOME HQ)
-        (TGOAL-HOME SQ)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME CQ)
+        (ACHIEVE-HOME DQ)
+        (ACHIEVE-HOME HQ)
+        (ACHIEVE-HOME SQ)
+	)
 )
 

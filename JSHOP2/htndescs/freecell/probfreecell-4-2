@@ -145,13 +145,12 @@
         (BOTTOMCOL D4)
         (BOTTOMCOL DA)
         (BOTTOMCOL H2)
-        (TGOAL-HOME C4)
-        (TGOAL-HOME D4)
-        (TGOAL-HOME H4)
-        (TGOAL-HOME S4)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME C4)
+        (ACHIEVE-HOME D4)
+        (ACHIEVE-HOME H4)
+        (ACHIEVE-HOME S4)
+	)
 )
 

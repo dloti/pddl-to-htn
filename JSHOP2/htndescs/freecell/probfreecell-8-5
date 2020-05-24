@@ -242,13 +242,12 @@
         (BOTTOMCOL HA)
         (BOTTOMCOL S2)
         (BOTTOMCOL S8)
-        (TGOAL-HOME C8)
-        (TGOAL-HOME D8)
-        (TGOAL-HOME H8)
-        (TGOAL-HOME S8)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME C8)
+        (ACHIEVE-HOME D8)
+        (ACHIEVE-HOME H8)
+        (ACHIEVE-HOME S8)
+	)
 )
 

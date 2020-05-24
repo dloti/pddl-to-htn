@@ -193,13 +193,12 @@
         (BOTTOMCOL D2)
         (BOTTOMCOL D4)
         (BOTTOMCOL DA)
-        (TGOAL-HOME C6)
-        (TGOAL-HOME D6)
-        (TGOAL-HOME H6)
-        (TGOAL-HOME S6)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME C6)
+        (ACHIEVE-HOME D6)
+        (ACHIEVE-HOME H6)
+        (ACHIEVE-HOME S6)
+	)
 )
 

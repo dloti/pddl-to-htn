@@ -5,7 +5,7 @@
 #define LISP false
 #define JSHOP2H false
 //optimizations
-#define GORDER true
+#define GORDER false
 
 int main( int argc, char *argv[] ) {
 	if ( argc < 4 ) {

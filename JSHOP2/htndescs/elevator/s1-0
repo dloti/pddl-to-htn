@@ -11,10 +11,9 @@
         (ORIGIN P0 F1)
         (DESTIN P0 F0)
         (LIFT-AT F0)
-        (TGOAL-SERVED P0)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-SERVED P0)
+	)
 )
 

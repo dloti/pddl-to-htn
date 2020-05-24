@@ -63,11 +63,10 @@
         (ON CRATE0 PALLET1)
         (AT CRATE1 DEPOT0)
         (ON CRATE1 PALLET0)
-        (TGOAL-ON CRATE0 PALLET2)
-        (TGOAL-ON CRATE1 PALLET1)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-ON CRATE0 PALLET2)
+        (ACHIEVE-ON CRATE1 PALLET1)
+	)
 )
 

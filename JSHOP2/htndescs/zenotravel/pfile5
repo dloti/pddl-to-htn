@@ -55,13 +55,12 @@
         (NEXT FL3 FL4)
         (NEXT FL4 FL5)
         (NEXT FL5 FL6)
-        (TGOAL-AT PERSON1 CITY2)
-        (TGOAL-AT PERSON2 CITY3)
-        (TGOAL-AT PERSON3 CITY3)
-        (TGOAL-AT PERSON4 CITY3)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-AT PERSON1 CITY2)
+        (ACHIEVE-AT PERSON2 CITY3)
+        (ACHIEVE-AT PERSON3 CITY3)
+        (ACHIEVE-AT PERSON4 CITY3)
+	)
 )
 

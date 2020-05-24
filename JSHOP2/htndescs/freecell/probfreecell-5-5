@@ -170,13 +170,12 @@
         (BOTTOMCOL HA)
         (BOTTOMCOL S2)
         (BOTTOMCOL SA)
-        (TGOAL-HOME C5)
-        (TGOAL-HOME D5)
-        (TGOAL-HOME H5)
-        (TGOAL-HOME S5)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME C5)
+        (ACHIEVE-HOME D5)
+        (ACHIEVE-HOME H5)
+        (ACHIEVE-HOME S5)
+	)
 )
 

@@ -314,13 +314,12 @@
         (BOTTOMCOL HA)
         (BOTTOMCOL S2)
         (BOTTOMCOL S8)
-        (TGOAL-HOME CJ)
-        (TGOAL-HOME DJ)
-        (TGOAL-HOME HJ)
-        (TGOAL-HOME SJ)
     )
     (
-        (ORDER 0)
-        (SOLVE 0)	)
+        (ACHIEVE-HOME CJ)
+        (ACHIEVE-HOME DJ)
+        (ACHIEVE-HOME HJ)
+        (ACHIEVE-HOME SJ)
+	)
 )
 
