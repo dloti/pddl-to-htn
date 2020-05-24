@@ -15,70 +15,70 @@
 	( VALUE ?CARD0 - CARD ?NUM1 - NUM )
 	( SUCCESSOR ?NUM0 - NUM ?NUM1 - NUM )
 )
-( :action !MOVE
+( :action MOVE
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD)
 	:precondition (and
 		 ( CLEAR ?CARD0 ) ( CLEAR ?CARD2 ) ( CANSTACK ?CARD0 ?CARD2 ) ( ON ?CARD0 ?CARD1 ))
 	:effect (and
 		 ( NOT ( ON ?CARD0 ?CARD1 ) ) ( NOT ( CLEAR ?CARD2 ) ) ( ON ?CARD0 ?CARD2 ) ( CLEAR ?CARD1 ))
 )
-( :action !MOVE-B
+( :action MOVE-B
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM)
 	:precondition (and
 		 ( CLEAR ?CARD0 ) ( BOTTOMCOL ?CARD0 ) ( CLEAR ?CARD1 ) ( CANSTACK ?CARD0 ?CARD1 ) ( COLSPACE ?NUM2 ) ( SUCCESSOR ?NUM3 ?NUM2 ))
 	:effect (and
 		 ( NOT ( BOTTOMCOL ?CARD0 ) ) ( NOT ( CLEAR ?CARD1 ) ) ( NOT ( COLSPACE ?NUM2 ) ) ( ON ?CARD0 ?CARD1 ) ( COLSPACE ?NUM3 ))
 )
-( :action !SENDTOFREE
+( :action SENDTOFREE
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM)
 	:precondition (and
 		 ( CLEAR ?CARD0 ) ( ON ?CARD0 ?CARD1 ) ( CELLSPACE ?NUM2 ) ( SUCCESSOR ?NUM2 ?NUM3 ))
 	:effect (and
 		 ( NOT ( ON ?CARD0 ?CARD1 ) ) ( NOT ( CLEAR ?CARD0 ) ) ( NOT ( CELLSPACE ?NUM2 ) ) ( INCELL ?CARD0 ) ( CLEAR ?CARD1 ) ( CELLSPACE ?NUM3 ))
 )
-( :action !SENDTOFREE-B
+( :action SENDTOFREE-B
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM)
 	:precondition (and
 		 ( CLEAR ?CARD0 ) ( BOTTOMCOL ?CARD0 ) ( CELLSPACE ?NUM1 ) ( SUCCESSOR ?NUM1 ?NUM2 ) ( COLSPACE ?NUM3 ) ( SUCCESSOR ?NUM4 ?NUM3 ))
 	:effect (and
 		 ( NOT ( BOTTOMCOL ?CARD0 ) ) ( NOT ( CLEAR ?CARD0 ) ) ( NOT ( COLSPACE ?NUM3 ) ) ( NOT ( CELLSPACE ?NUM1 ) ) ( INCELL ?CARD0 ) ( COLSPACE ?NUM4 ) ( CELLSPACE ?NUM2 ))
 )
-( :action !SENDTONEWCOL
+( :action SENDTONEWCOL
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM)
 	:precondition (and
 		 ( CLEAR ?CARD0 ) ( COLSPACE ?NUM2 ) ( SUCCESSOR ?NUM2 ?NUM3 ) ( ON ?CARD0 ?CARD1 ))
 	:effect (and
 		 ( NOT ( ON ?CARD0 ?CARD1 ) ) ( NOT ( COLSPACE ?NUM2 ) ) ( BOTTOMCOL ?CARD0 ) ( CLEAR ?CARD1 ) ( COLSPACE ?NUM3 ))
 )
-( :action !SENDTOHOME
+( :action SENDTOHOME
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?SUIT2 - SUIT ?NUM3 - NUM ?CARD4 - CARD ?NUM5 - NUM)
 	:precondition (and
 		 ( CLEAR ?CARD0 ) ( ON ?CARD0 ?CARD1 ) ( HOME ?CARD4 ) ( SUIT ?CARD0 ?SUIT2 ) ( SUIT ?CARD4 ?SUIT2 ) ( VALUE ?CARD0 ?NUM3 ) ( VALUE ?CARD4 ?NUM5 ) ( SUCCESSOR ?NUM3 ?NUM5 ))
 	:effect (and
 		 ( NOT ( ON ?CARD0 ?CARD1 ) ) ( NOT ( HOME ?CARD4 ) ) ( NOT ( CLEAR ?CARD0 ) ) ( HOME ?CARD0 ) ( CLEAR ?CARD1 ))
 )
-( :action !SENDTOHOME-B
+( :action SENDTOHOME-B
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM)
 	:precondition (and
 		 ( CLEAR ?CARD0 ) ( BOTTOMCOL ?CARD0 ) ( HOME ?CARD3 ) ( SUIT ?CARD0 ?SUIT1 ) ( SUIT ?CARD3 ?SUIT1 ) ( VALUE ?CARD0 ?NUM2 ) ( VALUE ?CARD3 ?NUM4 ) ( SUCCESSOR ?NUM2 ?NUM4 ) ( COLSPACE ?NUM5 ) ( SUCCESSOR ?NUM6 ?NUM5 ))
 	:effect (and
 		 ( NOT ( HOME ?CARD3 ) ) ( NOT ( CLEAR ?CARD0 ) ) ( NOT ( BOTTOMCOL ?CARD0 ) ) ( NOT ( COLSPACE ?NUM5 ) ) ( HOME ?CARD0 ) ( COLSPACE ?NUM6 ))
 )
-( :action !HOMEFROMFREECELL
+( :action HOMEFROMFREECELL
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM)
 	:precondition (and
 		 ( INCELL ?CARD0 ) ( HOME ?CARD3 ) ( SUIT ?CARD0 ?SUIT1 ) ( SUIT ?CARD3 ?SUIT1 ) ( VALUE ?CARD0 ?NUM2 ) ( VALUE ?CARD3 ?NUM4 ) ( SUCCESSOR ?NUM2 ?NUM4 ) ( CELLSPACE ?NUM5 ) ( SUCCESSOR ?NUM6 ?NUM5 ))
 	:effect (and
 		 ( NOT ( INCELL ?CARD0 ) ) ( NOT ( CELLSPACE ?NUM5 ) ) ( NOT ( HOME ?CARD3 ) ) ( HOME ?CARD0 ) ( CELLSPACE ?NUM6 ))
 )
-( :action !COLFROMFREECELL
+( :action COLFROMFREECELL
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM)
 	:precondition (and
 		 ( INCELL ?CARD0 ) ( CLEAR ?CARD1 ) ( CANSTACK ?CARD0 ?CARD1 ) ( CELLSPACE ?NUM2 ) ( SUCCESSOR ?NUM3 ?NUM2 ))
 	:effect (and
 		 ( NOT ( INCELL ?CARD0 ) ) ( NOT ( CELLSPACE ?NUM2 ) ) ( NOT ( CLEAR ?CARD1 ) ) ( CELLSPACE ?NUM3 ) ( CLEAR ?CARD0 ) ( ON ?CARD0 ?CARD1 ))
 )
-( :action !NEWCOLFROMFREECELL
+( :action NEWCOLFROMFREECELL
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM)
 	:precondition (and
 		 ( INCELL ?CARD0 ) ( COLSPACE ?NUM1 ) ( CELLSPACE ?NUM3 ) ( SUCCESSOR ?NUM1 ?NUM2 ) ( SUCCESSOR ?NUM4 ?NUM3 ))
@@ -92,7 +92,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
 	:task ( DO-ON-MOVE0 ?CARD0 ?CARD1 ?CARD2 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !MOVE ?CARD0 ?CARD1 ?CARD2 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( MOVE ?CARD0 ?CARD1 ?CARD2 ) )
 )
 (:task DO-ON-SENDTONEWCOL0
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -101,7 +101,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-ON-SENDTONEWCOL0 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-ON-SENDTOFREE0
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -110,7 +110,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-ON-SENDTOFREE0 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-ON-SENDTOHOME0
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?SUIT2 - SUIT ?NUM3 - NUM ?CARD4 - CARD ?NUM5 - NUM )
@@ -119,7 +119,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?SUIT2 - SUIT ?NUM3 - NUM ?CARD4 - CARD ?NUM5 - NUM )
 	:task ( DO-ON-SENDTOHOME0 ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD4 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOHOME ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 ) )
+	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD4 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOHOME ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 ) )
 )
 (:task DO-BOTTOMCOL-MOVE-B0
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -128,7 +128,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-BOTTOMCOL-MOVE-B0 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( BOTTOMCOL ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD1 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD1 ) ( ACHIEVE-CLEAR ?CARD0 ) ( MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-BOTTOMCOL-SENDTOFREE-B0
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -137,7 +137,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-BOTTOMCOL-SENDTOFREE-B0 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( BOTTOMCOL ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM3 ) ( ACHIEVE-CELLSPACE ?NUM1 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM3 ) ( ACHIEVE-CELLSPACE ?NUM1 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-BOTTOMCOL-SENDTOHOME-B0
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
@@ -146,7 +146,7 @@
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
 	:task ( DO-BOTTOMCOL-SENDTOHOME-B0 ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 )
 	:precondition (and  ( BOTTOMCOL ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOHOME-B ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOHOME-B ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
 )
 (:task DO-INCELL-COLFROMFREECELL0
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -155,7 +155,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-INCELL-COLFROMFREECELL0 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( !COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-INCELL-NEWCOLFROMFREECELL0
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -164,7 +164,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-INCELL-NEWCOLFROMFREECELL0 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM3 ) ( ACHIEVE-COLSPACE ?NUM1 ) ( !NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM3 ) ( ACHIEVE-COLSPACE ?NUM1 ) ( NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-INCELL-HOMEFROMFREECELL0
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
@@ -173,7 +173,7 @@
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
 	:task ( DO-INCELL-HOMEFROMFREECELL0 ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( !HOMEFROMFREECELL ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
+	:ordered-subtasks (and  ( HOMEFROMFREECELL ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
 )
 (:task DO-ON-MOVE1
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
@@ -182,7 +182,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
 	:task ( DO-ON-MOVE1 ?CARD0 ?CARD1 ?CARD2 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !MOVE ?CARD0 ?CARD1 ?CARD2 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( MOVE ?CARD0 ?CARD1 ?CARD2 ) )
 )
 (:task DO-ON-SENDTONEWCOL1
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -191,7 +191,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-ON-SENDTONEWCOL1 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-ON-SENDTOFREE1
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -200,7 +200,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-ON-SENDTOFREE1 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-BOTTOMCOL-MOVE-B1
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -209,7 +209,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-BOTTOMCOL-MOVE-B1 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( BOTTOMCOL ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD1 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD1 ) ( ACHIEVE-CLEAR ?CARD0 ) ( MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-BOTTOMCOL-SENDTOFREE-B1
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -218,7 +218,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-BOTTOMCOL-SENDTOFREE-B1 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( BOTTOMCOL ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM3 ) ( ACHIEVE-CELLSPACE ?NUM1 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM3 ) ( ACHIEVE-CELLSPACE ?NUM1 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-INCELL-COLFROMFREECELL1
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -227,7 +227,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-INCELL-COLFROMFREECELL1 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( !COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-INCELL-NEWCOLFROMFREECELL1
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -236,7 +236,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-INCELL-NEWCOLFROMFREECELL1 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM3 ) ( ACHIEVE-COLSPACE ?NUM1 ) ( !NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM3 ) ( ACHIEVE-COLSPACE ?NUM1 ) ( NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-ON-MOVE2
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
@@ -245,7 +245,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
 	:task ( DO-ON-MOVE2 ?CARD0 ?CARD1 ?CARD2 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD0 ) ( ACHIEVE-CLEAR ?CARD2 ) ( !MOVE ?CARD0 ?CARD1 ?CARD2 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD0 ) ( ACHIEVE-CLEAR ?CARD2 ) ( MOVE ?CARD0 ?CARD1 ?CARD2 ) )
 )
 (:task DO-ON-SENDTOFREE2
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -254,7 +254,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-ON-SENDTOFREE2 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-ON-SENDTONEWCOL2
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -263,7 +263,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-ON-SENDTONEWCOL2 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-ON-SENDTOHOME2
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?SUIT2 - SUIT ?NUM3 - NUM ?CARD4 - CARD ?NUM5 - NUM )
@@ -272,7 +272,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?SUIT2 - SUIT ?NUM3 - NUM ?CARD4 - CARD ?NUM5 - NUM )
 	:task ( DO-ON-SENDTOHOME2 ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD4 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOHOME ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 ) )
+	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD4 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOHOME ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 ) )
 )
 (:task DO-CLEAR-MOVE2
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
@@ -281,7 +281,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
 	:task ( DO-CLEAR-MOVE2 ?CARD0 ?CARD1 ?CARD2 )
 	:precondition (and  ( CLEAR ?CARD2 ))
-	:ordered-subtasks (and  ( !MOVE ?CARD0 ?CARD1 ?CARD2 ) )
+	:ordered-subtasks (and  ( MOVE ?CARD0 ?CARD1 ?CARD2 ) )
 )
 (:task DO-CLEAR-MOVE-B2
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -290,7 +290,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-CLEAR-MOVE-B2 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( CLEAR ?CARD1 ))
-	:ordered-subtasks (and  ( !MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-CLEAR-COLFROMFREECELL2
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -299,7 +299,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-CLEAR-COLFROMFREECELL2 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( CLEAR ?CARD1 ))
-	:ordered-subtasks (and  ( !COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-CLEAR-SENDTOFREE2
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -308,7 +308,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-CLEAR-SENDTOFREE2 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( CLEAR ?CARD0 ))
-	:ordered-subtasks (and  ( !SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-CLEAR-SENDTOFREE-B2
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -317,7 +317,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-CLEAR-SENDTOFREE-B2 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( CLEAR ?CARD0 ))
-	:ordered-subtasks (and  ( !SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-INCELL-COLFROMFREECELL2
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -326,7 +326,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-INCELL-COLFROMFREECELL2 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( !COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-INCELL-NEWCOLFROMFREECELL2
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -335,7 +335,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-INCELL-NEWCOLFROMFREECELL2 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM3 ) ( ACHIEVE-COLSPACE ?NUM1 ) ( !NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM3 ) ( ACHIEVE-COLSPACE ?NUM1 ) ( NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-ON-MOVE3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
@@ -344,7 +344,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
 	:task ( DO-ON-MOVE3 ?CARD0 ?CARD1 ?CARD2 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD0 ) ( ACHIEVE-CLEAR ?CARD2 ) ( !MOVE ?CARD0 ?CARD1 ?CARD2 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD0 ) ( ACHIEVE-CLEAR ?CARD2 ) ( MOVE ?CARD0 ?CARD1 ?CARD2 ) )
 )
 (:task DO-ON-SENDTOFREE3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -353,7 +353,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-ON-SENDTOFREE3 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-ON-SENDTONEWCOL3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -362,7 +362,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-ON-SENDTONEWCOL3 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-COLSPACE ?NUM2 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-ON-SENDTOHOME3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?SUIT2 - SUIT ?NUM3 - NUM ?CARD4 - CARD ?NUM5 - NUM )
@@ -371,7 +371,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?SUIT2 - SUIT ?NUM3 - NUM ?CARD4 - CARD ?NUM5 - NUM )
 	:task ( DO-ON-SENDTOHOME3 ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 )
 	:precondition (and  ( ON ?CARD0 ?CARD1 ))
-	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD4 ) ( ACHIEVE-CLEAR ?CARD0 ) ( !SENDTOHOME ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 ) )
+	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD4 ) ( ACHIEVE-CLEAR ?CARD0 ) ( SENDTOHOME ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 ) )
 )
 (:task DO-CLEAR-MOVE3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
@@ -380,7 +380,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?CARD2 - CARD )
 	:task ( DO-CLEAR-MOVE3 ?CARD0 ?CARD1 ?CARD2 )
 	:precondition (and  ( CLEAR ?CARD2 ))
-	:ordered-subtasks (and  ( !MOVE ?CARD0 ?CARD1 ?CARD2 ) )
+	:ordered-subtasks (and  ( MOVE ?CARD0 ?CARD1 ?CARD2 ) )
 )
 (:task DO-CLEAR-MOVE-B3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -389,7 +389,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-CLEAR-MOVE-B3 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( CLEAR ?CARD1 ))
-	:ordered-subtasks (and  ( !MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-CLEAR-COLFROMFREECELL3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -398,7 +398,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-CLEAR-COLFROMFREECELL3 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( CLEAR ?CARD1 ))
-	:ordered-subtasks (and  ( !COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-CLEAR-SENDTOFREE3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -407,7 +407,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-CLEAR-SENDTOFREE3 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( CLEAR ?CARD0 ))
-	:ordered-subtasks (and  ( !SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-CLEAR-SENDTOFREE-B3
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -416,7 +416,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-CLEAR-SENDTOFREE-B3 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( CLEAR ?CARD0 ))
-	:ordered-subtasks (and  ( !SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-CLEAR-SENDTOHOME3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?SUIT2 - SUIT ?NUM3 - NUM ?CARD4 - CARD ?NUM5 - NUM )
@@ -425,7 +425,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?SUIT2 - SUIT ?NUM3 - NUM ?CARD4 - CARD ?NUM5 - NUM )
 	:task ( DO-CLEAR-SENDTOHOME3 ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 )
 	:precondition (and  ( CLEAR ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD4 ) ( ACHIEVE-ON ?CARD0 ?CARD1 ) ( !SENDTOHOME ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 ) )
+	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD4 ) ( ACHIEVE-ON ?CARD0 ?CARD1 ) ( SENDTOHOME ?CARD0 ?CARD1 ?SUIT2 ?NUM3 ?CARD4 ?NUM5 ) )
 )
 (:task DO-CLEAR-SENDTOHOME-B3
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
@@ -434,7 +434,7 @@
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
 	:task ( DO-CLEAR-SENDTOHOME-B3 ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 )
 	:precondition (and  ( CLEAR ?CARD0 ))
-	:ordered-subtasks (and  ( !SENDTOHOME-B ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
+	:ordered-subtasks (and  ( SENDTOHOME-B ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
 )
 (:task DO-INCELL-COLFROMFREECELL3
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -443,7 +443,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-INCELL-COLFROMFREECELL3 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( !COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-INCELL-NEWCOLFROMFREECELL3
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -452,7 +452,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-INCELL-NEWCOLFROMFREECELL3 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM3 ) ( ACHIEVE-COLSPACE ?NUM1 ) ( !NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CELLSPACE ?NUM3 ) ( ACHIEVE-COLSPACE ?NUM1 ) ( NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-INCELL-HOMEFROMFREECELL3
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
@@ -461,7 +461,7 @@
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
 	:task ( DO-INCELL-HOMEFROMFREECELL3 ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 )
 	:precondition (and  ( INCELL ?CARD0 ))
-	:ordered-subtasks (and  ( !HOMEFROMFREECELL ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
+	:ordered-subtasks (and  ( HOMEFROMFREECELL ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
 )
 (:task DO-CELLSPACE-SENDTOFREE4
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -470,7 +470,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-CELLSPACE-SENDTOFREE4 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( CELLSPACE ?NUM2 ))
-	:ordered-subtasks (and  ( !SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( SENDTOFREE ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-CELLSPACE-SENDTOFREE-B4
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -479,7 +479,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-CELLSPACE-SENDTOFREE-B4 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( CELLSPACE ?NUM1 ))
-	:ordered-subtasks (and  ( !SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-CELLSPACE-HOMEFROMFREECELL4
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
@@ -488,7 +488,7 @@
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
 	:task ( DO-CELLSPACE-HOMEFROMFREECELL4 ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 )
 	:precondition (and  ( CELLSPACE ?NUM5 ))
-	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD3 ) ( ACHIEVE-INCELL ?CARD0 ) ( !HOMEFROMFREECELL ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
+	:ordered-subtasks (and  ( ACHIEVE-HOME ?CARD3 ) ( ACHIEVE-INCELL ?CARD0 ) ( HOMEFROMFREECELL ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
 )
 (:task DO-CELLSPACE-COLFROMFREECELL4
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -497,7 +497,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-CELLSPACE-COLFROMFREECELL4 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( CELLSPACE ?NUM2 ))
-	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD1 ) ( ACHIEVE-INCELL ?CARD0 ) ( !COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD1 ) ( ACHIEVE-INCELL ?CARD0 ) ( COLFROMFREECELL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-CELLSPACE-NEWCOLFROMFREECELL4
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -506,7 +506,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-CELLSPACE-NEWCOLFROMFREECELL4 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( CELLSPACE ?NUM3 ))
-	:ordered-subtasks (and  ( !NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-COLSPACE-MOVE-B5
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -515,7 +515,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-COLSPACE-MOVE-B5 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( COLSPACE ?NUM2 ))
-	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD1 ) ( !MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?CARD1 ) ( MOVE-B ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-COLSPACE-SENDTOFREE-B5
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -524,7 +524,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-COLSPACE-SENDTOFREE-B5 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( COLSPACE ?NUM3 ))
-	:ordered-subtasks (and  ( !SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( SENDTOFREE-B ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 (:task DO-COLSPACE-SENDTONEWCOL5
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
@@ -533,7 +533,7 @@
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD ?NUM2 - NUM ?NUM3 - NUM )
 	:task ( DO-COLSPACE-SENDTONEWCOL5 ?CARD0 ?CARD1 ?NUM2 ?NUM3 )
 	:precondition (and  ( COLSPACE ?NUM2 ))
-	:ordered-subtasks (and  ( !SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
+	:ordered-subtasks (and  ( SENDTONEWCOL ?CARD0 ?CARD1 ?NUM2 ?NUM3 ) )
 )
 (:task DO-COLSPACE-SENDTOHOME-B5
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
@@ -542,7 +542,7 @@
 	:parameters ( ?CARD0 - CARD ?SUIT1 - SUIT ?NUM2 - NUM ?CARD3 - CARD ?NUM4 - NUM ?NUM5 - NUM ?NUM6 - NUM )
 	:task ( DO-COLSPACE-SENDTOHOME-B5 ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 )
 	:precondition (and  ( COLSPACE ?NUM5 ))
-	:ordered-subtasks (and  ( !SENDTOHOME-B ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
+	:ordered-subtasks (and  ( SENDTOHOME-B ?CARD0 ?SUIT1 ?NUM2 ?CARD3 ?NUM4 ?NUM5 ?NUM6 ) )
 )
 (:task DO-COLSPACE-NEWCOLFROMFREECELL5
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
@@ -551,7 +551,7 @@
 	:parameters ( ?CARD0 - CARD ?NUM1 - NUM ?NUM2 - NUM ?NUM3 - NUM ?NUM4 - NUM )
 	:task ( DO-COLSPACE-NEWCOLFROMFREECELL5 ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 )
 	:precondition (and  ( COLSPACE ?NUM1 ))
-	:ordered-subtasks (and  ( !NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
+	:ordered-subtasks (and  ( NEWCOLFROMFREECELL ?CARD0 ?NUM1 ?NUM2 ?NUM3 ?NUM4 ) )
 )
 ( :task ACHIEVE-ON
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD )

@@ -544,7 +544,7 @@ public:
 
 	void printHDDLActions( std::ostream &os ) {
 		for ( unsigned i = 0; i < actions.size(); ++i ) {
-			os<<"( :action !"<<actions[i].name<<std::endl;
+			os<<"( :action "<<actions[i].name<<std::endl;
 			os<<"\t:parameters (";
 				Condition& c = actions[i];
 				for ( unsigned i = 0; i < c.params.size(); ++i )

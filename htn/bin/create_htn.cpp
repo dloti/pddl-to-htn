@@ -194,7 +194,7 @@ void printHDDLDOMethods(Domain &d, std::ostream &out) {
 				// 	std::string s(c2.neg ? "" : "IFUNLOCK-");
 				// 	out << d.parametrizeCondition(a, c2, s, false);
 				// }
-				out << d.parametrizeCondition(a, "!", false);
+				out << d.parametrizeCondition(a, "", false);
 			
 				out << " )"<<std::endl;
 				out<<")"<<std::endl;
@@ -1023,7 +1023,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 										printCondition(out, false, cc, "DO", true, pa, i);
 									} else{
 										std::ostringstream ts;
-										printCondition(ts, false, a, "!", false, pa);
+										printCondition(ts, false, a, "", false, pa);
 										out<<ts.str();
 										taskToFluentMap[i][ts.str()] = d.parametrizeCondition(cadd,"",false);
 									}
@@ -1099,7 +1099,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 								 		printCondition(out, false, cc, "DO", true, pa, i);
 								 	}
 								 	else
-								 		printCondition(out, false, a, "!", false, pa );
+								 		printCondition(out, false, a, "", false, pa );
 
 								 	printCondition(out, false, c, "ACHIEVE", true, params, i);
 								 	out << " )\n)\n";//end ordered-subtasks and end method
