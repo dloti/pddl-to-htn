@@ -123,11 +123,15 @@
               ( ( NOT ( HOLDING ?BLOCK0 ) ) ( ONTABLE ?BLOCK0 ) ( BLOCK ?BLOCK0 ) )
               ( ( DO-ONTABLE-PICK-UP0 ?BLOCK0 ) ( ACHIEVE-HOLDING0 ?BLOCK0 ) )
     )
-    ( :FIKO ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
+( :method M-ACHIEVE-ON0
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK4 - BLOCK)
+
               ( ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK4 ) ( BLOCK ?BLOCK0 ) ( BLOCK ?BLOCK4 ) )
               ( ( !STACK ?BLOCK0 ?BLOCK4 ) ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) )
     )
-    ( :FIKO ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
+( :method M-ACHIEVE-ON0
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
+
               ( ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( HOLDING ?BLOCK0 ) ( BLOCK ?BLOCK0 ) )
               ( ( !PUT-DOWN ?BLOCK0 ) ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) )
     )
@@ -155,15 +159,21 @@
 	:task ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
 	:subtasks ( )
 )
-    ( :FIKO ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
+( :method M-ACHIEVE-ON0
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK3 - BLOCK)
+
               ( ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( ON ?BLOCK0 ?BLOCK3 ) ( BLOCK ?BLOCK0 ) ( BLOCK ?BLOCK3 ) )
               ( ( DO-ON-UNSTACK0 ?BLOCK0 ?BLOCK3 ) ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) )
     )
-    ( :FIKO ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
+( :method M-ACHIEVE-ON0
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
+
               ( ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( ONTABLE ?BLOCK0 ) ( BLOCK ?BLOCK0 ) )
               ( ( DO-ONTABLE-PICK-UP0 ?BLOCK0 ) ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) )
     )
-    ( :FIKO ( ACHIEVE-ONTABLE0 ?BLOCK0 )
+( :method M-ACHIEVE-ONTABLE0
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK3 - BLOCK)
+
               ( ( NOT ( ONTABLE ?BLOCK0 ) ) ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK3 ) ( BLOCK ?BLOCK0 ) ( BLOCK ?BLOCK3 ) )
               ( ( !STACK ?BLOCK0 ?BLOCK3 ) ( ACHIEVE-ONTABLE0 ?BLOCK0 ) )
     )
@@ -171,7 +181,9 @@
               ( ( NOT ( ONTABLE ?BLOCK0 ) ) ( HOLDING ?BLOCK0 ) ( BLOCK ?BLOCK0 ) )
               ( ( !PUT-DOWN ?BLOCK0 ) ( ACHIEVE-ONTABLE0 ?BLOCK0 ) )
     )
-    ( :FIKO ( ACHIEVE-ONTABLE0 ?BLOCK0 )
+( :method M-ACHIEVE-ONTABLE0
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK2 - BLOCK)
+
               ( ( NOT ( ONTABLE ?BLOCK0 ) ) ( ON ?BLOCK0 ?BLOCK2 ) ( BLOCK ?BLOCK0 ) ( BLOCK ?BLOCK2 ) )
               ( ( DO-ON-UNSTACK0 ?BLOCK0 ?BLOCK2 ) ( ACHIEVE-ONTABLE0 ?BLOCK0 ) )
     )
@@ -231,15 +243,21 @@
               ( ( NOT ( CLEAR ?BLOCK0 ) ) ( HOLDING ?BLOCK0 ) ( BLOCK ?BLOCK0 ) )
               ( ( !PUT-DOWN ?BLOCK0 ) ( ACHIEVE-CLEAR1 ?BLOCK0 ) )
     )
-    ( :FIKO ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
+( :method M-ACHIEVE-ON1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK3 - BLOCK)
+
               ( ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( CLEAR ?BLOCK1 ) ( BLOCK ?BLOCK3 ) ( BLOCK ?BLOCK1 ) )
               ( ( DO-CLEAR-STACK1 ?BLOCK3 ?BLOCK1 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
     )
-    ( :FIKO ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
+( :method M-ACHIEVE-ON1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
+
               ( ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( CLEAR ?BLOCK1 ) ( ONTABLE ?BLOCK1 ) ( BLOCK ?BLOCK1 ) )
               ( ( DO-CLEAR-PICK-UP1 ?BLOCK1 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
     )
-    ( :FIKO ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
+( :method M-ACHIEVE-ON1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK4 - BLOCK)
+
               ( ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( CLEAR ?BLOCK1 ) ( BLOCK ?BLOCK1 ) ( BLOCK ?BLOCK4 ) )
               ( ( DO-CLEAR-UNSTACK1 ?BLOCK1 ?BLOCK4 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
     )
@@ -258,15 +276,21 @@
 	:task ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
 	:subtasks ( )
 )
-    ( :FIKO ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
+( :method M-ACHIEVE-ON1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK2 - BLOCK)
+
               ( ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( ON ?BLOCK2 ?BLOCK1 ) ( BLOCK ?BLOCK2 ) ( BLOCK ?BLOCK1 ) )
               ( ( DO-ON-UNSTACK1 ?BLOCK2 ?BLOCK1 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
     )
-    ( :FIKO ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
+( :method M-ACHIEVE-ON1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
+
               ( ( NOT ( ON ?BLOCK0 ?BLOCK1 ) ) ( HOLDING ?BLOCK1 ) ( BLOCK ?BLOCK1 ) )
               ( ( !PUT-DOWN ?BLOCK1 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
     )
-    ( :FIKO ( ACHIEVE-HOLDING1 ?BLOCK0 )
+( :method M-ACHIEVE-HOLDING1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK2 - BLOCK)
+
               ( ( NOT ( HOLDING ?BLOCK0 ) ) ( CLEAR ?BLOCK0 ) ( BLOCK ?BLOCK2 ) ( BLOCK ?BLOCK0 ) )
               ( ( DO-CLEAR-STACK1 ?BLOCK2 ?BLOCK0 ) ( ACHIEVE-HOLDING1 ?BLOCK0 ) )
     )
@@ -278,7 +302,9 @@
               ( ( NOT ( HOLDING ?BLOCK0 ) ) ( CLEAR ?BLOCK0 ) ( BLOCK ?BLOCK0 ) ( BLOCK ?BLOCK3 ) )
               ( ( DO-CLEAR-UNSTACK1 ?BLOCK0 ?BLOCK3 ) ( ACHIEVE-HOLDING1 ?BLOCK0 ) )
     )
-    ( :FIKO ( ACHIEVE-HOLDING1 ?BLOCK0 )
+( :method M-ACHIEVE-HOLDING1
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
+
               ( ( NOT ( HOLDING ?BLOCK0 ) ) ( ON ?BLOCK1 ?BLOCK0 ) ( BLOCK ?BLOCK1 ) ( BLOCK ?BLOCK0 ) )
               ( ( DO-ON-UNSTACK1 ?BLOCK1 ?BLOCK0 ) ( ACHIEVE-HOLDING1 ?BLOCK0 ) )
     )
@@ -325,11 +351,15 @@
               ( ( NOT ( HANDEMPTY ) ) ( HOLDING ?BLOCK0 ) ( BLOCK ?BLOCK0 ) )
               ( ( !PUT-DOWN ?BLOCK0 ) ( ACHIEVE-HANDEMPTY2 ) )
     )
-    ( :FIKO ( ACHIEVE-HOLDING2 ?BLOCK0 )
+( :method M-ACHIEVE-HOLDING2
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
+
               ( ( NOT ( HOLDING ?BLOCK0 ) ) ( HANDEMPTY ) ( CLEAR ?BLOCK1 ) ( ONTABLE ?BLOCK1 ) ( BLOCK ?BLOCK1 ) )
               ( ( !PICK-UP ?BLOCK1 ) ( ACHIEVE-HOLDING2 ?BLOCK0 ) )
     )
-    ( :FIKO ( ACHIEVE-HOLDING2 ?BLOCK0 )
+( :method M-ACHIEVE-HOLDING2
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK2 - BLOCK)
+
               ( ( NOT ( HOLDING ?BLOCK0 ) ) ( HANDEMPTY ) ( ON ?BLOCK1 ?BLOCK2 ) ( CLEAR ?BLOCK1 ) ( BLOCK ?BLOCK1 ) ( BLOCK ?BLOCK2 ) )
               ( ( !UNSTACK ?BLOCK1 ?BLOCK2 ) ( ACHIEVE-HOLDING2 ?BLOCK0 ) )
     )
@@ -348,7 +378,9 @@
 	:task ( ACHIEVE-HOLDING2 ?BLOCK0 )
 	:subtasks ( )
 )
-    ( :FIKO ( ACHIEVE-HOLDING2 ?BLOCK0 )
+( :method M-ACHIEVE-HOLDING2
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
+
               ( ( NOT ( HOLDING ?BLOCK0 ) ) ( HOLDING ?BLOCK1 ) ( BLOCK ?BLOCK1 ) )
               ( ( !PUT-DOWN ?BLOCK1 ) ( ACHIEVE-HOLDING2 ?BLOCK0 ) )
     )

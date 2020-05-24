@@ -927,7 +927,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 								std::vector<std::string> pa,padd;
 								//out<<"p2"<<p2<<std::endl;
 								
-								 //out<<"del:"<<del<<" add:"<<add<<"aparam:"<<a.params<<"c:"<<c<<std::endl;
+								//out<<"del:"<<del<<" add:"<<add<<"aparam:"<<a.params<<"c:"<<c<<std::endl;
 								for (unsigned l = 0; l < a.params.size(); ++l) {
 									mys.insert(l);
 									std::ostringstream os;
@@ -967,9 +967,22 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 										:ordered-subtasks(and ( DO-AT-LIFT1 ?HOIST4 ?CRATE0 ?SURFACE6 ?PLACE3 ) ( ACHIEVE-AT1 ?CRATE0 ?PLACE1 ) )
 									)
 								*/
+								std::string taskName = "ACHIEVE-"+c.name+std::to_string(i);
 								if (i3->first != j || invs[i].types.size() < invs[i].conds[j].params.size()) {
-									out << "    ( :FIKO";
-									printCondition(out, false, c, "ACHIEVE", true, params, i);
+									std::ostringstream head;
+									std::set<std::string> typedParams;
+									head << "( :method M-"<<taskName<<std::endl;
+									head <<"\t:parameters (";
+									for ( unsigned pk = 0; pk < params.size(); ++pk )
+										typedParams.insert(" " + params[pk] + " - " + param_types[pk]);
+									for (unsigned pk = 0; pk < a.params.size(); ++pk)
+										typedParams.insert(" " + pa[pk] + " - " + d.types[a.params[pk]].name);
+
+									for(auto& tp : typedParams)
+										head<<tp;
+									head<<")"<<std::endl;
+									out<<head.str();
+									//printCondition(out, false, c, "ACHIEVE", true, params, i);
 									out << "\n";
 									out << "              (";
 									

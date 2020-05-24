@@ -92,11 +92,15 @@
 	:task ( ACHIEVE-LIFT-AT0 ?FLOOR0 )
 	:subtasks ( )
 )
-    ( :FIKO ( ACHIEVE-LIFT-AT0 ?FLOOR0 )
+( :method M-ACHIEVE-LIFT-AT0
+	:parameters ( ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR ?FLOOR3 - FLOOR)
+
               ( ( NOT ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ) ( ABOVE ?FLOOR1 ?FLOOR3 ) ( FLOOR ?FLOOR1 ) ( FLOOR ?FLOOR3 ) )
               ( ( !UP ?FLOOR1 ?FLOOR3 ) ( ACHIEVE-LIFT-AT0 ?FLOOR0 ) )
     )
-    ( :FIKO ( ACHIEVE-LIFT-AT0 ?FLOOR0 )
+( :method M-ACHIEVE-LIFT-AT0
+	:parameters ( ?FLOOR0 - FLOOR ?FLOOR1 - FLOOR ?FLOOR3 - FLOOR)
+
               ( ( NOT ( LIFT-AT ?FLOOR0 ) ) ( LIFT-AT ?FLOOR1 ) ( ABOVE ?FLOOR3 ?FLOOR1 ) ( FLOOR ?FLOOR1 ) ( FLOOR ?FLOOR3 ) )
               ( ( !DOWN ?FLOOR1 ?FLOOR3 ) ( ACHIEVE-LIFT-AT0 ?FLOOR0 ) )
     )
