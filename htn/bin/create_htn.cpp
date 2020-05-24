@@ -221,11 +221,11 @@ void printInnerACHIEVE(Domain &d, std::ostream &out, int invariant_num, int cond
 	out << "    )\n";
 }
 
-void printHDDLInnerACHIEVE(Domain &d, std::ostream &out, int invariant_num, int condition_num, Condition& pred,
+std::string printHDDLInnerACHIEVE(Domain &d, std::ostream &out, int invariant_num, int condition_num, Condition& pred,
 		std::vector<std::string>& params) {
 	Condition c = invs[invariant_num].conds[condition_num];
 	if (isPosNegInvariant(invariant_num) && c.neg)
-		return;
+		return std::string();
 	std::ostringstream ts;
 	ts<<d.parametrizeHDDLCondition(c, "ACHIEVE-", invariant_num);
 	out<<"( :task "<<ts.str()<<std::endl<<")"<<std::endl;
@@ -238,6 +238,7 @@ void printHDDLInnerACHIEVE(Domain &d, std::ostream &out, int invariant_num, int 
 	out<<std::endl;
 	out<<"\t:subtasks ( )"<<std::endl;
 	out<<")"<<std::endl;
+	return d.parametrizeCondition(c, "ACHIEVE-",false, invariant_num);
 }
 
 void printACHIEVEOps(Domain &d, std::ostream &out) {
@@ -889,6 +890,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 					sort_by_index = k;
 				}
 			}
+			std::string hddlTaskName;
 			for (unsigned k = 0; k < invs[i].conds.size(); ++k) {
 				bool achieveWrap(false);
 				Condition pred = invs[i].conds[k];
@@ -897,7 +899,9 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 						printHDDLTopACHIEVE(d, out, param_types, params, i, j, pred);
 						achieveWrap = true;
 					}
-					printHDDLInnerACHIEVE(d, out, i, j, pred, params);
+					std::string tmpHDDLTaskName = printHDDLInnerACHIEVE(d, out, i, j, pred, params);
+					if(!tmpHDDLTaskName.empty())
+						hddlTaskName = tmpHDDLTaskName;
 				}
 				if (j != k || invs[i].types.size() < c.params.size()) {
 					x = d.pmap[pred.name];
@@ -959,13 +963,6 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 								if( sort )
 									sort_by.push_back(padd[sort_by_index]);
 								
-								/*      ( :method ACHIEVE-AT1 
-        								:parameters (?CRATE0 - CRATE ?PLACE1 - PLACE ?PLACE3 - PLACE ?SURFACE6 - SURFACE ?HOIST4 - HOIST)
-										:task (ACHIEVE-AT1 ?CRATE0 ?PLACE1)
-										:precondition (and ( NOT ( AT ?CRATE0 ?PLACE1 ) ) ( AT ?CRATE0 ?PLACE3 ) ( ON ?CRATE0 ?SURFACE6 ))
-										:ordered-subtasks(and ( DO-AT-LIFT1 ?HOIST4 ?CRATE0 ?SURFACE6 ?PLACE3 ) ( ACHIEVE-AT1 ?CRATE0 ?PLACE1 ) )
-									)
-								*/
 								std::string taskName = "ACHIEVE-"+c.name+std::to_string(i);
 								if (i3->first != j || invs[i].types.size() < invs[i].conds[j].params.size()) {
 									std::ostringstream head;
@@ -980,7 +977,15 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 										head<<tp;
 									head<<")"<<std::endl;
 									out<<head.str();
-									out<<"\t:task "<<d.parametrizeCondition(pred, "ACHIEVE-",false, i)<<std::endl;
+									out<<"\t:task ";
+									if(hddlTaskName.empty()) {
+										out<<"( "<<taskName;
+										for ( unsigned pk = 0; pk < params.size(); ++pk )
+											out<<" "<<params[pk];
+										out<<" )";
+									}
+									else out<<hddlTaskName;
+									out<<std::endl;
 									out << "\t:precondition (and";
 									out << " ( NOT";
 									printCondition(out, false, c, "", false, params);
@@ -1047,7 +1052,15 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 										head<<tp;
 									head<<")"<<std::endl;
 									out<<head.str();
-									out<<"\t:task "<<d.parametrizeCondition(pred, "ACHIEVE-",false, i)<<std::endl;
+									out<<"\t:task ";
+									if(hddlTaskName.empty()) {
+										out<<"( "<<taskName;
+										for ( unsigned pk = 0; pk < params.size(); ++pk )
+											out<<" "<<params[pk];
+										out<<" )";
+									}
+									else out<<hddlTaskName;
+									out<<std::endl;
 									out << "\t:precondition (and";
 								 	out << " ( NOT";
 								 	printCondition(out, false, c, "", false, params);
