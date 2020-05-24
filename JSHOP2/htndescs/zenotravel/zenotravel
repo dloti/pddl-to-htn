@@ -103,14 +103,14 @@
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?PERSON0 - PERSON ?CITY1 - CITY )
-	:precondition (and ( AT ?PERSON0 ?CITY1 ))
 	:task  ( ACHIEVE-AT ?PERSON0 ?CITY1 )
+	:precondition (and ( AT ?PERSON0 ?CITY1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?PERSON0 - PERSON ?CITY1 - CITY )
-	:precondition ( NOT ( AT ?PERSON0 ?CITY1 ))
 	:task  ( ACHIEVE-AT ?PERSON0 ?CITY1 )
+	:precondition ( NOT ( AT ?PERSON0 ?CITY1 ))
 	:subtasks  ( ACHIEVE-AT0 ?PERSON0 ?CITY1 )
 )
 ( :task ACHIEVE-AT0
@@ -118,8 +118,8 @@
 )
 ( :method M-ACHIEVE-AT0
 	:parameters ( ?PERSON0 - PERSON ?CITY1 - CITY )
-	:precondition  ( AT ?PERSON0 ?CITY1 )
 	:task ( ACHIEVE-AT0 ?PERSON0 ?CITY1 )
+	:precondition  ( AT ?PERSON0 ?CITY1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-AT0
@@ -130,13 +130,13 @@
 )
 ( :method M-ACHIEVE-AT0
 	:parameters ( ?AIRCRAFT3 - AIRCRAFT ?CITY1 - CITY ?CITY6 - CITY ?PERSON0 - PERSON)
-	:task 
+	:task  ( ACHIEVE-IN0 ?PERSON0 ?AIRCRAFT1 )
 	:precondition (and ( NOT ( AT ?PERSON0 ?CITY1 ) ) ( IN ?PERSON0 ?AIRCRAFT3 ) )
 	:ordered-subtasks (and  ( DO-IN-DEBARK0 ?PERSON0 ?AIRCRAFT3 ?CITY6 ) ( ACHIEVE-AT0 ?PERSON0 ?CITY1 ) )
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?AIRCRAFT1 - AIRCRAFT ?AIRCRAFT5 - AIRCRAFT ?CITY3 - CITY ?PERSON0 - PERSON)
-	:task 
+	:task  ( ACHIEVE-AT0 ?PERSON0 ?CITY1 )
 	:precondition (and ( NOT ( IN ?PERSON0 ?AIRCRAFT1 ) ) ( AT ?PERSON0 ?CITY3 ) )
 	:ordered-subtasks (and  ( DO-AT-BOARD0 ?PERSON0 ?AIRCRAFT5 ?CITY3 ) ( ACHIEVE-IN0 ?PERSON0 ?AIRCRAFT1 ) )
 )
@@ -145,14 +145,14 @@
 )
 ( :method M-ACHIEVE-IN
 	:parameters ( ?PERSON0 - PERSON ?AIRCRAFT1 - AIRCRAFT )
-	:precondition (and ( IN ?PERSON0 ?AIRCRAFT1 ))
 	:task  ( ACHIEVE-IN ?PERSON0 ?AIRCRAFT1 )
+	:precondition (and ( IN ?PERSON0 ?AIRCRAFT1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-IN
 	:parameters ( ?PERSON0 - PERSON ?AIRCRAFT1 - AIRCRAFT )
-	:precondition ( NOT ( IN ?PERSON0 ?AIRCRAFT1 ))
 	:task  ( ACHIEVE-IN ?PERSON0 ?AIRCRAFT1 )
+	:precondition ( NOT ( IN ?PERSON0 ?AIRCRAFT1 ))
 	:subtasks  ( ACHIEVE-IN0 ?PERSON0 ?AIRCRAFT1 )
 )
 ( :task ACHIEVE-IN0
@@ -160,8 +160,8 @@
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?PERSON0 - PERSON ?AIRCRAFT1 - AIRCRAFT )
-	:precondition  ( IN ?PERSON0 ?AIRCRAFT1 )
 	:task ( ACHIEVE-IN0 ?PERSON0 ?AIRCRAFT1 )
+	:precondition  ( IN ?PERSON0 ?AIRCRAFT1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-IN0
@@ -175,14 +175,14 @@
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?CITY1 - CITY )
-	:precondition (and ( AT ?AIRCRAFT0 ?CITY1 ))
 	:task  ( ACHIEVE-AT ?AIRCRAFT0 ?CITY1 )
+	:precondition (and ( AT ?AIRCRAFT0 ?CITY1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?CITY1 - CITY )
-	:precondition ( NOT ( AT ?AIRCRAFT0 ?CITY1 ))
 	:task  ( ACHIEVE-AT ?AIRCRAFT0 ?CITY1 )
+	:precondition ( NOT ( AT ?AIRCRAFT0 ?CITY1 ))
 	:subtasks  ( ACHIEVE-AT1 ?AIRCRAFT0 ?CITY1 )
 )
 ( :task ACHIEVE-AT1
@@ -190,8 +190,8 @@
 )
 ( :method M-ACHIEVE-AT1
 	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?CITY1 - CITY )
-	:precondition  ( AT ?AIRCRAFT0 ?CITY1 )
 	:task ( ACHIEVE-AT1 ?AIRCRAFT0 ?CITY1 )
+	:precondition  ( AT ?AIRCRAFT0 ?CITY1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-AT1
@@ -205,14 +205,14 @@
 )
 ( :method M-ACHIEVE-FUEL-LEVEL
 	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?FLEVEL1 - FLEVEL )
-	:precondition (and ( FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 ))
 	:task  ( ACHIEVE-FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 )
+	:precondition (and ( FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-FUEL-LEVEL
 	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?FLEVEL1 - FLEVEL )
-	:precondition ( NOT ( FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 ))
 	:task  ( ACHIEVE-FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 )
+	:precondition ( NOT ( FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 ))
 	:subtasks  ( ACHIEVE-FUEL-LEVEL2 ?AIRCRAFT0 ?FLEVEL1 )
 )
 ( :task ACHIEVE-FUEL-LEVEL2
@@ -220,8 +220,8 @@
 )
 ( :method M-ACHIEVE-FUEL-LEVEL2
 	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?FLEVEL1 - FLEVEL )
-	:precondition  ( FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 )
 	:task ( ACHIEVE-FUEL-LEVEL2 ?AIRCRAFT0 ?FLEVEL1 )
+	:precondition  ( FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-FUEL-LEVEL2

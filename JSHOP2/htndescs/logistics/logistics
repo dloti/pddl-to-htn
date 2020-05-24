@@ -94,14 +94,14 @@
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?PACKAGE0 - PACKAGE ?PLACE1 - PLACE )
-	:precondition (and ( AT ?PACKAGE0 ?PLACE1 ))
 	:task  ( ACHIEVE-AT ?PACKAGE0 ?PLACE1 )
+	:precondition (and ( AT ?PACKAGE0 ?PLACE1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?PACKAGE0 - PACKAGE ?PLACE1 - PLACE )
-	:precondition ( NOT ( AT ?PACKAGE0 ?PLACE1 ))
 	:task  ( ACHIEVE-AT ?PACKAGE0 ?PLACE1 )
+	:precondition ( NOT ( AT ?PACKAGE0 ?PLACE1 ))
 	:subtasks  ( ACHIEVE-AT0 ?PACKAGE0 ?PLACE1 )
 )
 ( :task ACHIEVE-AT0
@@ -109,8 +109,8 @@
 )
 ( :method M-ACHIEVE-AT0
 	:parameters ( ?PACKAGE0 - PACKAGE ?PLACE1 - PLACE )
-	:precondition  ( AT ?PACKAGE0 ?PLACE1 )
 	:task ( ACHIEVE-AT0 ?PACKAGE0 ?PLACE1 )
+	:precondition  ( AT ?PACKAGE0 ?PLACE1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-AT0
@@ -127,25 +127,25 @@
 )
 ( :method M-ACHIEVE-AT0
 	:parameters ( ?PACKAGE0 - PACKAGE ?PLACE1 - PLACE ?PLACE6 - PLACE ?TRUCK3 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-IN0 ?PACKAGE0 ?TRUCK1 )
 	:precondition (and ( NOT ( AT ?PACKAGE0 ?PLACE1 ) ) ( IN ?PACKAGE0 ?TRUCK3 ) )
 	:ordered-subtasks (and  ( DO-IN-UNLOAD-TRUCK0 ?PACKAGE0 ?TRUCK3 ?PLACE6 ) ( ACHIEVE-AT0 ?PACKAGE0 ?PLACE1 ) )
 )
 ( :method M-ACHIEVE-AT0
 	:parameters ( ?AIRPLANE3 - AIRPLANE ?PACKAGE0 - PACKAGE ?PLACE1 - PLACE ?PLACE6 - PLACE)
-	:task 
+	:task  ( ACHIEVE-IN0 ?PACKAGE0 ?AIRPLANE1 )
 	:precondition (and ( NOT ( AT ?PACKAGE0 ?PLACE1 ) ) ( IN ?PACKAGE0 ?AIRPLANE3 ) )
 	:ordered-subtasks (and  ( DO-IN-UNLOAD-AIRPLANE0 ?PACKAGE0 ?AIRPLANE3 ?PLACE6 ) ( ACHIEVE-AT0 ?PACKAGE0 ?PLACE1 ) )
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?PACKAGE0 - PACKAGE ?PLACE3 - PLACE ?TRUCK1 - TRUCK ?TRUCK5 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-AT0 ?PACKAGE0 ?PLACE1 )
 	:precondition (and ( NOT ( IN ?PACKAGE0 ?TRUCK1 ) ) ( AT ?PACKAGE0 ?PLACE3 ) )
 	:ordered-subtasks (and  ( DO-AT-LOAD-TRUCK0 ?PACKAGE0 ?TRUCK5 ?PLACE3 ) ( ACHIEVE-IN0 ?PACKAGE0 ?TRUCK1 ) )
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?AIRPLANE5 - AIRPLANE ?PACKAGE0 - PACKAGE ?PLACE3 - PLACE ?TRUCK1 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-AT0 ?PACKAGE0 ?PLACE1 )
 	:precondition (and ( NOT ( IN ?PACKAGE0 ?TRUCK1 ) ) ( AT ?PACKAGE0 ?PLACE3 ) )
 	:ordered-subtasks (and  ( DO-AT-LOAD-AIRPLANE0 ?PACKAGE0 ?AIRPLANE5 ?PLACE3 ) ( ACHIEVE-IN0 ?PACKAGE0 ?TRUCK1 ) )
 )
@@ -154,14 +154,14 @@
 )
 ( :method M-ACHIEVE-IN
 	:parameters ( ?PACKAGE0 - PACKAGE ?TRUCK1 - TRUCK )
-	:precondition (and ( IN ?PACKAGE0 ?TRUCK1 ))
 	:task  ( ACHIEVE-IN ?PACKAGE0 ?TRUCK1 )
+	:precondition (and ( IN ?PACKAGE0 ?TRUCK1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-IN
 	:parameters ( ?PACKAGE0 - PACKAGE ?TRUCK1 - TRUCK )
-	:precondition ( NOT ( IN ?PACKAGE0 ?TRUCK1 ))
 	:task  ( ACHIEVE-IN ?PACKAGE0 ?TRUCK1 )
+	:precondition ( NOT ( IN ?PACKAGE0 ?TRUCK1 ))
 	:subtasks  ( ACHIEVE-IN0 ?PACKAGE0 ?TRUCK1 )
 )
 ( :task ACHIEVE-IN0
@@ -169,8 +169,8 @@
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?PACKAGE0 - PACKAGE ?TRUCK1 - TRUCK )
-	:precondition  ( IN ?PACKAGE0 ?TRUCK1 )
 	:task ( ACHIEVE-IN0 ?PACKAGE0 ?TRUCK1 )
+	:precondition  ( IN ?PACKAGE0 ?TRUCK1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-IN0
@@ -181,25 +181,25 @@
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?AIRPLANE3 - AIRPLANE ?PACKAGE0 - PACKAGE ?PLACE6 - PLACE ?TRUCK1 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-IN0 ?PACKAGE0 ?AIRPLANE1 )
 	:precondition (and ( NOT ( IN ?PACKAGE0 ?TRUCK1 ) ) ( IN ?PACKAGE0 ?AIRPLANE3 ) )
 	:ordered-subtasks (and  ( DO-IN-UNLOAD-AIRPLANE0 ?PACKAGE0 ?AIRPLANE3 ?PLACE6 ) ( ACHIEVE-IN0 ?PACKAGE0 ?TRUCK1 ) )
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?AIRPLANE1 - AIRPLANE ?PACKAGE0 - PACKAGE ?PLACE3 - PLACE ?TRUCK5 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-AT0 ?PACKAGE0 ?PLACE1 )
 	:precondition (and ( NOT ( IN ?PACKAGE0 ?AIRPLANE1 ) ) ( AT ?PACKAGE0 ?PLACE3 ) )
 	:ordered-subtasks (and  ( DO-AT-LOAD-TRUCK0 ?PACKAGE0 ?TRUCK5 ?PLACE3 ) ( ACHIEVE-IN0 ?PACKAGE0 ?AIRPLANE1 ) )
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?AIRPLANE1 - AIRPLANE ?AIRPLANE5 - AIRPLANE ?PACKAGE0 - PACKAGE ?PLACE3 - PLACE)
-	:task 
+	:task  ( ACHIEVE-AT0 ?PACKAGE0 ?PLACE1 )
 	:precondition (and ( NOT ( IN ?PACKAGE0 ?AIRPLANE1 ) ) ( AT ?PACKAGE0 ?PLACE3 ) )
 	:ordered-subtasks (and  ( DO-AT-LOAD-AIRPLANE0 ?PACKAGE0 ?AIRPLANE5 ?PLACE3 ) ( ACHIEVE-IN0 ?PACKAGE0 ?AIRPLANE1 ) )
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?AIRPLANE1 - AIRPLANE ?PACKAGE0 - PACKAGE ?PLACE6 - PLACE ?TRUCK3 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-IN0 ?PACKAGE0 ?TRUCK1 )
 	:precondition (and ( NOT ( IN ?PACKAGE0 ?AIRPLANE1 ) ) ( IN ?PACKAGE0 ?TRUCK3 ) )
 	:ordered-subtasks (and  ( DO-IN-UNLOAD-TRUCK0 ?PACKAGE0 ?TRUCK3 ?PLACE6 ) ( ACHIEVE-IN0 ?PACKAGE0 ?AIRPLANE1 ) )
 )
@@ -208,14 +208,14 @@
 )
 ( :method M-ACHIEVE-IN
 	:parameters ( ?PACKAGE0 - PACKAGE ?AIRPLANE1 - AIRPLANE )
-	:precondition (and ( IN ?PACKAGE0 ?AIRPLANE1 ))
 	:task  ( ACHIEVE-IN ?PACKAGE0 ?AIRPLANE1 )
+	:precondition (and ( IN ?PACKAGE0 ?AIRPLANE1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-IN
 	:parameters ( ?PACKAGE0 - PACKAGE ?AIRPLANE1 - AIRPLANE )
-	:precondition ( NOT ( IN ?PACKAGE0 ?AIRPLANE1 ))
 	:task  ( ACHIEVE-IN ?PACKAGE0 ?AIRPLANE1 )
+	:precondition ( NOT ( IN ?PACKAGE0 ?AIRPLANE1 ))
 	:subtasks  ( ACHIEVE-IN0 ?PACKAGE0 ?AIRPLANE1 )
 )
 ( :task ACHIEVE-IN0
@@ -223,8 +223,8 @@
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?PACKAGE0 - PACKAGE ?AIRPLANE1 - AIRPLANE )
-	:precondition  ( IN ?PACKAGE0 ?AIRPLANE1 )
 	:task ( ACHIEVE-IN0 ?PACKAGE0 ?AIRPLANE1 )
+	:precondition  ( IN ?PACKAGE0 ?AIRPLANE1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-IN0
@@ -238,14 +238,14 @@
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
-	:precondition (and ( AT ?TRUCK0 ?PLACE1 ))
 	:task  ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
+	:precondition (and ( AT ?TRUCK0 ?PLACE1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
-	:precondition ( NOT ( AT ?TRUCK0 ?PLACE1 ))
 	:task  ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
+	:precondition ( NOT ( AT ?TRUCK0 ?PLACE1 ))
 	:subtasks  ( ACHIEVE-AT1 ?TRUCK0 ?PLACE1 )
 )
 ( :task ACHIEVE-AT1
@@ -253,8 +253,8 @@
 )
 ( :method M-ACHIEVE-AT1
 	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
-	:precondition  ( AT ?TRUCK0 ?PLACE1 )
 	:task ( ACHIEVE-AT1 ?TRUCK0 ?PLACE1 )
+	:precondition  ( AT ?TRUCK0 ?PLACE1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-AT1
@@ -268,14 +268,14 @@
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?AIRPLANE0 - AIRPLANE ?AIRPORT1 - AIRPORT )
-	:precondition (and ( AT ?AIRPLANE0 ?AIRPORT1 ))
 	:task  ( ACHIEVE-AT ?AIRPLANE0 ?AIRPORT1 )
+	:precondition (and ( AT ?AIRPLANE0 ?AIRPORT1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?AIRPLANE0 - AIRPLANE ?AIRPORT1 - AIRPORT )
-	:precondition ( NOT ( AT ?AIRPLANE0 ?AIRPORT1 ))
 	:task  ( ACHIEVE-AT ?AIRPLANE0 ?AIRPORT1 )
+	:precondition ( NOT ( AT ?AIRPLANE0 ?AIRPORT1 ))
 	:subtasks  ( ACHIEVE-AT2 ?AIRPLANE0 ?AIRPORT1 )
 )
 ( :task ACHIEVE-AT2
@@ -283,8 +283,8 @@
 )
 ( :method M-ACHIEVE-AT2
 	:parameters ( ?AIRPLANE0 - AIRPLANE ?AIRPORT1 - AIRPORT )
-	:precondition  ( AT ?AIRPLANE0 ?AIRPORT1 )
 	:task ( ACHIEVE-AT2 ?AIRPLANE0 ?AIRPORT1 )
+	:precondition  ( AT ?AIRPLANE0 ?AIRPORT1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-AT2

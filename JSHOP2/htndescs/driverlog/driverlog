@@ -122,14 +122,14 @@
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?OBJ0 - OBJ ?LOCATION1 - LOCATION )
-	:precondition (and ( AT ?OBJ0 ?LOCATION1 ))
 	:task  ( ACHIEVE-AT ?OBJ0 ?LOCATION1 )
+	:precondition (and ( AT ?OBJ0 ?LOCATION1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?OBJ0 - OBJ ?LOCATION1 - LOCATION )
-	:precondition ( NOT ( AT ?OBJ0 ?LOCATION1 ))
 	:task  ( ACHIEVE-AT ?OBJ0 ?LOCATION1 )
+	:precondition ( NOT ( AT ?OBJ0 ?LOCATION1 ))
 	:subtasks  ( ACHIEVE-AT0 ?OBJ0 ?LOCATION1 )
 )
 ( :task ACHIEVE-AT0
@@ -137,8 +137,8 @@
 )
 ( :method M-ACHIEVE-AT0
 	:parameters ( ?OBJ0 - OBJ ?LOCATION1 - LOCATION )
-	:precondition  ( AT ?OBJ0 ?LOCATION1 )
 	:task ( ACHIEVE-AT0 ?OBJ0 ?LOCATION1 )
+	:precondition  ( AT ?OBJ0 ?LOCATION1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-AT0
@@ -149,13 +149,13 @@
 )
 ( :method M-ACHIEVE-AT0
 	:parameters ( ?LOCATION1 - LOCATION ?LOCATION6 - LOCATION ?OBJ0 - OBJ ?TRUCK3 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-IN0 ?OBJ0 ?TRUCK1 )
 	:precondition (and ( NOT ( AT ?OBJ0 ?LOCATION1 ) ) ( IN ?OBJ0 ?TRUCK3 ) )
 	:ordered-subtasks (and  ( DO-IN-UNLOAD-TRUCK0 ?OBJ0 ?TRUCK3 ?LOCATION6 ) ( ACHIEVE-AT0 ?OBJ0 ?LOCATION1 ) )
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?LOCATION3 - LOCATION ?OBJ0 - OBJ ?TRUCK1 - TRUCK ?TRUCK5 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-AT0 ?OBJ0 ?LOCATION1 )
 	:precondition (and ( NOT ( IN ?OBJ0 ?TRUCK1 ) ) ( AT ?OBJ0 ?LOCATION3 ) )
 	:ordered-subtasks (and  ( DO-AT-LOAD-TRUCK0 ?OBJ0 ?TRUCK5 ?LOCATION3 ) ( ACHIEVE-IN0 ?OBJ0 ?TRUCK1 ) )
 )
@@ -164,14 +164,14 @@
 )
 ( :method M-ACHIEVE-IN
 	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK )
-	:precondition (and ( IN ?OBJ0 ?TRUCK1 ))
 	:task  ( ACHIEVE-IN ?OBJ0 ?TRUCK1 )
+	:precondition (and ( IN ?OBJ0 ?TRUCK1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-IN
 	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK )
-	:precondition ( NOT ( IN ?OBJ0 ?TRUCK1 ))
 	:task  ( ACHIEVE-IN ?OBJ0 ?TRUCK1 )
+	:precondition ( NOT ( IN ?OBJ0 ?TRUCK1 ))
 	:subtasks  ( ACHIEVE-IN0 ?OBJ0 ?TRUCK1 )
 )
 ( :task ACHIEVE-IN0
@@ -179,8 +179,8 @@
 )
 ( :method M-ACHIEVE-IN0
 	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK )
-	:precondition  ( IN ?OBJ0 ?TRUCK1 )
 	:task ( ACHIEVE-IN0 ?OBJ0 ?TRUCK1 )
+	:precondition  ( IN ?OBJ0 ?TRUCK1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-IN0
@@ -194,14 +194,14 @@
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?DRIVER0 - DRIVER ?LOCATION1 - LOCATION )
-	:precondition (and ( AT ?DRIVER0 ?LOCATION1 ))
 	:task  ( ACHIEVE-AT ?DRIVER0 ?LOCATION1 )
+	:precondition (and ( AT ?DRIVER0 ?LOCATION1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?DRIVER0 - DRIVER ?LOCATION1 - LOCATION )
-	:precondition ( NOT ( AT ?DRIVER0 ?LOCATION1 ))
 	:task  ( ACHIEVE-AT ?DRIVER0 ?LOCATION1 )
+	:precondition ( NOT ( AT ?DRIVER0 ?LOCATION1 ))
 	:subtasks  ( ACHIEVE-AT1 ?DRIVER0 ?LOCATION1 )
 )
 ( :task ACHIEVE-AT1
@@ -209,8 +209,8 @@
 )
 ( :method M-ACHIEVE-AT1
 	:parameters ( ?DRIVER0 - DRIVER ?LOCATION1 - LOCATION )
-	:precondition  ( AT ?DRIVER0 ?LOCATION1 )
 	:task ( ACHIEVE-AT1 ?DRIVER0 ?LOCATION1 )
+	:precondition  ( AT ?DRIVER0 ?LOCATION1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-AT1
@@ -227,19 +227,19 @@
 )
 ( :method M-ACHIEVE-AT1
 	:parameters ( ?DRIVER0 - DRIVER ?LOCATION1 - LOCATION ?LOCATION6 - LOCATION ?TRUCK3 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-DRIVING1 ?DRIVER0 ?TRUCK1 )
 	:precondition (and ( NOT ( AT ?DRIVER0 ?LOCATION1 ) ) ( DRIVING ?DRIVER0 ?TRUCK3 ) )
 	:ordered-subtasks (and  ( DO-DRIVING-DISEMBARK-TRUCK1 ?DRIVER0 ?TRUCK3 ?LOCATION6 ) ( ACHIEVE-AT1 ?DRIVER0 ?LOCATION1 ) )
 )
 ( :method M-ACHIEVE-DRIVING1
 	:parameters ( ?DRIVER0 - DRIVER ?LOCATION3 - LOCATION ?LOCATION6 - LOCATION ?TRUCK1 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-AT1 ?DRIVER0 ?LOCATION1 )
 	:precondition (and ( NOT ( DRIVING ?DRIVER0 ?TRUCK1 ) ) ( AT ?DRIVER0 ?LOCATION3 ) ( PATH ?LOCATION3 ?LOCATION6 ) )
 	:ordered-subtasks (and  ( !WALK ?DRIVER0 ?LOCATION3 ?LOCATION6 ) ( ACHIEVE-DRIVING1 ?DRIVER0 ?TRUCK1 ) )
 )
 ( :method M-ACHIEVE-DRIVING1
 	:parameters ( ?DRIVER0 - DRIVER ?LOCATION3 - LOCATION ?TRUCK1 - TRUCK ?TRUCK5 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-AT1 ?DRIVER0 ?LOCATION1 )
 	:precondition (and ( NOT ( DRIVING ?DRIVER0 ?TRUCK1 ) ) ( AT ?DRIVER0 ?LOCATION3 ) )
 	:ordered-subtasks (and  ( DO-AT-BOARD-TRUCK1 ?DRIVER0 ?TRUCK5 ?LOCATION3 ) ( ACHIEVE-DRIVING1 ?DRIVER0 ?TRUCK1 ) )
 )
@@ -248,14 +248,14 @@
 )
 ( :method M-ACHIEVE-DRIVING
 	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK )
-	:precondition (and ( DRIVING ?DRIVER0 ?TRUCK1 ))
 	:task  ( ACHIEVE-DRIVING ?DRIVER0 ?TRUCK1 )
+	:precondition (and ( DRIVING ?DRIVER0 ?TRUCK1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-DRIVING
 	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK )
-	:precondition ( NOT ( DRIVING ?DRIVER0 ?TRUCK1 ))
 	:task  ( ACHIEVE-DRIVING ?DRIVER0 ?TRUCK1 )
+	:precondition ( NOT ( DRIVING ?DRIVER0 ?TRUCK1 ))
 	:subtasks  ( ACHIEVE-DRIVING1 ?DRIVER0 ?TRUCK1 )
 )
 ( :task ACHIEVE-DRIVING1
@@ -263,8 +263,8 @@
 )
 ( :method M-ACHIEVE-DRIVING1
 	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK )
-	:precondition  ( DRIVING ?DRIVER0 ?TRUCK1 )
 	:task ( ACHIEVE-DRIVING1 ?DRIVER0 ?TRUCK1 )
+	:precondition  ( DRIVING ?DRIVER0 ?TRUCK1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-DRIVING1
@@ -278,14 +278,14 @@
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?TRUCK0 - TRUCK ?LOCATION1 - LOCATION )
-	:precondition (and ( AT ?TRUCK0 ?LOCATION1 ))
 	:task  ( ACHIEVE-AT ?TRUCK0 ?LOCATION1 )
+	:precondition (and ( AT ?TRUCK0 ?LOCATION1 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?TRUCK0 - TRUCK ?LOCATION1 - LOCATION )
-	:precondition ( NOT ( AT ?TRUCK0 ?LOCATION1 ))
 	:task  ( ACHIEVE-AT ?TRUCK0 ?LOCATION1 )
+	:precondition ( NOT ( AT ?TRUCK0 ?LOCATION1 ))
 	:subtasks  ( ACHIEVE-AT2 ?TRUCK0 ?LOCATION1 )
 )
 ( :task ACHIEVE-AT2
@@ -293,8 +293,8 @@
 )
 ( :method M-ACHIEVE-AT2
 	:parameters ( ?TRUCK0 - TRUCK ?LOCATION1 - LOCATION )
-	:precondition  ( AT ?TRUCK0 ?LOCATION1 )
 	:task ( ACHIEVE-AT2 ?TRUCK0 ?LOCATION1 )
+	:precondition  ( AT ?TRUCK0 ?LOCATION1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-AT2
@@ -308,14 +308,14 @@
 )
 ( :method M-ACHIEVE-EMPTY
 	:parameters ( ?TRUCK0 - TRUCK )
-	:precondition (and ( EMPTY ?TRUCK0 ))
 	:task  ( ACHIEVE-EMPTY ?TRUCK0 )
+	:precondition (and ( EMPTY ?TRUCK0 ))
 	:ordered-subtasks ( )
 )
 ( :method M-ACHIEVE-EMPTY
 	:parameters ( ?TRUCK0 - TRUCK )
-	:precondition ( NOT ( EMPTY ?TRUCK0 ))
 	:task  ( ACHIEVE-EMPTY ?TRUCK0 )
+	:precondition ( NOT ( EMPTY ?TRUCK0 ))
 	:subtasks  ( ACHIEVE-EMPTY3 ?TRUCK0 )
 )
 ( :task ACHIEVE-EMPTY3
@@ -323,24 +323,26 @@
 )
 ( :method M-ACHIEVE-EMPTY3
 	:parameters ( ?TRUCK0 - TRUCK )
-	:precondition  ( EMPTY ?TRUCK0 )
 	:task ( ACHIEVE-EMPTY3 ?TRUCK0 )
+	:precondition  ( EMPTY ?TRUCK0 )
 	:subtasks ( )
 )
-    ( :DALO ( ACHIEVE-EMPTY3 ?TRUCK0 )
-              ( ( NOT ( EMPTY ?TRUCK0 ) ) ( DRIVING ?DRIVER1 ?TRUCK0 ) ( DRIVER ?DRIVER1 ) ( TRUCK ?TRUCK0 ) ( LOCATION ?LOCATION5 ) )
-              ( ( DO-DRIVING-DISEMBARK-TRUCK3 ?DRIVER1 ?TRUCK0 ?LOCATION5 ) ( ACHIEVE-EMPTY3 ?TRUCK0 ) )
-    )
+( :method M-ACHIEVE-EMPTY3
+	:parameters ( ?DRIVER1 - DRIVER ?LOCATION5 - LOCATION ?TRUCK0 - TRUCK)
+	:task  ( ACHIEVE-DRIVING3 ?DRIVER0 ?TRUCK1 )
+	:precondition (and ( NOT ( EMPTY ?TRUCK0 ) ) ( DRIVING ?DRIVER1 ?TRUCK0 ) )
+	:ordered-subtasks (and  ( DO-DRIVING-DISEMBARK-TRUCK3 ?DRIVER1 ?TRUCK0 ?LOCATION5 ) ( ACHIEVE-EMPTY3 ?TRUCK0 ) )
+)
 ( :method M-ACHIEVE-DRIVING3
 	:parameters ( ?DRIVER0 - DRIVER ?DRIVER3 - DRIVER ?LOCATION5 - LOCATION ?TRUCK1 - TRUCK)
-	:task 
+	:task  ( ACHIEVE-EMPTY3 ?TRUCK0 )
 	:precondition (and ( NOT ( DRIVING ?DRIVER0 ?TRUCK1 ) ) ( EMPTY ?TRUCK1 ) ( AT ?TRUCK1 ?LOCATION5 ) )
 	:ordered-subtasks (and  ( DO-EMPTY-BOARD-TRUCK3 ?DRIVER3 ?TRUCK1 ?LOCATION5 ) ( ACHIEVE-DRIVING3 ?DRIVER0 ?TRUCK1 ) )
 )
 ( :method M-ACHIEVE-DRIVING
 	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK )
-	:precondition ( NOT ( DRIVING ?DRIVER0 ?TRUCK1 ))
 	:task  ( ACHIEVE-DRIVING ?DRIVER0 ?TRUCK1 )
+	:precondition ( NOT ( DRIVING ?DRIVER0 ?TRUCK1 ))
 	:subtasks  ( ACHIEVE-DRIVING3 ?DRIVER0 ?TRUCK1 )
 )
 ( :task ACHIEVE-DRIVING3
@@ -348,8 +350,8 @@
 )
 ( :method M-ACHIEVE-DRIVING3
 	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK )
-	:precondition  ( DRIVING ?DRIVER0 ?TRUCK1 )
 	:task ( ACHIEVE-DRIVING3 ?DRIVER0 ?TRUCK1 )
+	:precondition  ( DRIVING ?DRIVER0 ?TRUCK1 )
 	:subtasks ( )
 )
 ( :method M-ACHIEVE-DRIVING3
