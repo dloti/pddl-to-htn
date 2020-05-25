@@ -485,7 +485,7 @@ public:
 
 	std::string parametrizeCondition( Condition &c, const std::string &s, bool b, int invariant_number=-1) {
 		std::ostringstream os;
-		os << " ( " << ( b ? "NOT ( " : "" ) << s << c.name;
+		os << " ( " << ( b ? "not ( " : "" ) << s << c.name;
 		if(invariant_number>-1)
 			os << invariant_number;
 		for ( unsigned i = 0; i < c.params.size(); ++i )
@@ -554,7 +554,7 @@ public:
 			os<<"\t:precondition (and"<<std::endl;
 				os<<"\t\t";
 				printConditionVector( actions[i], actions[i].pre, os, "", false );
-				//printConditionVector( actions[i], actions[i].del, os, "LOCKED-", true );
+				printConditionVector( actions[i], actions[i].del, os, "LOCKED-", true );
 				os<<")"<<std::endl;
 				
 			os<<"\t:effect (and"<<std::endl;
@@ -576,6 +576,24 @@ public:
 				stream << "               ("+parametrizeCondition( c, "!!UNLOCK" + p, false )+" )\n";
 				stream << "    )\n";
 	}
+
+	void printHDDLMethod( Condition &c, std::ostream &os, const std::string &s,  const std::string &t ) {
+				std::string p("-");
+				os << "( :task " << parametrizeHDDLCondition( c, s + p) <<std::endl;
+				os << ")"<<std::endl;
+				os << "( :method " << parametrizeHDDLCondition( c, s + p) <<std::endl;
+				os << "\t:task"<<parametrizeCondition( c, s + p, false)<<std::endl;
+				os << "\t:precondition "+parametrizeCondition( c, "FLAGGED" + p, false )+"\n";
+				os << "\t:ordered-subtasks (and"<<parametrizeCondition( c, "i-UNFLAG" + p, false )<<")"<<std::endl;
+				os << ")"<<std::endl;
+
+				os << "( :method " << parametrizeHDDLCondition( c, s + p) <<std::endl;
+				os << "\t:task"<<parametrizeCondition( c, s + p, false)<<std::endl;
+				os << "\t:precondition (not "+parametrizeCondition( c, "FLAGGED" + p, false )+")"<<std::endl;
+				os << "\t:ordered-subtasks (and"<<parametrizeCondition( c, "i-UNLOCK" + p, false )<<")"<<std::endl;
+				os << ")"<<std::endl;
+	}
+
 
 	void printPredicate( Condition &c, std::ostream &stream, bool b, bool n,
 	                     const std::string &s, const std::string &t, int invariant_number=-1 ) {

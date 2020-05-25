@@ -189,11 +189,11 @@ void printHDDLDOMethods(Domain &d, std::ostream &out) {
 
 					out << d.parametrizeCondition(a, c2, s, false);
 				}
-				// for (CondPairSet::iterator it = m.variable.begin(); it != m.variable.end(); ++it) {
-				// 	Condition c2 = a.pre[it->second.first];
-				// 	std::string s(c2.neg ? "" : "IFUNLOCK-");
-				// 	out << d.parametrizeCondition(a, c2, s, false);
-				// }
+				for (CondPairSet::iterator it = m.variable.begin(); it != m.variable.end(); ++it) {
+					Condition c2 = a.pre[it->second.first];
+					std::string s(c2.neg ? "" : "IFUNLOCK-");
+					out << d.parametrizeCondition(a, c2, s, false);
+				}
 				out << d.parametrizeCondition(a, "", false);
 			
 				out << " )"<<std::endl;
@@ -469,8 +469,12 @@ void printHDDLTopACHIEVE(Domain& d, std::ostream &out, std::vector<std::string>&
 		out<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
 		out<<"\t:precondition (and";
 			printCondition(out, false, c, "", false, params);
-		out<<")"<<std::endl;
-		out <<"\t:ordered-subtasks ( )"<<std::endl;
+			out << " ( not";
+			printCondition(out, false, c, "LOCKED", true, params);
+			out<<") )"<<std::endl; //end precondition
+		out <<"\t:ordered-subtasks (and ";
+			printCondition(out, false, c, "i-LOCK", true, params);
+			out<<")"<<std::endl;//end subtasks
 		out<<")"<<std::endl;
 	}
 
@@ -479,13 +483,18 @@ void printHDDLTopACHIEVE(Domain& d, std::ostream &out, std::vector<std::string>&
 		out<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
 	out << "\t:task ";
 	out<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
-	out<<"\t:precondition";
-	out << " ( not";
-	printCondition(out, false, c, "", false, params);
-	out<<")"<<std::endl;
-	out <<"\t:subtasks ";
+	out<<"\t:precondition (and";
+		out << " ( not";
+		printCondition(out, false, c, "LOCKED", true, params);
+		out<<")";
+		out << " ( not";
+		printCondition(out, false, c, "", false, params);
+	out<<") )"<<std::endl; //end precondition
+	out <<"\t:ordered-subtasks (and";
 		printCondition(out, false, c, "ACHIEVE", true, params, invariant_num);
-	out<<std::endl<<")"<<std::endl;
+		printCondition(out, false, c, "i-LOCK", true, params);
+		out<<")"<<std::endl;//end subtasks
+	out<<")"<<std::endl;
 }
 
 //print solve methods, test and finish operators
@@ -757,8 +766,8 @@ void printAuxOps(std::ostream &stream, Domain &d) {
 void printHDDLAuxOps(std::ostream &stream, Domain &d) {
 	for (unsigned i = 0; i < d.preds.size(); ++i)
 		if (d.predActions[i].size() > 0) {
-			d.printHDDLAuxAction(d.preds[i], stream, false, false, "!!LOCK", "LOCKED");
-			d.printHDDLAuxAction(d.preds[i], stream, true, false, "!!UNLOCK", "LOCKED");
+			d.printHDDLAuxAction(d.preds[i], stream, false, false, "i-LOCK", "LOCKED");
+			d.printHDDLAuxAction(d.preds[i], stream, true, false, "i-UNLOCK", "LOCKED");
 
 			CondPairMap v = predInvs[d.pmap[d.preds[i].name]];
 			std::vector<int> inv_nums;
@@ -767,10 +776,10 @@ void printHDDLAuxOps(std::ostream &stream, Domain &d) {
 					if (std::find(inv_nums.begin(), inv_nums.end(), it1->first) == inv_nums.end())
 						inv_nums.push_back(it1->first);
 			
-            d.printHDDLAuxAction(d.preds[i], stream, false, false, "!!VISIT", "VISITED");
-			d.printHDDLAuxAction(d.preds[i], stream, false, false, "!!FLAG", "FLAGGED");
-			d.printHDDLAuxAction(d.preds[i], stream, true, false, "!!UNFLAG", "FLAGGED");
-			d.printMethod(d.preds[i], stream, "IFUNLOCK", "FLAGGED");
+            d.printHDDLAuxAction(d.preds[i], stream, false, false, "i-VISIT", "VISITED");
+			d.printHDDLAuxAction(d.preds[i], stream, false, false, "i-FLAG", "FLAGGED");
+			d.printHDDLAuxAction(d.preds[i], stream, true, false, "i-UNFLAG", "FLAGGED");
+			d.printHDDLMethod(d.preds[i], stream, "IFUNLOCK", "FLAGGED");
 			
 		}
 }
@@ -855,7 +864,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 		printSOLVE(out, d, trorder);
 	}
 	d.printHDDLActions(out);
-	//printHDDLAuxOps(out, d);
+	printHDDLAuxOps(out, d);
 	//printACHIEVEOps(d, out);
 	//printSTOPALLOps(d, out);
 	printHDDLDOMethods(d, out);
@@ -998,26 +1007,28 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 											if(pred == c3) continue;
 											printCondition(out, c3.neg, c3, pa, mys);
 										}
-									out<<" )"<<std::endl; //end precondtion
+
 									//printTypes(out, d, a.params, pa);
-									// if (!isDirReachable) {
-									// 	out << " ( NOT";
-                                    //     printCondition(out, false, pred, "VISITED", true, p2);
-									// 	//printCondition(out, false, pred, "VISITED", true, p2, i);
-									// 	out << " )";
-									// 	if (!isPosNegInvariant(i) && !pred.neg) {
-									// 		out << " ( NOT";
-                                    //         printCondition(out, false, add, "VISITED", true, padd);
-									// 		//printCondition(out, false, add, "VISITED", true, padd, i);
-									// 		out << " )";
-									// 	}
-									// }
+									if (!isDirReachable) {
+										out << " ( not";
+                                        printCondition(out, false, pred, "VISITED", true, p2);
+										//printCondition(out, false, pred, "VISITED", true, p2, i);
+										out << " )";
+										if (!isPosNegInvariant(i) && !pred.neg) {
+											out << " ( not";
+                                            printCondition(out, false, add, "VISITED", true, padd);
+											//printCondition(out, false, add, "VISITED", true, padd, i);
+											out << " )";
+										}
+									}
+									out<<" )"<<std::endl; //end precondtion
+
 									out<<"\t:ordered-subtasks (and ";
-									// if(!isDirReachable) {
-									// 	if (!isPosNegInvariant(i) && !pred.neg)
-                                    //         printCondition(out, false, pred, "!!VISIT", true, p2);
-									// 		//printCondition(out, false, pred, "!!VISIT", true, p2, i);
-									// }
+									if(!isDirReachable) {
+										if (!isPosNegInvariant(i) && !pred.neg)
+                                            printCondition(out, false, pred, "i-VISIT", true, p2);
+											//printCondition(out, false, pred, "!!VISIT", true, p2, i);
+									}
 									if (v[z].variable.size() > 0) {
 										Condition cc(del.name + "-" + a.name, del.neg);
 										printCondition(out, false, cc, "DO", true, pa, i);
@@ -1074,24 +1085,22 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 								 			if(pred == c3) continue;
 								 			printCondition(out, c3.neg, c3, pa, mys );
 								 		}
+									out << " ( not";
+                                    printCondition(out, false, pred, "VISITED", true, p2);
+								 	//printCondition(out, false, pred, "VISITED", true, p2, i);
+								 	out << " )";
+									if (!isPosNegInvariant(i) && !pred.neg){
+										out << " ( not";
+                                        printCondition(out, false, add, "VISITED", true, padd);
+										//printCondition(out, false, add, "VISITED", true, padd, i);
+										out << " )";
+									}
 								 	out<<" )"<<std::endl; //end precondtion
 
-								 	// out << " ( NOT";
-                                    // printCondition(out, false, pred, "VISITED", true, p2);
-								 	// //printCondition(out, false, pred, "VISITED", true, p2, i);
-								 	// out << " )";
-									// if (!isPosNegInvariant(i) && !pred.neg){
-									// 	out << " ( NOT";
-                                    //     printCondition(out, false, add, "VISITED", true, padd);
-									// 	//printCondition(out, false, add, "VISITED", true, padd, i);
-									// 	out << " )";
-									// }
-
-
 								 	out<<"\t:ordered-subtasks (and ";
-								 	// if (!isPosNegInvariant(i) && !pred.neg)
-                                    //     printCondition(out, false, pred, "!!VISIT", true, p2);
-								 	// 	//printCondition(out, false, pred, "!!VISIT", true, p2, i);
+								 	if (!isPosNegInvariant(i) && !pred.neg)
+                                        printCondition(out, false, pred, "i-VISIT", true, p2);
+								 		//printCondition(out, false, pred, "!!VISIT", true, p2, i);
 
 								 	if ( v[z].variable.size() > 0 ) {
 								 		//std::cout << del << "," << a << "\n";
