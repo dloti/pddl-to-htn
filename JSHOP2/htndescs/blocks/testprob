@@ -5,8 +5,6 @@
 )
 (:htn
  :tasks (and
-        (ACHIEVE-ON D C)
-        (ACHIEVE-ON C B)
         (ACHIEVE-ON B A)
         )
         :ordering ( )

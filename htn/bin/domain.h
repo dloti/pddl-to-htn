@@ -467,12 +467,16 @@ public:
 	void PDDLPrintPredicates(std::ostream &out){
 		for(auto pred : preds){
 			out<<"\t";
+			std::stringstream paramStream;
 			out << "( " << pred.name;
 			for ( unsigned i = 0; i < pred.params.size(); ++i ) {
-			out << " ?" << types[pred.params[i]].name << i;
-			if ( typed ) out << " - " << types[pred.params[i]].name;
+			paramStream << " ?" << types[pred.params[i]].name << i;
+			if ( typed ) paramStream << " - " << types[pred.params[i]].name;
 			}
-			out << " )"<<std::endl;
+			out<<paramStream.str()<<" )"<<std::endl;
+			out <<"\t( VISITED-"<<pred.name<<paramStream.str()<<" )"<<std::endl;
+			out <<"\t( LOCKED-"<<pred.name<<paramStream.str()<<" )"<<std::endl;
+			out <<"\t( FLAGGED-"<<pred.name<<paramStream.str()<<" )"<<std::endl;
 		}
 	}
 
@@ -577,10 +581,10 @@ public:
 				stream << "    )\n";
 	}
 
-	void printHDDLMethod( Condition &c, std::ostream &os, const std::string &s,  const std::string &t ) {
+	void printHDDLMethod( Condition &c, std::ostream &taskOs, std::ostream &os, const std::string &s,  const std::string &t ) {
 				std::string p("-");
-				os << "( :task " << parametrizeHDDLCondition( c, s + p) <<std::endl;
-				os << ")"<<std::endl;
+				taskOs << "(:task " << parametrizeHDDLCondition( c, s + p) <<std::endl;
+				taskOs << ")"<<std::endl;
 				os << "( :method " << parametrizeHDDLCondition( c, s + p) <<std::endl;
 				os << "\t:task"<<parametrizeCondition( c, s + p, false)<<std::endl;
 				os << "\t:precondition "+parametrizeCondition( c, "FLAGGED" + p, false )+"\n";

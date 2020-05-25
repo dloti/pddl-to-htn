@@ -17,6 +17,10 @@ std::map<std::string, int> taskToInvariantMap;
 std::map<int, std::map<std::string, std::string> > taskToFluentMap;
 bool hasGoalConflicts = false;
 
+std::ostringstream hddlTasks;
+std::ostringstream hddlMethods;
+std::ostringstream hddlActions;
+
 void printCondition(std::ostream &out, bool b, Condition &c, const std::string &s, bool z, std::vector<std::string> &v,
 		int invariant_number = -1) {
 
@@ -154,31 +158,31 @@ void printHDDLDOMethods(Domain &d, std::ostream &out) {
 				Action a = d.actions[m.t.a];
 				Condition c = a.getCondition(m.t.b);
 				Condition t = a.getCondition(m.t.c);
-				out<<"(:task "<< d.parametrizeHDDLCondition(a, "DO-" + c.name + "-", i->first.a)<<std::endl
+				hddlTasks<<"(:task "<< d.parametrizeHDDLCondition(a, "DO-" + c.name + "-", i->first.a)<<std::endl
 				   <<")"<<std::endl;
-				out<<"(:method ";
+				hddlMethods<<"(:method ";
 				std::ostringstream ts;
 				ts << d.parametrizeHDDLCondition(a, "M-DO-" + c.name + "-", i->first.a);
-				out <<ts.str()<< "\n";
+				hddlMethods <<ts.str()<< "\n";
 				taskToInvariantMap[ts.str()] = i->first.a;
 				taskToFluentMap[i->first.a][ts.str()] =  d.parametrizeCondition(a, t, "", false);
 				ts.str("");
 				ts.clear();
 
-				out<<"\t:task"<<d.parametrizeCondition(a, "DO-" + c.name + "-",false, i->first.a)<<std::endl;
+				hddlMethods<<"\t:task"<<d.parametrizeCondition(a, "DO-" + c.name + "-",false, i->first.a)<<std::endl;
 
-				out<<"\t:precondition (and ";
+				hddlMethods<<"\t:precondition (and ";
 					if (isPosNegInvariant(i->first.a))
-						out << " ( not";
-					out << d.parametrizeCondition(a, c, "", false);
+						hddlMethods << " ( not";
+					hddlMethods << d.parametrizeCondition(a, c, "", false);
 					if (isPosNegInvariant(i->first.a))
-						out << " )";
-				out<<")"<<std::endl;
+						hddlMethods << " )";
+				hddlMethods<<")"<<std::endl;
 				
 				if(m.unordered_precs && m.rorder.size() > 1)
-					out<<"\t:subtasks (and ";
+					hddlMethods<<"\t:subtasks (and ";
 				else 
-					out<<"\t:ordered-subtasks (and ";
+					hddlMethods<<"\t:ordered-subtasks (and ";
 				for (int k = m.rorder.size() - 1; k >= 0; --k) {
 					CondPairSet::iterator it = m.variable.begin();
 					for (int l = 0; l < m.rorder[k]; ++l, ++it)
@@ -187,17 +191,17 @@ void printHDDLDOMethods(Domain &d, std::ostream &out) {
 					//std::cout << k << "," << c2.name << "\n";
 					std::string s(c2.neg ? "" : "ACHIEVE-");
 
-					out << d.parametrizeCondition(a, c2, s, false);
+					hddlMethods << d.parametrizeCondition(a, c2, s, false);
 				}
 				for (CondPairSet::iterator it = m.variable.begin(); it != m.variable.end(); ++it) {
 					Condition c2 = a.pre[it->second.first];
 					std::string s(c2.neg ? "" : "IFUNLOCK-");
-					out << d.parametrizeCondition(a, c2, s, false);
+					hddlMethods << d.parametrizeCondition(a, c2, s, false);
 				}
-				out << d.parametrizeCondition(a, "", false);
+				hddlMethods << d.parametrizeCondition(a, "", false);
 			
-				out << " )"<<std::endl;
-				out<<")"<<std::endl;
+				hddlMethods << " )"<<std::endl;
+				hddlMethods<<")"<<std::endl;
 			}
 	}
 }
@@ -221,23 +225,23 @@ void printInnerACHIEVE(Domain &d, std::ostream &out, int invariant_num, int cond
 	out << "    )\n";
 }
 
-std::string printHDDLInnerACHIEVE(Domain &d, std::ostream &out, int invariant_num, int condition_num, Condition& pred,
+std::string printHDDLInnerACHIEVE(Domain &d, int invariant_num, int condition_num, Condition& pred,
 		std::vector<std::string>& params) {
 	Condition c = invs[invariant_num].conds[condition_num];
 	if (isPosNegInvariant(invariant_num) && c.neg)
 		return std::string();
 	std::ostringstream ts;
 	ts<<d.parametrizeHDDLCondition(c, "ACHIEVE-", invariant_num);
-	out<<"( :task "<<ts.str()<<std::endl<<")"<<std::endl;
-	out << "( :method "<<"M-"<<ts.str()<<std::endl;
+	hddlTasks<<"(:task "<<ts.str()<<std::endl<<")"<<std::endl;
+	hddlMethods << "( :method "<<"M-"<<ts.str()<<std::endl;
 	taskToInvariantMap[ts.str()] = invariant_num;
 	taskToFluentMap[invariant_num][ts.str()] = d.parametrizeCondition(c, "", false);
-	out<<"\t:task"<<d.parametrizeCondition(c, "ACHIEVE-",false, invariant_num)<<std::endl;
-	out<<"\t:precondition ";
-		printCondition(out, pred.neg, pred, "", false, params);
-	out<<std::endl;
-	out<<"\t:subtasks ( )"<<std::endl;
-	out<<")"<<std::endl;
+	hddlMethods<<"\t:task"<<d.parametrizeCondition(c, "ACHIEVE-",false, invariant_num)<<std::endl;
+	hddlMethods<<"\t:precondition ";
+		printCondition(hddlMethods, pred.neg, pred, "", false, params);
+	hddlMethods<<std::endl;
+	hddlMethods<<"\t:subtasks ( )"<<std::endl;
+	hddlMethods<<")"<<std::endl;
 	return d.parametrizeCondition(c, "ACHIEVE-",false, invariant_num);
 }
 
@@ -449,7 +453,7 @@ void printTopACHIEVE(Domain& d, std::ostream &out, std::vector<std::string>& par
 }
 
 //print entry point ACHIEVE methods
-void printHDDLTopACHIEVE(Domain& d, std::ostream &out, std::vector<std::string>& param_types,
+void printHDDLTopACHIEVE(Domain& d, std::vector<std::string>& param_types,
 		std::vector<std::string>& params, int invariant_num, int condition_num, Condition& pred) {
 	Condition c = invs[invariant_num].conds[condition_num];
 	int x = d.pmap[c.name];
@@ -460,41 +464,41 @@ void printHDDLTopACHIEVE(Domain& d, std::ostream &out, std::vector<std::string>&
 		printed_locks.push_back(c);
 
 		//NOT-LOCKED-X, X -> LOCK-X
-		out << "( :task ";
-		out<< d.parametrizeHDDLCondition(c, "ACHIEVE-")<<std::endl;
-		out<<")"<<std::endl;
-		out << "( :method ";
-		out<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
-		out << "\t:task ";
-		out<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
-		out<<"\t:precondition (and";
-			printCondition(out, false, c, "", false, params);
-			out << " ( not";
-			printCondition(out, false, c, "LOCKED", true, params);
-			out<<") )"<<std::endl; //end precondition
-		out <<"\t:ordered-subtasks (and ";
-			printCondition(out, false, c, "i-LOCK", true, params);
-			out<<")"<<std::endl;//end subtasks
-		out<<")"<<std::endl;
+		hddlTasks << "(:task ";
+		hddlTasks<< d.parametrizeHDDLCondition(c, "ACHIEVE-")<<std::endl;
+		hddlTasks<<")"<<std::endl;
+		hddlMethods << "( :method ";
+		hddlMethods<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
+		hddlMethods << "\t:task ";
+		hddlMethods<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
+		hddlMethods<<"\t:precondition (and";
+			printCondition(hddlMethods, false, c, "", false, params);
+			hddlMethods << " ( not";
+			printCondition(hddlMethods, false, c, "LOCKED", true, params);
+			hddlMethods<<") )"<<std::endl; //end precondition
+		hddlMethods <<"\t:ordered-subtasks (and ";
+			printCondition(hddlMethods, false, c, "i-LOCK", true, params);
+			hddlMethods<<")"<<std::endl;//end subtasks
+		hddlMethods<<")"<<std::endl;
 	}
 
 	//NOT-LOCKED-X, NOT-X, NOT-ACHIEVING-X -> LIST-OF-TASKS
-	out << "( :method ";
-		out<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
-	out << "\t:task ";
-	out<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
-	out<<"\t:precondition (and";
-		out << " ( not";
-		printCondition(out, false, c, "LOCKED", true, params);
-		out<<")";
-		out << " ( not";
-		printCondition(out, false, c, "", false, params);
-	out<<") )"<<std::endl; //end precondition
-	out <<"\t:ordered-subtasks (and";
-		printCondition(out, false, c, "ACHIEVE", true, params, invariant_num);
-		printCondition(out, false, c, "i-LOCK", true, params);
-		out<<")"<<std::endl;//end subtasks
-	out<<")"<<std::endl;
+	hddlMethods << "( :method ";
+		hddlMethods<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
+	hddlMethods << "\t:task ";
+	hddlMethods<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
+	hddlMethods<<"\t:precondition (and";
+		hddlMethods << " ( not";
+		printCondition(hddlMethods, false, c, "LOCKED", true, params);
+		hddlMethods<<")";
+		hddlMethods << " ( not";
+		printCondition(hddlMethods, false, c, "", false, params);
+	hddlMethods<<") )"<<std::endl; //end precondition
+	hddlMethods <<"\t:ordered-subtasks (and";
+		printCondition(hddlMethods, false, c, "ACHIEVE", true, params, invariant_num);
+		printCondition(hddlMethods, false, c, "i-LOCK", true, params);
+		hddlMethods<<")"<<std::endl;//end subtasks
+	hddlMethods<<")"<<std::endl;
 }
 
 //print solve methods, test and finish operators
@@ -766,8 +770,8 @@ void printAuxOps(std::ostream &stream, Domain &d) {
 void printHDDLAuxOps(std::ostream &stream, Domain &d) {
 	for (unsigned i = 0; i < d.preds.size(); ++i)
 		if (d.predActions[i].size() > 0) {
-			d.printHDDLAuxAction(d.preds[i], stream, false, false, "i-LOCK", "LOCKED");
-			d.printHDDLAuxAction(d.preds[i], stream, true, false, "i-UNLOCK", "LOCKED");
+			d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-LOCK", "LOCKED");
+			d.printHDDLAuxAction(d.preds[i], hddlActions, true, false, "i-UNLOCK", "LOCKED");
 
 			CondPairMap v = predInvs[d.pmap[d.preds[i].name]];
 			std::vector<int> inv_nums;
@@ -776,10 +780,10 @@ void printHDDLAuxOps(std::ostream &stream, Domain &d) {
 					if (std::find(inv_nums.begin(), inv_nums.end(), it1->first) == inv_nums.end())
 						inv_nums.push_back(it1->first);
 			
-            d.printHDDLAuxAction(d.preds[i], stream, false, false, "i-VISIT", "VISITED");
-			d.printHDDLAuxAction(d.preds[i], stream, false, false, "i-FLAG", "FLAGGED");
-			d.printHDDLAuxAction(d.preds[i], stream, true, false, "i-UNFLAG", "FLAGGED");
-			d.printHDDLMethod(d.preds[i], stream, "IFUNLOCK", "FLAGGED");
+            d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-VISIT", "VISITED");
+			d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-FLAG", "FLAGGED");
+			d.printHDDLAuxAction(d.preds[i], hddlActions, true, false, "i-UNFLAG", "FLAGGED");
+			d.printHDDLMethod(d.preds[i], hddlTasks, hddlMethods, "IFUNLOCK", "FLAGGED");
 			
 		}
 }
@@ -863,7 +867,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 		printORDER(out, d, trorder);
 		printSOLVE(out, d, trorder);
 	}
-	d.printHDDLActions(out);
+	d.printHDDLActions(hddlActions);
 	printHDDLAuxOps(out, d);
 	//printACHIEVEOps(d, out);
 	//printSTOPALLOps(d, out);
@@ -905,10 +909,10 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 				Condition pred = invs[i].conds[k];
 				if (j == k) {
 					if (!achieveWrap) {
-						printHDDLTopACHIEVE(d, out, param_types, params, i, j, pred);
+						printHDDLTopACHIEVE(d, param_types, params, i, j, pred);
 						achieveWrap = true;
 					}
-					std::string tmpHDDLTaskName = printHDDLInnerACHIEVE(d, out, i, j, pred, params);
+					std::string tmpHDDLTaskName = printHDDLInnerACHIEVE(d, i, j, pred, params);
 					if(!tmpHDDLTaskName.empty())
 						hddlTaskName = tmpHDDLTaskName;
 				}
@@ -985,62 +989,62 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 									for(auto& tp : typedParams)
 										head<<tp;
 									head<<")"<<std::endl;
-									out<<head.str();
-									out<<"\t:task ";
+									hddlMethods<<head.str();
+									hddlMethods<<"\t:task ";
 									if(hddlTaskName.empty()) {
-										out<<"( "<<taskName;
+										hddlMethods<<"( "<<taskName;
 										for ( unsigned pk = 0; pk < params.size(); ++pk )
-											out<<" "<<params[pk];
-										out<<" )";
+											hddlMethods<<" "<<params[pk];
+										hddlMethods<<" )";
 									}
-									else out<<hddlTaskName;
-									out<<std::endl;
-									out << "\t:precondition (and";
-									out << " ( not";
-									printCondition(out, false, c, "", false, params);
-									out << " )";
-									printCondition(out, pred.neg, pred, "", false, p2);
+									else hddlMethods<<hddlTaskName;
+									hddlMethods<<std::endl;
+									hddlMethods << "\t:precondition (and";
+									hddlMethods << " ( not";
+									printCondition(hddlMethods, false, c, "", false, params);
+									hddlMethods << " )";
+									printCondition(hddlMethods, pred.neg, pred, "", false, p2);
 
 									for (CondPairSet::iterator i4 = v[0].fixed.begin(); i4 != v[0].fixed.end(); ++i4)
 										if (i4->second.second.name != pred.name && i4->second.first < a.pre.size()) {
 											Condition c3 = a.pre[i4->second.first];
 											if(pred == c3) continue;
-											printCondition(out, c3.neg, c3, pa, mys);
+											printCondition(hddlMethods, c3.neg, c3, pa, mys);
 										}
 
 									//printTypes(out, d, a.params, pa);
 									if (!isDirReachable) {
-										out << " ( not";
-                                        printCondition(out, false, pred, "VISITED", true, p2);
+										hddlMethods << " ( not";
+                                        printCondition(hddlMethods, false, pred, "VISITED", true, p2);
 										//printCondition(out, false, pred, "VISITED", true, p2, i);
-										out << " )";
+										hddlMethods << " )";
 										if (!isPosNegInvariant(i) && !pred.neg) {
-											out << " ( not";
-                                            printCondition(out, false, add, "VISITED", true, padd);
+											hddlMethods << " ( not";
+                                            printCondition(hddlMethods, false, add, "VISITED", true, padd);
 											//printCondition(out, false, add, "VISITED", true, padd, i);
-											out << " )";
+											hddlMethods << " )";
 										}
 									}
-									out<<" )"<<std::endl; //end precondtion
+									hddlMethods<<" )"<<std::endl; //end precondtion
 
-									out<<"\t:ordered-subtasks (and ";
+									hddlMethods<<"\t:ordered-subtasks (and ";
 									if(!isDirReachable) {
 										if (!isPosNegInvariant(i) && !pred.neg)
-                                            printCondition(out, false, pred, "i-VISIT", true, p2);
+                                            printCondition(hddlMethods, false, pred, "i-VISIT", true, p2);
 											//printCondition(out, false, pred, "!!VISIT", true, p2, i);
 									}
 									if (v[z].variable.size() > 0) {
 										Condition cc(del.name + "-" + a.name, del.neg);
-										printCondition(out, false, cc, "DO", true, pa, i);
+										printCondition(hddlMethods, false, cc, "DO", true, pa, i);
 									} else{
 										std::ostringstream ts;
 										printCondition(ts, false, a, "", false, pa);
-										out<<ts.str();
+										hddlMethods<<ts.str();
 										taskToFluentMap[i][ts.str()] = d.parametrizeCondition(cadd,"",false);
 									}
 
-									printCondition(out, false, c, "ACHIEVE", true, params, i);
-									out << " )\n)\n"; //end ordered-subtasks and end method
+									printCondition(hddlMethods, false, c, "ACHIEVE", true, params, i);
+									hddlMethods << " )\n)\n"; //end ordered-subtasks and end method
 
 								} else if ( i3->first == j &&  invs[i].types.size() >= invs[i].conds[j].params.size()) {
 								 	Condition add = a.getCondition( v[z].t.c );
@@ -1062,56 +1066,56 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 									for(auto& tp : typedParams)
 										head<<tp;
 									head<<")"<<std::endl;
-									out<<head.str();
-									out<<"\t:task ";
+									hddlMethods<<head.str();
+									hddlMethods<<"\t:task ";
 									if(hddlTaskName.empty()) {
-										out<<"( "<<taskName;
+										hddlMethods<<"( "<<taskName;
 										for ( unsigned pk = 0; pk < params.size(); ++pk )
-											out<<" "<<params[pk];
-										out<<" )";
+											hddlMethods<<" "<<params[pk];
+										hddlMethods<<" )";
 									}
-									else out<<hddlTaskName;
-									out<<std::endl;
-									out << "\t:precondition (and";
-								 	out << " ( not";
-								 	printCondition(out, false, c, "", false, params);
-								 	out << " )";
-								 	printCondition(out, pred.neg, pred, "", false, p2 );
+									else hddlMethods<<hddlTaskName;
+									hddlMethods<<std::endl;
+									hddlMethods << "\t:precondition (and";
+								 	hddlMethods << " ( not";
+								 	printCondition(hddlMethods, false, c, "", false, params);
+								 	hddlMethods << " )";
+								 	printCondition(hddlMethods, pred.neg, pred, "", false, p2 );
 
 
 								 	for ( CondPairSet::iterator i4 = v[0].fixed.begin(); i4 != v[0].fixed.end(); ++i4 )
 								 		if ( i4->second.second.name != pred.name ) {
 								 			Condition c3 = a.pre[i4->second.first];
 								 			if(pred == c3) continue;
-								 			printCondition(out, c3.neg, c3, pa, mys );
+								 			printCondition(hddlMethods, c3.neg, c3, pa, mys );
 								 		}
-									out << " ( not";
-                                    printCondition(out, false, pred, "VISITED", true, p2);
+									hddlMethods << " ( not";
+                                    printCondition(hddlMethods, false, pred, "VISITED", true, p2);
 								 	//printCondition(out, false, pred, "VISITED", true, p2, i);
-								 	out << " )";
+								 	hddlMethods << " )";
 									if (!isPosNegInvariant(i) && !pred.neg){
-										out << " ( not";
-                                        printCondition(out, false, add, "VISITED", true, padd);
+										hddlMethods << " ( not";
+                                        printCondition(hddlMethods, false, add, "VISITED", true, padd);
 										//printCondition(out, false, add, "VISITED", true, padd, i);
-										out << " )";
+										hddlMethods << " )";
 									}
-								 	out<<" )"<<std::endl; //end precondtion
+								 	hddlMethods<<" )"<<std::endl; //end precondtion
 
-								 	out<<"\t:ordered-subtasks (and ";
+								 	hddlMethods<<"\t:ordered-subtasks (and ";
 								 	if (!isPosNegInvariant(i) && !pred.neg)
-                                        printCondition(out, false, pred, "i-VISIT", true, p2);
+                                        printCondition(hddlMethods, false, pred, "i-VISIT", true, p2);
 								 		//printCondition(out, false, pred, "!!VISIT", true, p2, i);
 
 								 	if ( v[z].variable.size() > 0 ) {
 								 		//std::cout << del << "," << a << "\n";
 								 		Condition cc( del.name + "-" + a.name, v[z].t.b >= 0 );
-								 		printCondition(out, false, cc, "DO", true, pa, i);
+								 		printCondition(hddlMethods, false, cc, "DO", true, pa, i);
 								 	}
 								 	else
-								 		printCondition(out, false, a, "", false, pa );
+								 		printCondition(hddlMethods, false, a, "", false, pa );
 
-								 	printCondition(out, false, c, "ACHIEVE", true, params, i);
-								 	out << " )\n)\n";//end ordered-subtasks and end method
+								 	printCondition(hddlMethods, false, c, "ACHIEVE", true, params, i);
+								 	hddlMethods << " )\n)\n";//end ordered-subtasks and end method
 								 }
 								 if(sort_by.size() > 1 )
 								 	sort_by.pop_back();
@@ -1122,6 +1126,9 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 			}
 		}
 	}
+	out<<hddlTasks.str();
+	out<<hddlMethods.str();
+	out<<hddlActions.str();
 	out << ")";
 	if(JSHOP2H){
 		out<<"\n(\n";
