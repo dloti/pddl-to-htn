@@ -1,40 +1,52 @@
-
-(DEFPROBLEM PROBLEM freecell
-    (
-        (CARD S3)
-        (CARD H3)
-        (CARD D3)
-        (CARD C3)
-        (CARD SA)
-        (CARD S2)
-        (CARD S0)
-        (CARD HA)
-        (CARD H2)
-        (CARD H0)
-        (CARD DA)
-        (CARD D2)
-        (CARD D0)
-        (CARD CA)
-        (CARD C2)
-        (CARD C0)
-        (NUM N8)
-        (NUM N7)
-        (NUM N6)
-        (NUM N5)
-        (NUM N4)
-        (NUM N3)
-        (NUM N13)
-        (NUM N12)
-        (NUM N11)
-        (NUM N9)
-        (NUM N10)
-        (NUM N1)
-        (NUM N2)
-        (NUM N0)
-        (SUIT S)
-        (SUIT H)
-        (SUIT D)
-        (SUIT C)
+(define (problem p)
+(:domain freecell)
+(:objects
+	S3 - CARD
+	H3 - CARD
+	D3 - CARD
+	C3 - CARD
+	SA - CARD
+	S2 - CARD
+	S0 - CARD
+	HA - CARD
+	H2 - CARD
+	H0 - CARD
+	DA - CARD
+	D2 - CARD
+	D0 - CARD
+	CA - CARD
+	C2 - CARD
+	C0 - CARD
+	N8 - NUM
+	N7 - NUM
+	N6 - NUM
+	N5 - NUM
+	N4 - NUM
+	N3 - NUM
+	N13 - NUM
+	N12 - NUM
+	N11 - NUM
+	N9 - NUM
+	N10 - NUM
+	N1 - NUM
+	N2 - NUM
+	N0 - NUM
+	S - SUIT
+	H - SUIT
+	D - SUIT
+	C - SUIT
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-HOME C3)
+	(ACHIEVE-HOME D3)
+	(ACHIEVE-HOME H3)
+	(ACHIEVE-HOME S3)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (VALUE C0 N0)
         (VALUE C2 N2)
         (VALUE C3 N3)
@@ -121,12 +133,6 @@
         (BOTTOMCOL H2)
         (BOTTOMCOL HA)
         (BOTTOMCOL S3)
-    )
-    (
-        (ACHIEVE-HOME C3)
-        (ACHIEVE-HOME D3)
-        (ACHIEVE-HOME H3)
-        (ACHIEVE-HOME S3)
-	)
+)
 )
 

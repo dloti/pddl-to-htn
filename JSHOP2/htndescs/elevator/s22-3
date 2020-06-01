@@ -1,138 +1,168 @@
-
-(DEFPROBLEM PROBLEM elevator
-    (
-        (PASSENGER P0)
-        (PASSENGER P1)
-        (PASSENGER P2)
-        (PASSENGER P3)
-        (PASSENGER P4)
-        (PASSENGER P5)
-        (PASSENGER P6)
-        (PASSENGER P7)
-        (PASSENGER P8)
-        (PASSENGER P9)
-        (PASSENGER P10)
-        (PASSENGER P11)
-        (PASSENGER P12)
-        (PASSENGER P13)
-        (PASSENGER P14)
-        (PASSENGER P15)
-        (PASSENGER P16)
-        (PASSENGER P17)
-        (PASSENGER P18)
-        (PASSENGER P19)
-        (PASSENGER P20)
-        (PASSENGER P21)
-        (OBJECT P0)
-        (OBJECT P1)
-        (OBJECT P2)
-        (OBJECT P3)
-        (OBJECT P4)
-        (OBJECT P5)
-        (OBJECT P6)
-        (OBJECT P7)
-        (OBJECT P8)
-        (OBJECT P9)
-        (OBJECT P10)
-        (OBJECT P11)
-        (OBJECT P12)
-        (OBJECT P13)
-        (OBJECT P14)
-        (OBJECT P15)
-        (OBJECT P16)
-        (OBJECT P17)
-        (OBJECT P18)
-        (OBJECT P19)
-        (OBJECT P20)
-        (OBJECT P21)
-        (OBJECT F0)
-        (OBJECT F1)
-        (OBJECT F2)
-        (OBJECT F3)
-        (OBJECT F4)
-        (OBJECT F5)
-        (OBJECT F6)
-        (OBJECT F7)
-        (OBJECT F8)
-        (OBJECT F9)
-        (OBJECT F10)
-        (OBJECT F11)
-        (OBJECT F12)
-        (OBJECT F13)
-        (OBJECT F14)
-        (OBJECT F15)
-        (OBJECT F16)
-        (OBJECT F17)
-        (OBJECT F18)
-        (OBJECT F19)
-        (OBJECT F20)
-        (OBJECT F21)
-        (OBJECT F22)
-        (OBJECT F23)
-        (OBJECT F24)
-        (OBJECT F25)
-        (OBJECT F26)
-        (OBJECT F27)
-        (OBJECT F28)
-        (OBJECT F29)
-        (OBJECT F30)
-        (OBJECT F31)
-        (OBJECT F32)
-        (OBJECT F33)
-        (OBJECT F34)
-        (OBJECT F35)
-        (OBJECT F36)
-        (OBJECT F37)
-        (OBJECT F38)
-        (OBJECT F39)
-        (OBJECT F40)
-        (OBJECT F41)
-        (OBJECT F42)
-        (OBJECT F43)
-        (FLOOR F0)
-        (FLOOR F1)
-        (FLOOR F2)
-        (FLOOR F3)
-        (FLOOR F4)
-        (FLOOR F5)
-        (FLOOR F6)
-        (FLOOR F7)
-        (FLOOR F8)
-        (FLOOR F9)
-        (FLOOR F10)
-        (FLOOR F11)
-        (FLOOR F12)
-        (FLOOR F13)
-        (FLOOR F14)
-        (FLOOR F15)
-        (FLOOR F16)
-        (FLOOR F17)
-        (FLOOR F18)
-        (FLOOR F19)
-        (FLOOR F20)
-        (FLOOR F21)
-        (FLOOR F22)
-        (FLOOR F23)
-        (FLOOR F24)
-        (FLOOR F25)
-        (FLOOR F26)
-        (FLOOR F27)
-        (FLOOR F28)
-        (FLOOR F29)
-        (FLOOR F30)
-        (FLOOR F31)
-        (FLOOR F32)
-        (FLOOR F33)
-        (FLOOR F34)
-        (FLOOR F35)
-        (FLOOR F36)
-        (FLOOR F37)
-        (FLOOR F38)
-        (FLOOR F39)
-        (FLOOR F40)
-        (FLOOR F41)
-        (FLOOR F42)
-        (FLOOR F43)
+(define (problem p)
+(:domain elevator)
+(:objects
+	P0 - PASSENGER
+	P1 - PASSENGER
+	P2 - PASSENGER
+	P3 - PASSENGER
+	P4 - PASSENGER
+	P5 - PASSENGER
+	P6 - PASSENGER
+	P7 - PASSENGER
+	P8 - PASSENGER
+	P9 - PASSENGER
+	P10 - PASSENGER
+	P11 - PASSENGER
+	P12 - PASSENGER
+	P13 - PASSENGER
+	P14 - PASSENGER
+	P15 - PASSENGER
+	P16 - PASSENGER
+	P17 - PASSENGER
+	P18 - PASSENGER
+	P19 - PASSENGER
+	P20 - PASSENGER
+	P21 - PASSENGER
+	P0 - OBJECT
+	P1 - OBJECT
+	P2 - OBJECT
+	P3 - OBJECT
+	P4 - OBJECT
+	P5 - OBJECT
+	P6 - OBJECT
+	P7 - OBJECT
+	P8 - OBJECT
+	P9 - OBJECT
+	P10 - OBJECT
+	P11 - OBJECT
+	P12 - OBJECT
+	P13 - OBJECT
+	P14 - OBJECT
+	P15 - OBJECT
+	P16 - OBJECT
+	P17 - OBJECT
+	P18 - OBJECT
+	P19 - OBJECT
+	P20 - OBJECT
+	P21 - OBJECT
+	F0 - OBJECT
+	F1 - OBJECT
+	F2 - OBJECT
+	F3 - OBJECT
+	F4 - OBJECT
+	F5 - OBJECT
+	F6 - OBJECT
+	F7 - OBJECT
+	F8 - OBJECT
+	F9 - OBJECT
+	F10 - OBJECT
+	F11 - OBJECT
+	F12 - OBJECT
+	F13 - OBJECT
+	F14 - OBJECT
+	F15 - OBJECT
+	F16 - OBJECT
+	F17 - OBJECT
+	F18 - OBJECT
+	F19 - OBJECT
+	F20 - OBJECT
+	F21 - OBJECT
+	F22 - OBJECT
+	F23 - OBJECT
+	F24 - OBJECT
+	F25 - OBJECT
+	F26 - OBJECT
+	F27 - OBJECT
+	F28 - OBJECT
+	F29 - OBJECT
+	F30 - OBJECT
+	F31 - OBJECT
+	F32 - OBJECT
+	F33 - OBJECT
+	F34 - OBJECT
+	F35 - OBJECT
+	F36 - OBJECT
+	F37 - OBJECT
+	F38 - OBJECT
+	F39 - OBJECT
+	F40 - OBJECT
+	F41 - OBJECT
+	F42 - OBJECT
+	F43 - OBJECT
+	F0 - FLOOR
+	F1 - FLOOR
+	F2 - FLOOR
+	F3 - FLOOR
+	F4 - FLOOR
+	F5 - FLOOR
+	F6 - FLOOR
+	F7 - FLOOR
+	F8 - FLOOR
+	F9 - FLOOR
+	F10 - FLOOR
+	F11 - FLOOR
+	F12 - FLOOR
+	F13 - FLOOR
+	F14 - FLOOR
+	F15 - FLOOR
+	F16 - FLOOR
+	F17 - FLOOR
+	F18 - FLOOR
+	F19 - FLOOR
+	F20 - FLOOR
+	F21 - FLOOR
+	F22 - FLOOR
+	F23 - FLOOR
+	F24 - FLOOR
+	F25 - FLOOR
+	F26 - FLOOR
+	F27 - FLOOR
+	F28 - FLOOR
+	F29 - FLOOR
+	F30 - FLOOR
+	F31 - FLOOR
+	F32 - FLOOR
+	F33 - FLOOR
+	F34 - FLOOR
+	F35 - FLOOR
+	F36 - FLOOR
+	F37 - FLOOR
+	F38 - FLOOR
+	F39 - FLOOR
+	F40 - FLOOR
+	F41 - FLOOR
+	F42 - FLOOR
+	F43 - FLOOR
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-SERVED P0)
+	(ACHIEVE-SERVED P1)
+	(ACHIEVE-SERVED P2)
+	(ACHIEVE-SERVED P3)
+	(ACHIEVE-SERVED P4)
+	(ACHIEVE-SERVED P5)
+	(ACHIEVE-SERVED P6)
+	(ACHIEVE-SERVED P7)
+	(ACHIEVE-SERVED P8)
+	(ACHIEVE-SERVED P9)
+	(ACHIEVE-SERVED P10)
+	(ACHIEVE-SERVED P11)
+	(ACHIEVE-SERVED P12)
+	(ACHIEVE-SERVED P13)
+	(ACHIEVE-SERVED P14)
+	(ACHIEVE-SERVED P15)
+	(ACHIEVE-SERVED P16)
+	(ACHIEVE-SERVED P17)
+	(ACHIEVE-SERVED P18)
+	(ACHIEVE-SERVED P19)
+	(ACHIEVE-SERVED P20)
+	(ACHIEVE-SERVED P21)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (ABOVE F0 F1)
         (ABOVE F0 F2)
         (ABOVE F0 F3)
@@ -1124,30 +1154,6 @@
         (ORIGIN P21 F7)
         (DESTIN P21 F35)
         (LIFT-AT F0)
-    )
-    (
-        (ACHIEVE-SERVED P0)
-        (ACHIEVE-SERVED P1)
-        (ACHIEVE-SERVED P2)
-        (ACHIEVE-SERVED P3)
-        (ACHIEVE-SERVED P4)
-        (ACHIEVE-SERVED P5)
-        (ACHIEVE-SERVED P6)
-        (ACHIEVE-SERVED P7)
-        (ACHIEVE-SERVED P8)
-        (ACHIEVE-SERVED P9)
-        (ACHIEVE-SERVED P10)
-        (ACHIEVE-SERVED P11)
-        (ACHIEVE-SERVED P12)
-        (ACHIEVE-SERVED P13)
-        (ACHIEVE-SERVED P14)
-        (ACHIEVE-SERVED P15)
-        (ACHIEVE-SERVED P16)
-        (ACHIEVE-SERVED P17)
-        (ACHIEVE-SERVED P18)
-        (ACHIEVE-SERVED P19)
-        (ACHIEVE-SERVED P20)
-        (ACHIEVE-SERVED P21)
-	)
+)
 )
 

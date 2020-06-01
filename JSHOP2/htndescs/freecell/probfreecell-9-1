@@ -1,64 +1,76 @@
-
-(DEFPROBLEM PROBLEM freecell
-    (
-        (CARD S9)
-        (CARD H9)
-        (CARD D9)
-        (CARD C9)
-        (CARD S8)
-        (CARD H8)
-        (CARD D8)
-        (CARD C8)
-        (CARD S7)
-        (CARD H7)
-        (CARD D7)
-        (CARD C7)
-        (CARD S6)
-        (CARD H6)
-        (CARD D6)
-        (CARD C6)
-        (CARD S5)
-        (CARD H5)
-        (CARD D5)
-        (CARD C5)
-        (CARD S4)
-        (CARD H4)
-        (CARD D4)
-        (CARD C4)
-        (CARD S3)
-        (CARD H3)
-        (CARD D3)
-        (CARD C3)
-        (CARD SA)
-        (CARD S2)
-        (CARD S0)
-        (CARD HA)
-        (CARD H2)
-        (CARD H0)
-        (CARD DA)
-        (CARD D2)
-        (CARD D0)
-        (CARD CA)
-        (CARD C2)
-        (CARD C0)
-        (NUM N8)
-        (NUM N7)
-        (NUM N6)
-        (NUM N5)
-        (NUM N4)
-        (NUM N3)
-        (NUM N13)
-        (NUM N12)
-        (NUM N11)
-        (NUM N9)
-        (NUM N10)
-        (NUM N1)
-        (NUM N2)
-        (NUM N0)
-        (SUIT S)
-        (SUIT H)
-        (SUIT D)
-        (SUIT C)
+(define (problem p)
+(:domain freecell)
+(:objects
+	S9 - CARD
+	H9 - CARD
+	D9 - CARD
+	C9 - CARD
+	S8 - CARD
+	H8 - CARD
+	D8 - CARD
+	C8 - CARD
+	S7 - CARD
+	H7 - CARD
+	D7 - CARD
+	C7 - CARD
+	S6 - CARD
+	H6 - CARD
+	D6 - CARD
+	C6 - CARD
+	S5 - CARD
+	H5 - CARD
+	D5 - CARD
+	C5 - CARD
+	S4 - CARD
+	H4 - CARD
+	D4 - CARD
+	C4 - CARD
+	S3 - CARD
+	H3 - CARD
+	D3 - CARD
+	C3 - CARD
+	SA - CARD
+	S2 - CARD
+	S0 - CARD
+	HA - CARD
+	H2 - CARD
+	H0 - CARD
+	DA - CARD
+	D2 - CARD
+	D0 - CARD
+	CA - CARD
+	C2 - CARD
+	C0 - CARD
+	N8 - NUM
+	N7 - NUM
+	N6 - NUM
+	N5 - NUM
+	N4 - NUM
+	N3 - NUM
+	N13 - NUM
+	N12 - NUM
+	N11 - NUM
+	N9 - NUM
+	N10 - NUM
+	N1 - NUM
+	N2 - NUM
+	N0 - NUM
+	S - SUIT
+	H - SUIT
+	D - SUIT
+	C - SUIT
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-HOME C9)
+	(ACHIEVE-HOME D9)
+	(ACHIEVE-HOME H9)
+	(ACHIEVE-HOME S9)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (VALUE C0 N0)
         (VALUE C2 N2)
         (VALUE C3 N3)
@@ -266,12 +278,6 @@
         (BOTTOMCOL H9)
         (BOTTOMCOL S2)
         (BOTTOMCOL S5)
-    )
-    (
-        (ACHIEVE-HOME C9)
-        (ACHIEVE-HOME D9)
-        (ACHIEVE-HOME H9)
-        (ACHIEVE-HOME S9)
-	)
+)
 )
 

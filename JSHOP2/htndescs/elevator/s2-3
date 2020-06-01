@@ -1,18 +1,28 @@
-
-(DEFPROBLEM PROBLEM elevator
-    (
-        (PASSENGER P0)
-        (PASSENGER P1)
-        (OBJECT P0)
-        (OBJECT P1)
-        (OBJECT F0)
-        (OBJECT F1)
-        (OBJECT F2)
-        (OBJECT F3)
-        (FLOOR F0)
-        (FLOOR F1)
-        (FLOOR F2)
-        (FLOOR F3)
+(define (problem p)
+(:domain elevator)
+(:objects
+	P0 - PASSENGER
+	P1 - PASSENGER
+	P0 - OBJECT
+	P1 - OBJECT
+	F0 - OBJECT
+	F1 - OBJECT
+	F2 - OBJECT
+	F3 - OBJECT
+	F0 - FLOOR
+	F1 - FLOOR
+	F2 - FLOOR
+	F3 - FLOOR
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-SERVED P0)
+	(ACHIEVE-SERVED P1)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (ABOVE F0 F1)
         (ABOVE F0 F2)
         (ABOVE F0 F3)
@@ -24,10 +34,6 @@
         (ORIGIN P1 F2)
         (DESTIN P1 F3)
         (LIFT-AT F0)
-    )
-    (
-        (ACHIEVE-SERVED P0)
-        (ACHIEVE-SERVED P1)
-	)
+)
 )
 

@@ -1,34 +1,55 @@
-
-(DEFPROBLEM PROBLEM blocks
-    (
-        (BLOCK I)
-        (BLOCK D)
-        (BLOCK B)
-        (BLOCK L)
-        (BLOCK C)
-        (BLOCK K)
-        (BLOCK M)
-        (BLOCK H)
-        (BLOCK J)
-        (BLOCK N)
-        (BLOCK E)
-        (BLOCK F)
-        (BLOCK G)
-        (BLOCK A)
-        (OBJECT I)
-        (OBJECT D)
-        (OBJECT B)
-        (OBJECT L)
-        (OBJECT C)
-        (OBJECT K)
-        (OBJECT M)
-        (OBJECT H)
-        (OBJECT J)
-        (OBJECT N)
-        (OBJECT E)
-        (OBJECT F)
-        (OBJECT G)
-        (OBJECT A)
+(define (problem p)
+(:domain blocks)
+(:objects
+	I - BLOCK
+	D - BLOCK
+	B - BLOCK
+	L - BLOCK
+	C - BLOCK
+	K - BLOCK
+	M - BLOCK
+	H - BLOCK
+	J - BLOCK
+	N - BLOCK
+	E - BLOCK
+	F - BLOCK
+	G - BLOCK
+	A - BLOCK
+	I - OBJECT
+	D - OBJECT
+	B - OBJECT
+	L - OBJECT
+	C - OBJECT
+	K - OBJECT
+	M - OBJECT
+	H - OBJECT
+	J - OBJECT
+	N - OBJECT
+	E - OBJECT
+	F - OBJECT
+	G - OBJECT
+	A - OBJECT
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-ON E L)
+	(ACHIEVE-ON L F)
+	(ACHIEVE-ON F B)
+	(ACHIEVE-ON B J)
+	(ACHIEVE-ON J I)
+	(ACHIEVE-ON I N)
+	(ACHIEVE-ON N C)
+	(ACHIEVE-ON C K)
+	(ACHIEVE-ON K G)
+	(ACHIEVE-ON G D)
+	(ACHIEVE-ON D M)
+	(ACHIEVE-ON M A)
+	(ACHIEVE-ON A H)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (CLEAR A)
         (CLEAR G)
         (CLEAR F)
@@ -47,21 +68,6 @@
         (ON D I)
         (ON I N)
         (HANDEMPTY)
-    )
-    (
-        (ACHIEVE-ON E L)
-        (ACHIEVE-ON L F)
-        (ACHIEVE-ON F B)
-        (ACHIEVE-ON B J)
-        (ACHIEVE-ON J I)
-        (ACHIEVE-ON I N)
-        (ACHIEVE-ON N C)
-        (ACHIEVE-ON C K)
-        (ACHIEVE-ON K G)
-        (ACHIEVE-ON G D)
-        (ACHIEVE-ON D M)
-        (ACHIEVE-ON M A)
-        (ACHIEVE-ON A H)
-	)
+)
 )
 

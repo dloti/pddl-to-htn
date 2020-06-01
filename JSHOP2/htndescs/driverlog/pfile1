@@ -1,34 +1,46 @@
-
-(DEFPROBLEM PROBLEM driverlog
-    (
-        (LOCATION S0)
-        (LOCATION S1)
-        (LOCATION S2)
-        (LOCATION P1-0)
-        (LOCATION P1-2)
-        (LOCATABLE DRIVER1)
-        (LOCATABLE DRIVER2)
-        (LOCATABLE TRUCK1)
-        (LOCATABLE TRUCK2)
-        (LOCATABLE PACKAGE1)
-        (LOCATABLE PACKAGE2)
-        (OBJECT DRIVER1)
-        (OBJECT DRIVER2)
-        (OBJECT TRUCK1)
-        (OBJECT TRUCK2)
-        (OBJECT PACKAGE1)
-        (OBJECT PACKAGE2)
-        (OBJECT S0)
-        (OBJECT S1)
-        (OBJECT S2)
-        (OBJECT P1-0)
-        (OBJECT P1-2)
-        (DRIVER DRIVER1)
-        (DRIVER DRIVER2)
-        (TRUCK TRUCK1)
-        (TRUCK TRUCK2)
-        (OBJ PACKAGE1)
-        (OBJ PACKAGE2)
+(define (problem p)
+(:domain driverlog)
+(:objects
+	S0 - LOCATION
+	S1 - LOCATION
+	S2 - LOCATION
+	P1-0 - LOCATION
+	P1-2 - LOCATION
+	DRIVER1 - LOCATABLE
+	DRIVER2 - LOCATABLE
+	TRUCK1 - LOCATABLE
+	TRUCK2 - LOCATABLE
+	PACKAGE1 - LOCATABLE
+	PACKAGE2 - LOCATABLE
+	DRIVER1 - OBJECT
+	DRIVER2 - OBJECT
+	TRUCK1 - OBJECT
+	TRUCK2 - OBJECT
+	PACKAGE1 - OBJECT
+	PACKAGE2 - OBJECT
+	S0 - OBJECT
+	S1 - OBJECT
+	S2 - OBJECT
+	P1-0 - OBJECT
+	P1-2 - OBJECT
+	DRIVER1 - DRIVER
+	DRIVER2 - DRIVER
+	TRUCK1 - TRUCK
+	TRUCK2 - TRUCK
+	PACKAGE1 - OBJ
+	PACKAGE2 - OBJ
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-AT DRIVER1 S1)
+	(ACHIEVE-AT TRUCK1 S1)
+	(ACHIEVE-AT PACKAGE1 S0)
+	(ACHIEVE-AT PACKAGE2 S0)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (AT DRIVER1 S2)
         (AT DRIVER2 S2)
         (AT TRUCK1 S0)
@@ -51,12 +63,6 @@
         (LINK S2 S0)
         (LINK S2 S1)
         (LINK S1 S2)
-    )
-    (
-        (ACHIEVE-AT DRIVER1 S1)
-        (ACHIEVE-AT TRUCK1 S1)
-        (ACHIEVE-AT PACKAGE1 S0)
-        (ACHIEVE-AT PACKAGE2 S0)
-	)
+)
 )
 

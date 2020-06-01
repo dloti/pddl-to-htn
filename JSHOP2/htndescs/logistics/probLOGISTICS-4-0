@@ -1,52 +1,64 @@
-
-(DEFPROBLEM PROBLEM logistics
-    (
-        (TRUCK TRU2)
-        (TRUCK TRU1)
-        (AIRPLANE APN1)
-        (VEHICLE APN1)
-        (VEHICLE TRU2)
-        (VEHICLE TRU1)
-        (PACKAGE OBJ23)
-        (PACKAGE OBJ22)
-        (PACKAGE OBJ21)
-        (PACKAGE OBJ13)
-        (PACKAGE OBJ12)
-        (PACKAGE OBJ11)
-        (PHYSOBJ APN1)
-        (PHYSOBJ TRU2)
-        (PHYSOBJ TRU1)
-        (PHYSOBJ OBJ23)
-        (PHYSOBJ OBJ22)
-        (PHYSOBJ OBJ21)
-        (PHYSOBJ OBJ13)
-        (PHYSOBJ OBJ12)
-        (PHYSOBJ OBJ11)
-        (AIRPORT APT1)
-        (AIRPORT APT2)
-        (LOCATION POS2)
-        (LOCATION POS1)
-        (PLACE APT1)
-        (PLACE APT2)
-        (PLACE POS2)
-        (PLACE POS1)
-        (CITY CIT2)
-        (CITY CIT1)
-        (OBJECT APN1)
-        (OBJECT APT1)
-        (OBJECT APT2)
-        (OBJECT POS2)
-        (OBJECT POS1)
-        (OBJECT CIT2)
-        (OBJECT CIT1)
-        (OBJECT TRU2)
-        (OBJECT TRU1)
-        (OBJECT OBJ23)
-        (OBJECT OBJ22)
-        (OBJECT OBJ21)
-        (OBJECT OBJ13)
-        (OBJECT OBJ12)
-        (OBJECT OBJ11)
+(define (problem p)
+(:domain logistics)
+(:objects
+	TRU2 - TRUCK
+	TRU1 - TRUCK
+	APN1 - AIRPLANE
+	APN1 - VEHICLE
+	TRU2 - VEHICLE
+	TRU1 - VEHICLE
+	OBJ23 - PACKAGE
+	OBJ22 - PACKAGE
+	OBJ21 - PACKAGE
+	OBJ13 - PACKAGE
+	OBJ12 - PACKAGE
+	OBJ11 - PACKAGE
+	APN1 - PHYSOBJ
+	TRU2 - PHYSOBJ
+	TRU1 - PHYSOBJ
+	OBJ23 - PHYSOBJ
+	OBJ22 - PHYSOBJ
+	OBJ21 - PHYSOBJ
+	OBJ13 - PHYSOBJ
+	OBJ12 - PHYSOBJ
+	OBJ11 - PHYSOBJ
+	APT1 - AIRPORT
+	APT2 - AIRPORT
+	POS2 - LOCATION
+	POS1 - LOCATION
+	APT1 - PLACE
+	APT2 - PLACE
+	POS2 - PLACE
+	POS1 - PLACE
+	CIT2 - CITY
+	CIT1 - CITY
+	APN1 - OBJECT
+	APT1 - OBJECT
+	APT2 - OBJECT
+	POS2 - OBJECT
+	POS1 - OBJECT
+	CIT2 - OBJECT
+	CIT1 - OBJECT
+	TRU2 - OBJECT
+	TRU1 - OBJECT
+	OBJ23 - OBJECT
+	OBJ22 - OBJECT
+	OBJ21 - OBJECT
+	OBJ13 - OBJECT
+	OBJ12 - OBJECT
+	OBJ11 - OBJECT
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-AT OBJ11 APT1)
+	(ACHIEVE-AT OBJ23 POS1)
+	(ACHIEVE-AT OBJ13 APT1)
+	(ACHIEVE-AT OBJ21 POS1)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (AT APN1 APT2)
         (AT TRU1 POS1)
         (AT OBJ11 POS1)
@@ -60,12 +72,6 @@
         (IN-CITY APT1 CIT1)
         (IN-CITY POS2 CIT2)
         (IN-CITY APT2 CIT2)
-    )
-    (
-        (ACHIEVE-AT OBJ11 APT1)
-        (ACHIEVE-AT OBJ23 POS1)
-        (ACHIEVE-AT OBJ13 APT1)
-        (ACHIEVE-AT OBJ21 POS1)
-	)
+)
 )
 

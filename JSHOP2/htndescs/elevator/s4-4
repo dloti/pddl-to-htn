@@ -1,30 +1,42 @@
-
-(DEFPROBLEM PROBLEM elevator
-    (
-        (PASSENGER P0)
-        (PASSENGER P1)
-        (PASSENGER P2)
-        (PASSENGER P3)
-        (OBJECT P0)
-        (OBJECT P1)
-        (OBJECT P2)
-        (OBJECT P3)
-        (OBJECT F0)
-        (OBJECT F1)
-        (OBJECT F2)
-        (OBJECT F3)
-        (OBJECT F4)
-        (OBJECT F5)
-        (OBJECT F6)
-        (OBJECT F7)
-        (FLOOR F0)
-        (FLOOR F1)
-        (FLOOR F2)
-        (FLOOR F3)
-        (FLOOR F4)
-        (FLOOR F5)
-        (FLOOR F6)
-        (FLOOR F7)
+(define (problem p)
+(:domain elevator)
+(:objects
+	P0 - PASSENGER
+	P1 - PASSENGER
+	P2 - PASSENGER
+	P3 - PASSENGER
+	P0 - OBJECT
+	P1 - OBJECT
+	P2 - OBJECT
+	P3 - OBJECT
+	F0 - OBJECT
+	F1 - OBJECT
+	F2 - OBJECT
+	F3 - OBJECT
+	F4 - OBJECT
+	F5 - OBJECT
+	F6 - OBJECT
+	F7 - OBJECT
+	F0 - FLOOR
+	F1 - FLOOR
+	F2 - FLOOR
+	F3 - FLOOR
+	F4 - FLOOR
+	F5 - FLOOR
+	F6 - FLOOR
+	F7 - FLOOR
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-SERVED P0)
+	(ACHIEVE-SERVED P1)
+	(ACHIEVE-SERVED P2)
+	(ACHIEVE-SERVED P3)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (ABOVE F0 F1)
         (ABOVE F0 F2)
         (ABOVE F0 F3)
@@ -62,12 +74,6 @@
         (ORIGIN P3 F5)
         (DESTIN P3 F1)
         (LIFT-AT F0)
-    )
-    (
-        (ACHIEVE-SERVED P0)
-        (ACHIEVE-SERVED P1)
-        (ACHIEVE-SERVED P2)
-        (ACHIEVE-SERVED P3)
-	)
+)
 )
 

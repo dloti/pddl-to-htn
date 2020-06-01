@@ -1,25 +1,31 @@
-
-(DEFPROBLEM PROBLEM blocks
-    (
-        (BLOCK A)
-        (BLOCK C)
-        (BLOCK D)
-        (BLOCK B)
-        (OBJECT A)
-        (OBJECT C)
-        (OBJECT D)
-        (OBJECT B)
+(define (problem p)
+(:domain blocks)
+(:objects
+	A - BLOCK
+	C - BLOCK
+	D - BLOCK
+	B - BLOCK
+	A - OBJECT
+	C - OBJECT
+	D - OBJECT
+	B - OBJECT
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-ON D C)
+	(ACHIEVE-ON C A)
+	(ACHIEVE-ON A B)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (CLEAR B)
         (ONTABLE D)
         (ON B C)
         (ON C A)
         (ON A D)
         (HANDEMPTY)
-    )
-    (
-        (ACHIEVE-ON D C)
-        (ACHIEVE-ON C A)
-        (ACHIEVE-ON A B)
-	)
+)
 )
 

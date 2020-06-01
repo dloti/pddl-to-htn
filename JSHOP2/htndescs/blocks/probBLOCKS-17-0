@@ -1,40 +1,64 @@
-
-(DEFPROBLEM PROBLEM blocks
-    (
-        (BLOCK C)
-        (BLOCK D)
-        (BLOCK E)
-        (BLOCK F)
-        (BLOCK B)
-        (BLOCK I)
-        (BLOCK J)
-        (BLOCK A)
-        (BLOCK N)
-        (BLOCK O)
-        (BLOCK K)
-        (BLOCK M)
-        (BLOCK P)
-        (BLOCK H)
-        (BLOCK G)
-        (BLOCK L)
-        (BLOCK Q)
-        (OBJECT C)
-        (OBJECT D)
-        (OBJECT E)
-        (OBJECT F)
-        (OBJECT B)
-        (OBJECT I)
-        (OBJECT J)
-        (OBJECT A)
-        (OBJECT N)
-        (OBJECT O)
-        (OBJECT K)
-        (OBJECT M)
-        (OBJECT P)
-        (OBJECT H)
-        (OBJECT G)
-        (OBJECT L)
-        (OBJECT Q)
+(define (problem p)
+(:domain blocks)
+(:objects
+	C - BLOCK
+	D - BLOCK
+	E - BLOCK
+	F - BLOCK
+	B - BLOCK
+	I - BLOCK
+	J - BLOCK
+	A - BLOCK
+	N - BLOCK
+	O - BLOCK
+	K - BLOCK
+	M - BLOCK
+	P - BLOCK
+	H - BLOCK
+	G - BLOCK
+	L - BLOCK
+	Q - BLOCK
+	C - OBJECT
+	D - OBJECT
+	E - OBJECT
+	F - OBJECT
+	B - OBJECT
+	I - OBJECT
+	J - OBJECT
+	A - OBJECT
+	N - OBJECT
+	O - OBJECT
+	K - OBJECT
+	M - OBJECT
+	P - OBJECT
+	H - OBJECT
+	G - OBJECT
+	L - OBJECT
+	Q - OBJECT
+)
+(:htn
+	:tasks (and
+	(ACHIEVE-ON Q N)
+	(ACHIEVE-ON N L)
+	(ACHIEVE-ON L O)
+	(ACHIEVE-ON O J)
+	(ACHIEVE-ON J H)
+	(ACHIEVE-ON H C)
+	(ACHIEVE-ON C E)
+	(ACHIEVE-ON E M)
+	(ACHIEVE-ON M P)
+	(ACHIEVE-ON P A)
+	(ACHIEVE-ON A G)
+	(ACHIEVE-ON G B)
+	(ACHIEVE-ON B I)
+	(ACHIEVE-ON I K)
+	(ACHIEVE-ON K F)
+	(ACHIEVE-ON F D)
+	)
+:ordering ( )
+:constraints ( )
+)
+(:init
         (CLEAR Q)
         (CLEAR L)
         (CLEAR G)
@@ -58,24 +82,6 @@
         (ON C O)
         (ON H N)
         (HANDEMPTY)
-    )
-    (
-        (ACHIEVE-ON Q N)
-        (ACHIEVE-ON N L)
-        (ACHIEVE-ON L O)
-        (ACHIEVE-ON O J)
-        (ACHIEVE-ON J H)
-        (ACHIEVE-ON H C)
-        (ACHIEVE-ON C E)
-        (ACHIEVE-ON E M)
-        (ACHIEVE-ON M P)
-        (ACHIEVE-ON P A)
-        (ACHIEVE-ON A G)
-        (ACHIEVE-ON G B)
-        (ACHIEVE-ON B I)
-        (ACHIEVE-ON I K)
-        (ACHIEVE-ON K F)
-        (ACHIEVE-ON F D)
-	)
+)
 )
 
