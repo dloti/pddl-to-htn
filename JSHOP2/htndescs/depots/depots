@@ -347,6 +347,12 @@
 ( :method M-ACHIEVE-AT
 	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
 	:task  ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
+	:precondition  ( LOCKED-AT ?TRUCK0 ?PLACE1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?TRUCK0 ?PLACE1 ))
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
+	:task  ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
 	:precondition (and ( AT ?TRUCK0 ?PLACE1 ) ( not ( LOCKED-AT ?TRUCK0 ?PLACE1 )) )
 	:ordered-subtasks (and  ( i-LOCK-AT ?TRUCK0 ?PLACE1 ))
 )
@@ -367,6 +373,12 @@
 	:task  ( ACHIEVE-AT0 ?TRUCK0 ?PLACE1 )
 	:precondition (and ( not ( AT ?TRUCK0 ?PLACE1 ) ) ( AT ?TRUCK0 ?PLACE3 ) )
 	:ordered-subtasks (and  ( DRIVE ?TRUCK0 ?PLACE3 ?PLACE6 ) ( ACHIEVE-AT0 ?TRUCK0 ?PLACE1 ) )
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?CRATE0 - CRATE ?PLACE1 - PLACE )
+	:task  ( ACHIEVE-AT ?CRATE0 ?PLACE1 )
+	:precondition  ( LOCKED-AT ?CRATE0 ?PLACE1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?CRATE0 ?PLACE1 ))
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?CRATE0 - CRATE ?PLACE1 - PLACE )
@@ -415,6 +427,12 @@
 	:task ( ACHIEVE-LIFTING1 ?HOIST0 ?CRATE1 )
 	:precondition (and ( not ( LIFTING ?HOIST0 ?CRATE1 ) ) ( AT ?CRATE1 ?PLACE3 ) ( ON ?CRATE1 ?SURFACE6 ) )
 	:ordered-subtasks (and  ( DO-AT-LIFT1 ?HOIST4 ?CRATE1 ?SURFACE6 ?PLACE3 ) ( ACHIEVE-LIFTING1 ?HOIST0 ?CRATE1 ) )
+)
+( :method M-ACHIEVE-LIFTING
+	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE )
+	:task  ( ACHIEVE-LIFTING ?HOIST0 ?CRATE1 )
+	:precondition  ( LOCKED-LIFTING ?HOIST0 ?CRATE1 )
+	:ordered-subtasks (and  ( i-FLAG-LIFTING ?HOIST0 ?CRATE1 ))
 )
 ( :method M-ACHIEVE-LIFTING
 	:parameters ( ?HOIST0 - HOIST ?CRATE1 - CRATE )
@@ -473,6 +491,12 @@
 ( :method M-ACHIEVE-IN
 	:parameters ( ?CRATE0 - CRATE ?TRUCK1 - TRUCK )
 	:task  ( ACHIEVE-IN ?CRATE0 ?TRUCK1 )
+	:precondition  ( LOCKED-IN ?CRATE0 ?TRUCK1 )
+	:ordered-subtasks (and  ( i-FLAG-IN ?CRATE0 ?TRUCK1 ))
+)
+( :method M-ACHIEVE-IN
+	:parameters ( ?CRATE0 - CRATE ?TRUCK1 - TRUCK )
+	:task  ( ACHIEVE-IN ?CRATE0 ?TRUCK1 )
 	:precondition (and ( IN ?CRATE0 ?TRUCK1 ) ( not ( LOCKED-IN ?CRATE0 ?TRUCK1 )) )
 	:ordered-subtasks (and  ( i-LOCK-IN ?CRATE0 ?TRUCK1 ))
 )
@@ -493,6 +517,12 @@
 	:task  ( ACHIEVE-IN1 ?CRATE0 ?TRUCK1 )
 	:precondition (and ( not ( IN ?CRATE0 ?TRUCK1 ) ) ( IN ?CRATE0 ?TRUCK3 ) ( AT ?HOIST4 ?PLACE7 ) )
 	:ordered-subtasks (and  ( DO-IN-UNLOAD1 ?HOIST4 ?CRATE0 ?TRUCK3 ?PLACE7 ) ( ACHIEVE-IN1 ?CRATE0 ?TRUCK1 ) )
+)
+( :method M-ACHIEVE-ON
+	:parameters ( ?CRATE0 - CRATE ?SURFACE1 - SURFACE )
+	:task  ( ACHIEVE-ON ?CRATE0 ?SURFACE1 )
+	:precondition  ( LOCKED-ON ?CRATE0 ?SURFACE1 )
+	:ordered-subtasks (and  ( i-FLAG-ON ?CRATE0 ?SURFACE1 ))
 )
 ( :method M-ACHIEVE-ON
 	:parameters ( ?CRATE0 - CRATE ?SURFACE1 - SURFACE )
@@ -641,6 +671,12 @@
 ( :method M-ACHIEVE-CLEAR
 	:parameters ( ?SURFACE0 - SURFACE )
 	:task  ( ACHIEVE-CLEAR ?SURFACE0 )
+	:precondition  ( LOCKED-CLEAR ?SURFACE0 )
+	:ordered-subtasks (and  ( i-FLAG-CLEAR ?SURFACE0 ))
+)
+( :method M-ACHIEVE-CLEAR
+	:parameters ( ?SURFACE0 - SURFACE )
+	:task  ( ACHIEVE-CLEAR ?SURFACE0 )
 	:precondition (and ( CLEAR ?SURFACE0 ) ( not ( LOCKED-CLEAR ?SURFACE0 )) )
 	:ordered-subtasks (and  ( i-LOCK-CLEAR ?SURFACE0 ))
 )
@@ -749,6 +785,12 @@
 ( :method M-ACHIEVE-CLEAR
 	:parameters ( ?CRATE0 - CRATE )
 	:task  ( ACHIEVE-CLEAR ?CRATE0 )
+	:precondition  ( LOCKED-CLEAR ?CRATE0 )
+	:ordered-subtasks (and  ( i-FLAG-CLEAR ?CRATE0 ))
+)
+( :method M-ACHIEVE-CLEAR
+	:parameters ( ?CRATE0 - CRATE )
+	:task  ( ACHIEVE-CLEAR ?CRATE0 )
 	:precondition (and ( CLEAR ?CRATE0 ) ( not ( LOCKED-CLEAR ?CRATE0 )) )
 	:ordered-subtasks (and  ( i-LOCK-CLEAR ?CRATE0 ))
 )
@@ -763,6 +805,12 @@
 	:task ( ACHIEVE-CLEAR4 ?CRATE0 )
 	:precondition  ( CLEAR ?CRATE0 )
 	:subtasks ( )
+)
+( :method M-ACHIEVE-AVAILABLE
+	:parameters ( ?HOIST0 - HOIST )
+	:task  ( ACHIEVE-AVAILABLE ?HOIST0 )
+	:precondition  ( LOCKED-AVAILABLE ?HOIST0 )
+	:ordered-subtasks (and  ( i-FLAG-AVAILABLE ?HOIST0 ))
 )
 ( :method M-ACHIEVE-AVAILABLE
 	:parameters ( ?HOIST0 - HOIST )

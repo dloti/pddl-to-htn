@@ -122,6 +122,12 @@
 ( :method M-ACHIEVE-LIFT-AT
 	:parameters ( ?FLOOR0 - FLOOR )
 	:task  ( ACHIEVE-LIFT-AT ?FLOOR0 )
+	:precondition  ( LOCKED-LIFT-AT ?FLOOR0 )
+	:ordered-subtasks (and  ( i-FLAG-LIFT-AT ?FLOOR0 ))
+)
+( :method M-ACHIEVE-LIFT-AT
+	:parameters ( ?FLOOR0 - FLOOR )
+	:task  ( ACHIEVE-LIFT-AT ?FLOOR0 )
 	:precondition (and ( LIFT-AT ?FLOOR0 ) ( not ( LOCKED-LIFT-AT ?FLOOR0 )) )
 	:ordered-subtasks (and  ( i-LOCK-LIFT-AT ?FLOOR0 ))
 )
@@ -152,6 +158,12 @@
 ( :method M-ACHIEVE-BOARDED
 	:parameters ( ?PASSENGER0 - PASSENGER )
 	:task  ( ACHIEVE-BOARDED ?PASSENGER0 )
+	:precondition  ( LOCKED-BOARDED ?PASSENGER0 )
+	:ordered-subtasks (and  ( i-FLAG-BOARDED ?PASSENGER0 ))
+)
+( :method M-ACHIEVE-BOARDED
+	:parameters ( ?PASSENGER0 - PASSENGER )
+	:task  ( ACHIEVE-BOARDED ?PASSENGER0 )
 	:precondition (and ( BOARDED ?PASSENGER0 ) ( not ( LOCKED-BOARDED ?PASSENGER0 )) )
 	:ordered-subtasks (and  ( i-LOCK-BOARDED ?PASSENGER0 ))
 )
@@ -172,6 +184,12 @@
 	:task  ( ACHIEVE-BOARDED1 ?PASSENGER0 )
 	:precondition (and ( not ( BOARDED ?PASSENGER0 ) ) ( not ( BOARDED ?PASSENGER0 ) ) ( ORIGIN ?PASSENGER0 ?FLOOR2 ) )
 	:ordered-subtasks (and  ( DO-BOARDED-BOARD1 ?FLOOR2 ?PASSENGER0 ) ( ACHIEVE-BOARDED1 ?PASSENGER0 ) )
+)
+( :method M-ACHIEVE-SERVED
+	:parameters ( ?PASSENGER0 - PASSENGER )
+	:task  ( ACHIEVE-SERVED ?PASSENGER0 )
+	:precondition  ( LOCKED-SERVED ?PASSENGER0 )
+	:ordered-subtasks (and  ( i-FLAG-SERVED ?PASSENGER0 ))
 )
 ( :method M-ACHIEVE-SERVED
 	:parameters ( ?PASSENGER0 - PASSENGER )

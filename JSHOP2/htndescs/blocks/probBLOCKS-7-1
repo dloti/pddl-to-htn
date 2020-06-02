@@ -18,14 +18,20 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-ON A E)
-	(ACHIEVE-ON E B)
-	(ACHIEVE-ON B F)
-	(ACHIEVE-ON F G)
-	(ACHIEVE-ON G C)
-	(ACHIEVE-ON C D)
+	(task0 (ACHIEVE-ON A E))
+	(task1 (ACHIEVE-ON E B))
+	(task2 (ACHIEVE-ON B F))
+	(task3 (ACHIEVE-ON F G))
+	(task4 (ACHIEVE-ON G C))
+	(task5 (ACHIEVE-ON C D))
 	)
-:ordering ( )
+:ordering (and
+	(task0 < task1)
+	(task1 < task2)
+	(task2 < task3)
+	(task3 < task4)
+	(task4 < task5)
+)
 :constraints ( )
 )
 (:init

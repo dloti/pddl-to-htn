@@ -64,14 +64,20 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-ON CRATE0 CRATE1)
-	(ACHIEVE-ON CRATE1 PALLET2)
-	(ACHIEVE-ON CRATE2 PALLET0)
-	(ACHIEVE-ON CRATE3 CRATE2)
-	(ACHIEVE-ON CRATE4 PALLET1)
-	(ACHIEVE-ON CRATE5 CRATE0)
+	(task0 (ACHIEVE-ON CRATE0 CRATE1))
+	(task1 (ACHIEVE-ON CRATE1 PALLET2))
+	(task2 (ACHIEVE-ON CRATE2 PALLET0))
+	(task3 (ACHIEVE-ON CRATE3 CRATE2))
+	(task4 (ACHIEVE-ON CRATE4 PALLET1))
+	(task5 (ACHIEVE-ON CRATE5 CRATE0))
 	)
-:ordering ( )
+:ordering (and
+	(task0 < task1)
+	(task1 < task2)
+	(task2 < task3)
+	(task3 < task4)
+	(task4 < task5)
+)
 :constraints ( )
 )
 (:init

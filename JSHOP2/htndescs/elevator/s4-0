@@ -28,12 +28,16 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-SERVED P0)
-	(ACHIEVE-SERVED P1)
-	(ACHIEVE-SERVED P2)
-	(ACHIEVE-SERVED P3)
+	(task0 (ACHIEVE-SERVED P0))
+	(task1 (ACHIEVE-SERVED P1))
+	(task2 (ACHIEVE-SERVED P2))
+	(task3 (ACHIEVE-SERVED P3))
 	)
-:ordering ( )
+:ordering (and
+	(task0 < task1)
+	(task1 < task2)
+	(task2 < task3)
+)
 :constraints ( )
 )
 (:init

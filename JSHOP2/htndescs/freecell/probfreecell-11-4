@@ -70,12 +70,16 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-HOME CJ)
-	(ACHIEVE-HOME DJ)
-	(ACHIEVE-HOME HJ)
-	(ACHIEVE-HOME SJ)
+	(task0 (ACHIEVE-HOME CJ))
+	(task1 (ACHIEVE-HOME DJ))
+	(task2 (ACHIEVE-HOME HJ))
+	(task3 (ACHIEVE-HOME SJ))
 	)
-:ordering ( )
+:ordering (and
+	(task0 < task1)
+	(task1 < task2)
+	(task2 < task3)
+)
 :constraints ( )
 )
 (:init

@@ -189,6 +189,12 @@
 ( :method M-ACHIEVE-AT
 	:parameters ( ?OBJ0 - OBJ ?LOCATION1 - LOCATION )
 	:task  ( ACHIEVE-AT ?OBJ0 ?LOCATION1 )
+	:precondition  ( LOCKED-AT ?OBJ0 ?LOCATION1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?OBJ0 ?LOCATION1 ))
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?OBJ0 - OBJ ?LOCATION1 - LOCATION )
+	:task  ( ACHIEVE-AT ?OBJ0 ?LOCATION1 )
 	:precondition (and ( AT ?OBJ0 ?LOCATION1 ) ( not ( LOCKED-AT ?OBJ0 ?LOCATION1 )) )
 	:ordered-subtasks (and  ( i-LOCK-AT ?OBJ0 ?LOCATION1 ))
 )
@@ -225,6 +231,12 @@
 ( :method M-ACHIEVE-IN
 	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK )
 	:task  ( ACHIEVE-IN ?OBJ0 ?TRUCK1 )
+	:precondition  ( LOCKED-IN ?OBJ0 ?TRUCK1 )
+	:ordered-subtasks (and  ( i-FLAG-IN ?OBJ0 ?TRUCK1 ))
+)
+( :method M-ACHIEVE-IN
+	:parameters ( ?OBJ0 - OBJ ?TRUCK1 - TRUCK )
+	:task  ( ACHIEVE-IN ?OBJ0 ?TRUCK1 )
 	:precondition (and ( IN ?OBJ0 ?TRUCK1 ) ( not ( LOCKED-IN ?OBJ0 ?TRUCK1 )) )
 	:ordered-subtasks (and  ( i-LOCK-IN ?OBJ0 ?TRUCK1 ))
 )
@@ -245,6 +257,12 @@
 	:task  ( ACHIEVE-IN0 ?OBJ0 ?TRUCK1 )
 	:precondition (and ( not ( IN ?OBJ0 ?TRUCK1 ) ) ( IN ?OBJ0 ?TRUCK3 ) )
 	:ordered-subtasks (and  ( DO-IN-UNLOAD-TRUCK0 ?OBJ0 ?TRUCK3 ?LOCATION6 ) ( ACHIEVE-IN0 ?OBJ0 ?TRUCK1 ) )
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?DRIVER0 - DRIVER ?LOCATION1 - LOCATION )
+	:task  ( ACHIEVE-AT ?DRIVER0 ?LOCATION1 )
+	:precondition  ( LOCKED-AT ?DRIVER0 ?LOCATION1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?DRIVER0 ?LOCATION1 ))
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?DRIVER0 - DRIVER ?LOCATION1 - LOCATION )
@@ -297,6 +315,12 @@
 ( :method M-ACHIEVE-DRIVING
 	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK )
 	:task  ( ACHIEVE-DRIVING ?DRIVER0 ?TRUCK1 )
+	:precondition  ( LOCKED-DRIVING ?DRIVER0 ?TRUCK1 )
+	:ordered-subtasks (and  ( i-FLAG-DRIVING ?DRIVER0 ?TRUCK1 ))
+)
+( :method M-ACHIEVE-DRIVING
+	:parameters ( ?DRIVER0 - DRIVER ?TRUCK1 - TRUCK )
+	:task  ( ACHIEVE-DRIVING ?DRIVER0 ?TRUCK1 )
 	:precondition (and ( DRIVING ?DRIVER0 ?TRUCK1 ) ( not ( LOCKED-DRIVING ?DRIVER0 ?TRUCK1 )) )
 	:ordered-subtasks (and  ( i-LOCK-DRIVING ?DRIVER0 ?TRUCK1 ))
 )
@@ -321,6 +345,12 @@
 ( :method M-ACHIEVE-AT
 	:parameters ( ?TRUCK0 - TRUCK ?LOCATION1 - LOCATION )
 	:task  ( ACHIEVE-AT ?TRUCK0 ?LOCATION1 )
+	:precondition  ( LOCKED-AT ?TRUCK0 ?LOCATION1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?TRUCK0 ?LOCATION1 ))
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?TRUCK0 - TRUCK ?LOCATION1 - LOCATION )
+	:task  ( ACHIEVE-AT ?TRUCK0 ?LOCATION1 )
 	:precondition (and ( AT ?TRUCK0 ?LOCATION1 ) ( not ( LOCKED-AT ?TRUCK0 ?LOCATION1 )) )
 	:ordered-subtasks (and  ( i-LOCK-AT ?TRUCK0 ?LOCATION1 ))
 )
@@ -341,6 +371,12 @@
 	:task  ( ACHIEVE-AT2 ?TRUCK0 ?LOCATION1 )
 	:precondition (and ( not ( AT ?TRUCK0 ?LOCATION1 ) ) ( AT ?TRUCK0 ?LOCATION3 ) ( LINK ?LOCATION3 ?LOCATION6 ) )
 	:ordered-subtasks (and  ( DO-AT-DRIVE-TRUCK2 ?TRUCK0 ?LOCATION3 ?LOCATION6 ?DRIVER7 ) ( ACHIEVE-AT2 ?TRUCK0 ?LOCATION1 ) )
+)
+( :method M-ACHIEVE-EMPTY
+	:parameters ( ?TRUCK0 - TRUCK )
+	:task  ( ACHIEVE-EMPTY ?TRUCK0 )
+	:precondition  ( LOCKED-EMPTY ?TRUCK0 )
+	:ordered-subtasks (and  ( i-FLAG-EMPTY ?TRUCK0 ))
 )
 ( :method M-ACHIEVE-EMPTY
 	:parameters ( ?TRUCK0 - TRUCK )

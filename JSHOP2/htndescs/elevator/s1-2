@@ -10,9 +10,10 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-SERVED P0)
+	(task0 (ACHIEVE-SERVED P0))
 	)
-:ordering ( )
+:ordering (
+)
 :constraints ( )
 )
 (:init

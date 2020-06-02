@@ -33,11 +33,14 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-AT PLANE1 CITY1)
-	(ACHIEVE-AT PERSON1 CITY0)
-	(ACHIEVE-AT PERSON2 CITY2)
+	(task0 (ACHIEVE-AT PLANE1 CITY1))
+	(task1 (ACHIEVE-AT PERSON1 CITY0))
+	(task2 (ACHIEVE-AT PERSON2 CITY2))
 	)
-:ordering ( )
+:ordering (and
+	(task0 < task1)
+	(task1 < task2)
+)
 :constraints ( )
 )
 (:init

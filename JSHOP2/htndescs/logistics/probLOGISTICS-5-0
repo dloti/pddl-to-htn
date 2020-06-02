@@ -50,13 +50,18 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-AT OBJ23 APT2)
-	(ACHIEVE-AT OBJ22 APT1)
-	(ACHIEVE-AT OBJ13 APT2)
-	(ACHIEVE-AT OBJ12 POS2)
-	(ACHIEVE-AT OBJ11 POS2)
+	(task0 (ACHIEVE-AT OBJ23 APT2))
+	(task1 (ACHIEVE-AT OBJ22 APT1))
+	(task2 (ACHIEVE-AT OBJ13 APT2))
+	(task3 (ACHIEVE-AT OBJ12 POS2))
+	(task4 (ACHIEVE-AT OBJ11 POS2))
 	)
-:ordering ( )
+:ordering (and
+	(task0 < task1)
+	(task1 < task2)
+	(task2 < task3)
+	(task3 < task4)
+)
 :constraints ( )
 )
 (:init

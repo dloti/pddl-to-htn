@@ -58,12 +58,16 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-HOME C8)
-	(ACHIEVE-HOME D8)
-	(ACHIEVE-HOME H8)
-	(ACHIEVE-HOME S8)
+	(task0 (ACHIEVE-HOME C8))
+	(task1 (ACHIEVE-HOME D8))
+	(task2 (ACHIEVE-HOME H8))
+	(task3 (ACHIEVE-HOME S8))
 	)
-:ordering ( )
+:ordering (and
+	(task0 < task1)
+	(task1 < task2)
+	(task2 < task3)
+)
 :constraints ( )
 )
 (:init

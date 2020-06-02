@@ -682,6 +682,12 @@
 ( :method M-ACHIEVE-ON
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD )
 	:task  ( ACHIEVE-ON ?CARD0 ?CARD1 )
+	:precondition  ( LOCKED-ON ?CARD0 ?CARD1 )
+	:ordered-subtasks (and  ( i-FLAG-ON ?CARD0 ?CARD1 ))
+)
+( :method M-ACHIEVE-ON
+	:parameters ( ?CARD0 - CARD ?CARD1 - CARD )
+	:task  ( ACHIEVE-ON ?CARD0 ?CARD1 )
 	:precondition (and ( ON ?CARD0 ?CARD1 ) ( not ( LOCKED-ON ?CARD0 ?CARD1 )) )
 	:ordered-subtasks (and  ( i-LOCK-ON ?CARD0 ?CARD1 ))
 )
@@ -784,6 +790,12 @@
 ( :method M-ACHIEVE-BOTTOMCOL
 	:parameters ( ?CARD0 - CARD )
 	:task  ( ACHIEVE-BOTTOMCOL ?CARD0 )
+	:precondition  ( LOCKED-BOTTOMCOL ?CARD0 )
+	:ordered-subtasks (and  ( i-FLAG-BOTTOMCOL ?CARD0 ))
+)
+( :method M-ACHIEVE-BOTTOMCOL
+	:parameters ( ?CARD0 - CARD )
+	:task  ( ACHIEVE-BOTTOMCOL ?CARD0 )
 	:precondition (and ( BOTTOMCOL ?CARD0 ) ( not ( LOCKED-BOTTOMCOL ?CARD0 )) )
 	:ordered-subtasks (and  ( i-LOCK-BOTTOMCOL ?CARD0 ))
 )
@@ -862,6 +874,12 @@
 ( :method M-ACHIEVE-INCELL
 	:parameters ( ?CARD0 - CARD )
 	:task  ( ACHIEVE-INCELL ?CARD0 )
+	:precondition  ( LOCKED-INCELL ?CARD0 )
+	:ordered-subtasks (and  ( i-FLAG-INCELL ?CARD0 ))
+)
+( :method M-ACHIEVE-INCELL
+	:parameters ( ?CARD0 - CARD )
+	:task  ( ACHIEVE-INCELL ?CARD0 )
 	:precondition (and ( INCELL ?CARD0 ) ( not ( LOCKED-INCELL ?CARD0 )) )
 	:ordered-subtasks (and  ( i-LOCK-INCELL ?CARD0 ))
 )
@@ -936,6 +954,12 @@
 	:task ( ACHIEVE-HOME0 ?CARD0 )
 	:precondition (and ( not ( HOME ?CARD0 ) ) ( INCELL ?CARD0 ) ( SUIT ?CARD5 ?SUIT3 ) ( VALUE ?CARD5 ?NUM6 ) ( SUCCESSOR ?NUM4 ?NUM6 ) ( SUCCESSOR ?NUM8 ?NUM7 ) ( SUIT ?CARD0 ?SUIT3 ) ( VALUE ?CARD0 ?NUM4 ) )
 	:ordered-subtasks (and  ( DO-INCELL-HOMEFROMFREECELL0 ?CARD0 ?SUIT3 ?NUM4 ?CARD5 ?NUM6 ?NUM7 ?NUM8 ) ( ACHIEVE-HOME0 ?CARD0 ) )
+)
+( :method M-ACHIEVE-HOME
+	:parameters ( ?CARD0 - CARD )
+	:task  ( ACHIEVE-HOME ?CARD0 )
+	:precondition  ( LOCKED-HOME ?CARD0 )
+	:ordered-subtasks (and  ( i-FLAG-HOME ?CARD0 ))
 )
 ( :method M-ACHIEVE-HOME
 	:parameters ( ?CARD0 - CARD )
@@ -1194,6 +1218,12 @@
 	:task ( ACHIEVE-CLEAR2 ?CARD0 )
 	:precondition (and ( not ( CLEAR ?CARD0 ) ) ( ON ?CARD1 ?CARD0 ) ( HOME ?CARD7 ) )
 	:ordered-subtasks (and  ( DO-ON-SENDTOHOME2 ?CARD1 ?CARD0 ?SUIT5 ?NUM6 ?CARD7 ?NUM8 ) ( ACHIEVE-CLEAR2 ?CARD0 ) )
+)
+( :method M-ACHIEVE-CLEAR
+	:parameters ( ?CARD0 - CARD )
+	:task  ( ACHIEVE-CLEAR ?CARD0 )
+	:precondition  ( LOCKED-CLEAR ?CARD0 )
+	:ordered-subtasks (and  ( i-FLAG-CLEAR ?CARD0 ))
 )
 ( :method M-ACHIEVE-CLEAR
 	:parameters ( ?CARD0 - CARD )
@@ -1618,6 +1648,12 @@
 ( :method M-ACHIEVE-CELLSPACE
 	:parameters ( ?NUM0 - NUM )
 	:task  ( ACHIEVE-CELLSPACE ?NUM0 )
+	:precondition  ( LOCKED-CELLSPACE ?NUM0 )
+	:ordered-subtasks (and  ( i-FLAG-CELLSPACE ?NUM0 ))
+)
+( :method M-ACHIEVE-CELLSPACE
+	:parameters ( ?NUM0 - NUM )
+	:task  ( ACHIEVE-CELLSPACE ?NUM0 )
 	:precondition (and ( CELLSPACE ?NUM0 ) ( not ( LOCKED-CELLSPACE ?NUM0 )) )
 	:ordered-subtasks (and  ( i-LOCK-CELLSPACE ?NUM0 ))
 )
@@ -1662,6 +1698,12 @@
 	:task  ( ACHIEVE-CELLSPACE4 ?NUM0 )
 	:precondition (and ( not ( CELLSPACE ?NUM0 ) ) ( CELLSPACE ?NUM1 ) ( SUCCESSOR ?NUM3 ?NUM4 ) )
 	:ordered-subtasks (and  ( DO-CELLSPACE-NEWCOLFROMFREECELL4 ?CARD2 ?NUM3 ?NUM4 ?NUM1 ?NUM6 ) ( ACHIEVE-CELLSPACE4 ?NUM0 ) )
+)
+( :method M-ACHIEVE-COLSPACE
+	:parameters ( ?NUM0 - NUM )
+	:task  ( ACHIEVE-COLSPACE ?NUM0 )
+	:precondition  ( LOCKED-COLSPACE ?NUM0 )
+	:ordered-subtasks (and  ( i-FLAG-COLSPACE ?NUM0 ))
 )
 ( :method M-ACHIEVE-COLSPACE
 	:parameters ( ?NUM0 - NUM )

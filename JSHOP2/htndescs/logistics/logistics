@@ -116,6 +116,12 @@
 ( :method M-ACHIEVE-AT
 	:parameters ( ?PACKAGE0 - PACKAGE ?PLACE1 - PLACE )
 	:task  ( ACHIEVE-AT ?PACKAGE0 ?PLACE1 )
+	:precondition  ( LOCKED-AT ?PACKAGE0 ?PLACE1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?PACKAGE0 ?PLACE1 ))
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?PACKAGE0 - PACKAGE ?PLACE1 - PLACE )
+	:task  ( ACHIEVE-AT ?PACKAGE0 ?PLACE1 )
 	:precondition (and ( AT ?PACKAGE0 ?PLACE1 ) ( not ( LOCKED-AT ?PACKAGE0 ?PLACE1 )) )
 	:ordered-subtasks (and  ( i-LOCK-AT ?PACKAGE0 ?PLACE1 ))
 )
@@ -170,6 +176,12 @@
 ( :method M-ACHIEVE-IN
 	:parameters ( ?PACKAGE0 - PACKAGE ?TRUCK1 - TRUCK )
 	:task  ( ACHIEVE-IN ?PACKAGE0 ?TRUCK1 )
+	:precondition  ( LOCKED-IN ?PACKAGE0 ?TRUCK1 )
+	:ordered-subtasks (and  ( i-FLAG-IN ?PACKAGE0 ?TRUCK1 ))
+)
+( :method M-ACHIEVE-IN
+	:parameters ( ?PACKAGE0 - PACKAGE ?TRUCK1 - TRUCK )
+	:task  ( ACHIEVE-IN ?PACKAGE0 ?TRUCK1 )
 	:precondition (and ( IN ?PACKAGE0 ?TRUCK1 ) ( not ( LOCKED-IN ?PACKAGE0 ?TRUCK1 )) )
 	:ordered-subtasks (and  ( i-LOCK-IN ?PACKAGE0 ?TRUCK1 ))
 )
@@ -218,6 +230,12 @@
 ( :method M-ACHIEVE-IN
 	:parameters ( ?PACKAGE0 - PACKAGE ?AIRPLANE1 - AIRPLANE )
 	:task  ( ACHIEVE-IN ?PACKAGE0 ?AIRPLANE1 )
+	:precondition  ( LOCKED-IN ?PACKAGE0 ?AIRPLANE1 )
+	:ordered-subtasks (and  ( i-FLAG-IN ?PACKAGE0 ?AIRPLANE1 ))
+)
+( :method M-ACHIEVE-IN
+	:parameters ( ?PACKAGE0 - PACKAGE ?AIRPLANE1 - AIRPLANE )
+	:task  ( ACHIEVE-IN ?PACKAGE0 ?AIRPLANE1 )
 	:precondition (and ( IN ?PACKAGE0 ?AIRPLANE1 ) ( not ( LOCKED-IN ?PACKAGE0 ?AIRPLANE1 )) )
 	:ordered-subtasks (and  ( i-LOCK-IN ?PACKAGE0 ?AIRPLANE1 ))
 )
@@ -242,6 +260,12 @@
 ( :method M-ACHIEVE-AT
 	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
 	:task  ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
+	:precondition  ( LOCKED-AT ?TRUCK0 ?PLACE1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?TRUCK0 ?PLACE1 ))
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
+	:task  ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
 	:precondition (and ( AT ?TRUCK0 ?PLACE1 ) ( not ( LOCKED-AT ?TRUCK0 ?PLACE1 )) )
 	:ordered-subtasks (and  ( i-LOCK-AT ?TRUCK0 ?PLACE1 ))
 )
@@ -262,6 +286,12 @@
 	:task  ( ACHIEVE-AT1 ?TRUCK0 ?PLACE1 )
 	:precondition (and ( not ( AT ?TRUCK0 ?PLACE1 ) ) ( AT ?TRUCK0 ?PLACE3 ) ( IN-CITY ?PLACE3 ?CITY7 ) ( IN-CITY ?PLACE6 ?CITY7 ) )
 	:ordered-subtasks (and  ( DRIVE-TRUCK ?TRUCK0 ?PLACE3 ?PLACE6 ?CITY7 ) ( ACHIEVE-AT1 ?TRUCK0 ?PLACE1 ) )
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?AIRPLANE0 - AIRPLANE ?AIRPORT1 - AIRPORT )
+	:task  ( ACHIEVE-AT ?AIRPLANE0 ?AIRPORT1 )
+	:precondition  ( LOCKED-AT ?AIRPLANE0 ?AIRPORT1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?AIRPLANE0 ?AIRPORT1 ))
 )
 ( :method M-ACHIEVE-AT
 	:parameters ( ?AIRPLANE0 - AIRPLANE ?AIRPORT1 - AIRPORT )

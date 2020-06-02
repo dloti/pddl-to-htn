@@ -143,6 +143,12 @@
 ( :method M-ACHIEVE-AT
 	:parameters ( ?PERSON0 - PERSON ?CITY1 - CITY )
 	:task  ( ACHIEVE-AT ?PERSON0 ?CITY1 )
+	:precondition  ( LOCKED-AT ?PERSON0 ?CITY1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?PERSON0 ?CITY1 ))
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?PERSON0 - PERSON ?CITY1 - CITY )
+	:task  ( ACHIEVE-AT ?PERSON0 ?CITY1 )
 	:precondition (and ( AT ?PERSON0 ?CITY1 ) ( not ( LOCKED-AT ?PERSON0 ?CITY1 )) )
 	:ordered-subtasks (and  ( i-LOCK-AT ?PERSON0 ?CITY1 ))
 )
@@ -179,6 +185,12 @@
 ( :method M-ACHIEVE-IN
 	:parameters ( ?PERSON0 - PERSON ?AIRCRAFT1 - AIRCRAFT )
 	:task  ( ACHIEVE-IN ?PERSON0 ?AIRCRAFT1 )
+	:precondition  ( LOCKED-IN ?PERSON0 ?AIRCRAFT1 )
+	:ordered-subtasks (and  ( i-FLAG-IN ?PERSON0 ?AIRCRAFT1 ))
+)
+( :method M-ACHIEVE-IN
+	:parameters ( ?PERSON0 - PERSON ?AIRCRAFT1 - AIRCRAFT )
+	:task  ( ACHIEVE-IN ?PERSON0 ?AIRCRAFT1 )
 	:precondition (and ( IN ?PERSON0 ?AIRCRAFT1 ) ( not ( LOCKED-IN ?PERSON0 ?AIRCRAFT1 )) )
 	:ordered-subtasks (and  ( i-LOCK-IN ?PERSON0 ?AIRCRAFT1 ))
 )
@@ -203,6 +215,12 @@
 ( :method M-ACHIEVE-AT
 	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?CITY1 - CITY )
 	:task  ( ACHIEVE-AT ?AIRCRAFT0 ?CITY1 )
+	:precondition  ( LOCKED-AT ?AIRCRAFT0 ?CITY1 )
+	:ordered-subtasks (and  ( i-FLAG-AT ?AIRCRAFT0 ?CITY1 ))
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?CITY1 - CITY )
+	:task  ( ACHIEVE-AT ?AIRCRAFT0 ?CITY1 )
 	:precondition (and ( AT ?AIRCRAFT0 ?CITY1 ) ( not ( LOCKED-AT ?AIRCRAFT0 ?CITY1 )) )
 	:ordered-subtasks (and  ( i-LOCK-AT ?AIRCRAFT0 ?CITY1 ))
 )
@@ -223,6 +241,12 @@
 	:task  ( ACHIEVE-AT1 ?AIRCRAFT0 ?CITY1 )
 	:precondition (and ( not ( AT ?AIRCRAFT0 ?CITY1 ) ) ( AT ?AIRCRAFT0 ?CITY3 ) ( NEXT ?FLEVEL8 ?FLEVEL7 ) )
 	:ordered-subtasks (and  ( DO-AT-FLY1 ?AIRCRAFT0 ?CITY3 ?CITY6 ?FLEVEL7 ?FLEVEL8 ) ( ACHIEVE-AT1 ?AIRCRAFT0 ?CITY1 ) )
+)
+( :method M-ACHIEVE-FUEL-LEVEL
+	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?FLEVEL1 - FLEVEL )
+	:task  ( ACHIEVE-FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 )
+	:precondition  ( LOCKED-FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 )
+	:ordered-subtasks (and  ( i-FLAG-FUEL-LEVEL ?AIRCRAFT0 ?FLEVEL1 ))
 )
 ( :method M-ACHIEVE-FUEL-LEVEL
 	:parameters ( ?AIRCRAFT0 - AIRCRAFT ?FLEVEL1 - FLEVEL )

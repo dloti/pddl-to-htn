@@ -463,10 +463,25 @@ void printHDDLTopACHIEVE(Domain& d, std::vector<std::string>& param_types,
 	if (std::find(printed_locks.begin(), printed_locks.end(), c) == printed_locks.end()) {
 		printed_locks.push_back(c);
 
-		//NOT-LOCKED-X, X -> LOCK-X
 		hddlTasks << "(:task ";
 		hddlTasks<< d.parametrizeHDDLCondition(c, "ACHIEVE-")<<std::endl;
 		hddlTasks<<")"<<std::endl;
+
+		//LOCKED-X, X -> FLAG-X
+		hddlMethods << "( :method ";
+		hddlMethods<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
+		hddlMethods << "\t:task ";
+		hddlMethods<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
+		hddlMethods<<"\t:precondition ";
+			printCondition(hddlMethods, false, c, "LOCKED", true, params);
+			hddlMethods<<std::endl; //end precondition
+		hddlMethods <<"\t:ordered-subtasks (and ";
+			printCondition(hddlMethods, false, c, "i-FLAG", true, params);
+			hddlMethods<<")"<<std::endl;//end subtasks
+		hddlMethods<<")"<<std::endl;
+
+
+		//NOT-LOCKED-X, X -> LOCK-X
 		hddlMethods << "( :method ";
 		hddlMethods<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
 		hddlMethods << "\t:task ";

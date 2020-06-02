@@ -191,6 +191,12 @@
 ( :method M-ACHIEVE-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-HOLDING ?BLOCK0 )
+	:precondition  ( LOCKED-HOLDING ?BLOCK0 )
+	:ordered-subtasks (and  ( i-FLAG-HOLDING ?BLOCK0 ))
+)
+( :method M-ACHIEVE-HOLDING
+	:parameters ( ?BLOCK0 - BLOCK )
+	:task  ( ACHIEVE-HOLDING ?BLOCK0 )
 	:precondition (and ( HOLDING ?BLOCK0 ) ( not ( LOCKED-HOLDING ?BLOCK0 )) )
 	:ordered-subtasks (and  ( i-LOCK-HOLDING ?BLOCK0 ))
 )
@@ -229,6 +235,12 @@
 	:task ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( HOLDING ?BLOCK0 ) )
 	:ordered-subtasks (and  ( PUT-DOWN ?BLOCK0 ) ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) )
+)
+( :method M-ACHIEVE-ON
+	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
+	:task  ( ACHIEVE-ON ?BLOCK0 ?BLOCK1 )
+	:precondition  ( LOCKED-ON ?BLOCK0 ?BLOCK1 )
+	:ordered-subtasks (and  ( i-FLAG-ON ?BLOCK0 ?BLOCK1 ))
 )
 ( :method M-ACHIEVE-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
@@ -281,6 +293,12 @@
 ( :method M-ACHIEVE-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-ONTABLE ?BLOCK0 )
+	:precondition  ( LOCKED-ONTABLE ?BLOCK0 )
+	:ordered-subtasks (and  ( i-FLAG-ONTABLE ?BLOCK0 ))
+)
+( :method M-ACHIEVE-ONTABLE
+	:parameters ( ?BLOCK0 - BLOCK )
+	:task  ( ACHIEVE-ONTABLE ?BLOCK0 )
 	:precondition (and ( ONTABLE ?BLOCK0 ) ( not ( LOCKED-ONTABLE ?BLOCK0 )) )
 	:ordered-subtasks (and  ( i-LOCK-ONTABLE ?BLOCK0 ))
 )
@@ -295,6 +313,12 @@
 	:task ( ACHIEVE-ONTABLE0 ?BLOCK0 )
 	:precondition  ( ONTABLE ?BLOCK0 )
 	:subtasks ( )
+)
+( :method M-ACHIEVE-CLEAR
+	:parameters ( ?BLOCK0 - BLOCK )
+	:task  ( ACHIEVE-CLEAR ?BLOCK0 )
+	:precondition  ( LOCKED-CLEAR ?BLOCK0 )
+	:ordered-subtasks (and  ( i-FLAG-CLEAR ?BLOCK0 ))
 )
 ( :method M-ACHIEVE-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
@@ -403,6 +427,12 @@
 	:task ( ACHIEVE-HOLDING1 ?BLOCK0 )
 	:precondition  ( HOLDING ?BLOCK0 )
 	:subtasks ( )
+)
+( :method M-ACHIEVE-HANDEMPTY
+	:parameters ( )
+	:task  ( ACHIEVE-HANDEMPTY )
+	:precondition  ( LOCKED-HANDEMPTY )
+	:ordered-subtasks (and  ( i-FLAG-HANDEMPTY ))
 )
 ( :method M-ACHIEVE-HANDEMPTY
 	:parameters ( )

@@ -49,13 +49,19 @@ int main( int argc, char *argv[] ) {
 	fout<<"\t:tasks (and"<<std::endl;
 	for ( unsigned j = 0; j < ins.goal.size(); ++j ) {
 		Condition c = d.preds[d.pmap[ins.goal[j].name]];
-		std::cout << "\t(ACHIEVE-" << c.name;
+		fout << "\t(task"<<j<<" (ACHIEVE-" << c.name;
 			for (unsigned k = 0; k < c.params.size(); ++k)
-				std::cout << " " << ins.objects[c.params[k]][ins.goal[j].params[k]];
-			std::cout << ")"<<std::endl;
+				fout << " " << ins.objects[c.params[k]][ins.goal[j].params[k]];
+			fout << "))"<<std::endl;
 	}
 	fout<<"\t)"<<std::endl; //end :tasks
-	fout<<":ordering ( )"<<std::endl;
+	fout<<":ordering (";
+	if(ins.goal.size()>1) fout<<"and";
+	fout<<std::endl;
+	for ( unsigned j = 0; j < ins.goal.size()-1; ++j ) 
+		fout<<"\t(task"<<j<<" < task"<<j+1<<")"<<std::endl;
+
+	fout<<")"<<std::endl;//end ordering
 	fout<<":constraints ( )"<<std::endl;
 	fout<<")"<<std::endl;
 // }

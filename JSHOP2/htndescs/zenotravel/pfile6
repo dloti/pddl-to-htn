@@ -47,13 +47,18 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-AT PERSON1 CITY3)
-	(ACHIEVE-AT PERSON2 CITY1)
-	(ACHIEVE-AT PERSON3 CITY3)
-	(ACHIEVE-AT PERSON4 CITY3)
-	(ACHIEVE-AT PERSON5 CITY1)
+	(task0 (ACHIEVE-AT PERSON1 CITY3))
+	(task1 (ACHIEVE-AT PERSON2 CITY1))
+	(task2 (ACHIEVE-AT PERSON3 CITY3))
+	(task3 (ACHIEVE-AT PERSON4 CITY3))
+	(task4 (ACHIEVE-AT PERSON5 CITY1))
 	)
-:ordering ( )
+:ordering (and
+	(task0 < task1)
+	(task1 < task2)
+	(task2 < task3)
+	(task3 < task4)
+)
 :constraints ( )
 )
 (:init

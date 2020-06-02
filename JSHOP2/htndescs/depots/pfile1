@@ -48,10 +48,12 @@
 )
 (:htn
 	:tasks (and
-	(ACHIEVE-ON CRATE0 PALLET2)
-	(ACHIEVE-ON CRATE1 PALLET1)
+	(task0 (ACHIEVE-ON CRATE0 PALLET2))
+	(task1 (ACHIEVE-ON CRATE1 PALLET1))
 	)
-:ordering ( )
+:ordering (and
+	(task0 < task1)
+)
 :constraints ( )
 )
 (:init
