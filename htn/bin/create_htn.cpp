@@ -780,7 +780,7 @@ void printHDDLAuxOps(std::ostream &stream, Domain &d) {
 					if (std::find(inv_nums.begin(), inv_nums.end(), it1->first) == inv_nums.end())
 						inv_nums.push_back(it1->first);
 			
-            d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-VISIT", "VISITED");
+            //d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-VISIT", "VISITED");
 			d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-FLAG", "FLAGGED");
 			d.printHDDLAuxAction(d.preds[i], hddlActions, true, false, "i-UNFLAG", "FLAGGED");
 			d.printHDDLMethod(d.preds[i], hddlTasks, hddlMethods, "IFUNLOCK", "FLAGGED");
@@ -1013,26 +1013,26 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 										}
 
 									//printTypes(out, d, a.params, pa);
-									if (!isDirReachable) {
-										hddlMethods << " ( not";
-                                        printCondition(hddlMethods, false, pred, "VISITED", true, p2);
-										//printCondition(out, false, pred, "VISITED", true, p2, i);
-										hddlMethods << " )";
-										if (!isPosNegInvariant(i) && !pred.neg) {
-											hddlMethods << " ( not";
-                                            printCondition(hddlMethods, false, add, "VISITED", true, padd);
-											//printCondition(out, false, add, "VISITED", true, padd, i);
-											hddlMethods << " )";
-										}
-									}
+									// if (!isDirReachable) {
+									// 	hddlMethods << " ( not";
+                                    //     printCondition(hddlMethods, false, pred, "VISITED", true, p2);
+									// 	//printCondition(out, false, pred, "VISITED", true, p2, i);
+									// 	hddlMethods << " )";
+									// 	if (!isPosNegInvariant(i) && !pred.neg) {
+									// 		hddlMethods << " ( not";
+                                    //         printCondition(hddlMethods, false, add, "VISITED", true, padd);
+									// 		//printCondition(out, false, add, "VISITED", true, padd, i);
+									// 		hddlMethods << " )";
+									// 	}
+									// }
 									hddlMethods<<" )"<<std::endl; //end precondtion
 
 									hddlMethods<<"\t:ordered-subtasks (and ";
-									if(!isDirReachable) {
-										if (!isPosNegInvariant(i) && !pred.neg)
-                                            printCondition(hddlMethods, false, pred, "i-VISIT", true, p2);
-											//printCondition(out, false, pred, "!!VISIT", true, p2, i);
-									}
+									// if(!isDirReachable) {
+									// 	if (!isPosNegInvariant(i) && !pred.neg)
+                                    //         printCondition(hddlMethods, false, pred, "i-VISIT", true, p2);
+									// 		//printCondition(out, false, pred, "!!VISIT", true, p2, i);
+									// }
 									if (v[z].variable.size() > 0) {
 										Condition cc(del.name + "-" + a.name, del.neg);
 										printCondition(hddlMethods, false, cc, "DO", true, pa, i);
@@ -1089,22 +1089,22 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 								 			if(pred == c3) continue;
 								 			printCondition(hddlMethods, c3.neg, c3, pa, mys );
 								 		}
-									hddlMethods << " ( not";
-                                    printCondition(hddlMethods, false, pred, "VISITED", true, p2);
-								 	//printCondition(out, false, pred, "VISITED", true, p2, i);
-								 	hddlMethods << " )";
-									if (!isPosNegInvariant(i) && !pred.neg){
-										hddlMethods << " ( not";
-                                        printCondition(hddlMethods, false, add, "VISITED", true, padd);
-										//printCondition(out, false, add, "VISITED", true, padd, i);
-										hddlMethods << " )";
-									}
+									// hddlMethods << " ( not";
+                                    // printCondition(hddlMethods, false, pred, "VISITED", true, p2);
+								 	// //printCondition(out, false, pred, "VISITED", true, p2, i);
+								 	// hddlMethods << " )";
+									// if (!isPosNegInvariant(i) && !pred.neg){
+									// 	hddlMethods << " ( not";
+                                    //     printCondition(hddlMethods, false, add, "VISITED", true, padd);
+									// 	//printCondition(out, false, add, "VISITED", true, padd, i);
+									// 	hddlMethods << " )";
+									// }
 								 	hddlMethods<<" )"<<std::endl; //end precondtion
 
 								 	hddlMethods<<"\t:ordered-subtasks (and ";
-								 	if (!isPosNegInvariant(i) && !pred.neg)
-                                        printCondition(hddlMethods, false, pred, "i-VISIT", true, p2);
-								 		//printCondition(out, false, pred, "!!VISIT", true, p2, i);
+								 	// if (!isPosNegInvariant(i) && !pred.neg)
+                                    //     printCondition(hddlMethods, false, pred, "i-VISIT", true, p2);
+								 	// 	//printCondition(out, false, pred, "!!VISIT", true, p2, i);
 
 								 	if ( v[z].variable.size() > 0 ) {
 								 		//std::cout << del << "," << a << "\n";

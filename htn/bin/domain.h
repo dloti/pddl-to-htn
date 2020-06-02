@@ -474,7 +474,7 @@ public:
 			if ( typed ) paramStream << " - " << types[pred.params[i]].name;
 			}
 			out<<paramStream.str()<<" )"<<std::endl;
-			out <<"\t( VISITED-"<<pred.name<<paramStream.str()<<" )"<<std::endl;
+			//out <<"\t( VISITED-"<<pred.name<<paramStream.str()<<" )"<<std::endl;
 			out <<"\t( LOCKED-"<<pred.name<<paramStream.str()<<" )"<<std::endl;
 			out <<"\t( FLAGGED-"<<pred.name<<paramStream.str()<<" )"<<std::endl;
 		}
