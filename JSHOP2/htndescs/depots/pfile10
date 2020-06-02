@@ -100,9 +100,9 @@
 	(task3 (ACHIEVE-ON CRATE4 PALLET5))
 	)
 :ordering (and
-	(task0 < task1)
-	(task1 < task2)
-	(task2 < task3)
+	(task3 < task2)
+	(task2 < task1)
+	(task1 < task0)
 )
 :constraints ( )
 )

@@ -20,9 +20,9 @@
 	(task3 (ACHIEVE-ON D C))
 	)
 :ordering (and
-	(task0 < task1)
-	(task1 < task2)
-	(task2 < task3)
+	(task3 < task2)
+	(task2 < task1)
+	(task1 < task0)
 )
 :constraints ( )
 )

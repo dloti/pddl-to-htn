@@ -45,8 +45,8 @@
 	(task2 (ACHIEVE-COMMUNICATED_IMAGE_DATA OBJECTIVE0 HIGH_RES))
 	)
 :ordering (and
-	(task0 < task1)
-	(task1 < task2)
+	(task2 < task1)
+	(task1 < task0)
 )
 :constraints ( )
 )

@@ -41,8 +41,8 @@
 	(task2 (ACHIEVE-AT PERSON3 CITY2))
 	)
 :ordering (and
-	(task0 < task1)
-	(task1 < task2)
+	(task2 < task1)
+	(task1 < task0)
 )
 :constraints ( )
 )

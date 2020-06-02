@@ -41,8 +41,8 @@
 	(task2 (ACHIEVE-COMMUNICATED_IMAGE_DATA OBJECTIVE0 COLOUR))
 	)
 :ordering (and
-	(task0 < task1)
-	(task1 < task2)
+	(task2 < task1)
+	(task1 < task0)
 )
 :constraints ( )
 )

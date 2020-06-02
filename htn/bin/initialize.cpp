@@ -58,8 +58,8 @@ int main( int argc, char *argv[] ) {
 	fout<<":ordering (";
 	if(ins.goal.size()>1) fout<<"and";
 	fout<<std::endl;
-	for ( unsigned j = 0; j < ins.goal.size()-1; ++j ) 
-		fout<<"\t(task"<<j<<" < task"<<j+1<<")"<<std::endl;
+	for ( unsigned j = ins.goal.size()-1; j > 0; --j ) 
+		fout<<"\t(task"<<j<<" < task"<<j-1<<")"<<std::endl;
 
 	fout<<")"<<std::endl;//end ordering
 	fout<<":constraints ( )"<<std::endl;

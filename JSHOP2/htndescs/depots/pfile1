@@ -52,7 +52,7 @@
 	(task1 (ACHIEVE-ON CRATE1 PALLET1))
 	)
 :ordering (and
-	(task0 < task1)
+	(task1 < task0)
 )
 :constraints ( )
 )
