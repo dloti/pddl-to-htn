@@ -1,0 +1,142 @@
+(define (domain logistics )
+(:requirements :typing)
+(:types
+	PHYSOBJ PLACE CITY - OBJECT
+	VEHICLE PACKAGE - PHYSOBJ
+	TRUCK AIRPLANE - VEHICLE
+	AIRPORT LOCATION - PLACE
+)
+(:predicates
+	( IN-CITY ?PLACE0 - PLACE ?CITY1 - CITY )
+	( LOCKED-IN-CITY ?PLACE0 - PLACE ?CITY1 - CITY )
+	( FLAGGED-IN-CITY ?PLACE0 - PLACE ?CITY1 - CITY )
+	( AT ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE )
+	( LOCKED-AT ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE )
+	( FLAGGED-AT ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE )
+	( IN ?PACKAGE0 - PACKAGE ?VEHICLE1 - VEHICLE )
+	( LOCKED-IN ?PACKAGE0 - PACKAGE ?VEHICLE1 - VEHICLE )
+	( FLAGGED-IN ?PACKAGE0 - PACKAGE ?VEHICLE1 - VEHICLE )
+)
+(:task IFUNLOCK-AT
+	:parameters ( ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE )
+)
+(:task ACHIEVE-AT
+	:parameters ( ?PACKAGE0 - PACKAGE ?PLACE1 - PLACE )
+)
+(:task ACHIEVE-AT
+	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
+)
+(:task ACHIEVE-AT1
+	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
+)
+
+( :method IFUNLOCK-AT
+	:parameters ( ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE )
+	:task ( IFUNLOCK-AT ?PHYSOBJ0 ?PLACE1 )
+	:precondition  ( FLAGGED-AT ?PHYSOBJ0 ?PLACE1 )
+	:ordered-subtasks (and ( i-UNFLAG-AT ?PHYSOBJ0 ?PLACE1 ))
+)
+( :method IFUNLOCK-AT
+	:parameters ( ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE )
+	:task ( IFUNLOCK-AT ?PHYSOBJ0 ?PLACE1 )
+	:precondition (not  ( FLAGGED-AT ?PHYSOBJ0 ?PLACE1 ))
+	:ordered-subtasks (and ( i-UNLOCK-AT ?PHYSOBJ0 ?PLACE1 ))
+)
+
+( :method M-ACHIEVE-AT
+	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
+	:task  ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
+	:precondition  ( LOCKED-AT ?TRUCK0 ?PLACE1 )
+	:ordered-subtasks  ( i-FLAG-AT ?TRUCK0 ?PLACE1 )
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
+	:task  ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
+	:precondition (and ( AT ?TRUCK0 ?PLACE1 ) ( not ( LOCKED-AT ?TRUCK0 ?PLACE1 )) )
+	:ordered-subtasks  ( i-LOCK-AT ?TRUCK0 ?PLACE1 )
+)
+( :method M-ACHIEVE-AT
+	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
+	:task  ( ACHIEVE-AT ?TRUCK0 ?PLACE1 )
+	:precondition (and ( not ( LOCKED-AT ?TRUCK0 ?PLACE1 )) ( not ( AT ?TRUCK0 ?PLACE1 )) )
+	:ordered-subtasks (and ( ACHIEVE-AT1 ?TRUCK0 ?PLACE1 ) ( i-LOCK-AT ?TRUCK0 ?PLACE1 ))
+)
+( :method M-ACHIEVE-AT1
+	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE )
+	:task ( ACHIEVE-AT1 ?TRUCK0 ?PLACE1 )
+	:precondition  ( AT ?TRUCK0 ?PLACE1 )
+	:subtasks ( )
+)
+( :method M-ACHIEVE-AT1
+	:parameters ( ?CITY7 - CITY ?PLACE1 - PLACE ?PLACE3 - PLACE ?PLACE6 - PLACE ?TRUCK0 - TRUCK)
+	:task  ( ACHIEVE-AT1 ?TRUCK0 ?PLACE1 )
+	:precondition (and ( not ( AT ?TRUCK0 ?PLACE1 ) ) ( AT ?TRUCK0 ?PLACE3 ) ( IN-CITY ?PLACE3 ?CITY7 ) ( IN-CITY ?PLACE6 ?CITY7 ) )
+	:ordered-subtasks (and  ( DRIVE-TRUCK ?TRUCK0 ?PLACE3 ?PLACE6 ?CITY7 ) ( ACHIEVE-AT1 ?TRUCK0 ?PLACE1 ) )
+)
+( :action LOAD-TRUCK
+	:parameters ( ?PACKAGE0 - PACKAGE ?TRUCK1 - TRUCK ?PLACE2 - PLACE)
+	:precondition (and
+		 ( AT ?TRUCK1 ?PLACE2 ) ( AT ?PACKAGE0 ?PLACE2 ) ( not ( LOCKED-AT ?PACKAGE0 ?PLACE2 ) ))
+	:effect (and
+		 ( not ( AT ?PACKAGE0 ?PLACE2 ) ) ( IN ?PACKAGE0 ?TRUCK1 ))
+)
+( :action LOAD-AIRPLANE
+	:parameters ( ?PACKAGE0 - PACKAGE ?AIRPLANE1 - AIRPLANE ?PLACE2 - PLACE)
+	:precondition (and
+		 ( AT ?PACKAGE0 ?PLACE2 ) ( AT ?AIRPLANE1 ?PLACE2 ) ( not ( LOCKED-AT ?PACKAGE0 ?PLACE2 ) ))
+	:effect (and
+		 ( not ( AT ?PACKAGE0 ?PLACE2 ) ) ( IN ?PACKAGE0 ?AIRPLANE1 ))
+)
+( :action UNLOAD-TRUCK
+	:parameters ( ?PACKAGE0 - PACKAGE ?TRUCK1 - TRUCK ?PLACE2 - PLACE)
+	:precondition (and
+		 ( AT ?TRUCK1 ?PLACE2 ) ( IN ?PACKAGE0 ?TRUCK1 ) ( not ( LOCKED-IN ?PACKAGE0 ?TRUCK1 ) ))
+	:effect (and
+		 ( not ( IN ?PACKAGE0 ?TRUCK1 ) ) ( AT ?PACKAGE0 ?PLACE2 ))
+)
+( :action UNLOAD-AIRPLANE
+	:parameters ( ?PACKAGE0 - PACKAGE ?AIRPLANE1 - AIRPLANE ?PLACE2 - PLACE)
+	:precondition (and
+		 ( IN ?PACKAGE0 ?AIRPLANE1 ) ( AT ?AIRPLANE1 ?PLACE2 ) ( not ( LOCKED-IN ?PACKAGE0 ?AIRPLANE1 ) ))
+	:effect (and
+		 ( not ( IN ?PACKAGE0 ?AIRPLANE1 ) ) ( AT ?PACKAGE0 ?PLACE2 ))
+)
+( :action DRIVE-TRUCK
+	:parameters ( ?TRUCK0 - TRUCK ?PLACE1 - PLACE ?PLACE2 - PLACE ?CITY3 - CITY)
+	:precondition (and
+		 ( AT ?TRUCK0 ?PLACE1 ) ( IN-CITY ?PLACE1 ?CITY3 ) ( IN-CITY ?PLACE2 ?CITY3 ) ( not ( LOCKED-AT ?TRUCK0 ?PLACE1 ) ))
+	:effect (and
+		 ( not ( AT ?TRUCK0 ?PLACE1 ) ) ( AT ?TRUCK0 ?PLACE2 ))
+)
+( :action FLY-AIRPLANE
+	:parameters ( ?AIRPLANE0 - AIRPLANE ?AIRPORT1 - AIRPORT ?AIRPORT2 - AIRPORT)
+	:precondition (and
+		 ( AT ?AIRPLANE0 ?AIRPORT1 ) ( not ( LOCKED-AT ?AIRPLANE0 ?AIRPORT1 ) ))
+	:effect (and
+		 ( not ( AT ?AIRPLANE0 ?AIRPORT1 ) ) ( AT ?AIRPLANE0 ?AIRPORT2 ))
+)
+( :action i-LOCK-AT
+	:parameters ( ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE)
+	:precondition ( )
+	:effect (and
+		 ( LOCKED-AT ?PHYSOBJ0 ?PLACE1 ))
+)
+( :action i-UNLOCK-AT
+	:parameters ( ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE)
+	:precondition ( )
+	:effect (and
+		 ( not ( LOCKED-AT ?PHYSOBJ0 ?PLACE1 ) ))
+)
+( :action i-FLAG-AT
+	:parameters ( ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE)
+	:precondition ( )
+	:effect (and
+		 ( FLAGGED-AT ?PHYSOBJ0 ?PLACE1 ))
+)
+( :action i-UNFLAG-AT
+	:parameters ( ?PHYSOBJ0 - PHYSOBJ ?PLACE1 - PLACE)
+	:precondition ( )
+	:effect (and
+		 ( not ( FLAGGED-AT ?PHYSOBJ0 ?PLACE1 ) ))
+)
+)

@@ -1,0 +1,23 @@
+(define (problem p)
+(:domain logistics)
+(:objects
+	TRU2 - TRUCK
+	TRU1 - TRUCK
+	OBJ11 - PACKAGE
+	POS2 - LOCATION
+	POS1 - LOCATION
+	CIT1 - CITY
+)
+(:htn
+	:tasks (ACHIEVE-AT TRU1 POS2)
+:ordering ()
+:constraints ( )
+)
+(:init
+        (AT TRU1 POS1)
+        (AT OBJ11 POS2)
+        (IN-CITY POS1 CIT1)
+        (IN-CITY POS2 CIT1)
+)
+)
+
