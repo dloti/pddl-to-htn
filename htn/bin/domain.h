@@ -581,7 +581,7 @@ public:
 				stream << "    )\n";
 	}
 
-	void printHDDLMethod( Condition &c, std::ostream &taskOs, std::ostream &os, const std::string &s,  const std::string &t ) {
+	void printHDDLMethod( Condition &c, std::ostream &taskOs, std::ostream &os, const std::string &s,  const std::string &t) {
 				std::string p("-");
 				taskOs << "(:task " << parametrizeHDDLCondition( c, s + p) <<std::endl;
 				taskOs << ")"<<std::endl;
@@ -590,14 +590,16 @@ public:
 				os << "\t:precondition "+parametrizeCondition( c, "FLAGGED" + p, false )+"\n";
 				os << "\t:ordered-subtasks (and"<<parametrizeCondition( c, "i-UNFLAG" + p, false )<<")"<<std::endl;
 				os << ")"<<std::endl;
+	}
 
+	void printHDDLMethod1( Condition &c, std::ostream &taskOs, std::ostream &os, const std::string &s,  const std::string &t) {
+				std::string p("-");
 				os << "( :method " << parametrizeHDDLCondition( c, s + p) <<std::endl;
 				os << "\t:task"<<parametrizeCondition( c, s + p, false)<<std::endl;
 				os << "\t:precondition (not "+parametrizeCondition( c, "FLAGGED" + p, false )+")"<<std::endl;
 				os << "\t:ordered-subtasks (and"<<parametrizeCondition( c, "i-UNLOCK" + p, false )<<")"<<std::endl;
 				os << ")"<<std::endl;
 	}
-
 
 	void printPredicate( Condition &c, std::ostream &stream, bool b, bool n,
 	                     const std::string &s, const std::string &t, int invariant_number=-1 ) {

@@ -20,19 +20,19 @@
 	( LOCKED-HOLDING ?BLOCK0 - BLOCK )
 	( FLAGGED-HOLDING ?BLOCK0 - BLOCK )
 )
-(:task IFUNLOCK-ON
+(:task IFUNLOCK0-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 )
-(:task IFUNLOCK-ONTABLE
+(:task IFUNLOCK2-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
 )
-(:task IFUNLOCK-CLEAR
+(:task IFUNLOCK4-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
 )
-(:task IFUNLOCK-HANDEMPTY
+(:task IFUNLOCK6-HANDEMPTY
 	:parameters ( )
 )
-(:task IFUNLOCK-HOLDING
+(:task IFUNLOCK8-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
 )
 (:task DO-ON-UNSTACK0
@@ -92,397 +92,397 @@
 (:task ACHIEVE-HOLDING2
 	:parameters ( ?BLOCK0 - BLOCK )
 )
-( :method IFUNLOCK-ON
+( :method IFUNLOCK0-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
-	:task ( IFUNLOCK-ON ?BLOCK0 ?BLOCK1 )
+	:task ( IFUNLOCK0-ON ?BLOCK0 ?BLOCK1 )
 	:precondition  ( FLAGGED-ON ?BLOCK0 ?BLOCK1 )
 	:ordered-subtasks (and ( i-UNFLAG-ON ?BLOCK0 ?BLOCK1 ))
 )
-( :method IFUNLOCK-ON
+( :method IFUNLOCK1-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
-	:task ( IFUNLOCK-ON ?BLOCK0 ?BLOCK1 )
+	:task ( IFUNLOCK1-ON ?BLOCK0 ?BLOCK1 )
 	:precondition (not  ( FLAGGED-ON ?BLOCK0 ?BLOCK1 ))
 	:ordered-subtasks (and ( i-UNLOCK-ON ?BLOCK0 ?BLOCK1 ))
 )
-( :method IFUNLOCK-ONTABLE
+( :method IFUNLOCK2-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK-ONTABLE ?BLOCK0 )
+	:task ( IFUNLOCK2-ONTABLE ?BLOCK0 )
 	:precondition  ( FLAGGED-ONTABLE ?BLOCK0 )
 	:ordered-subtasks (and ( i-UNFLAG-ONTABLE ?BLOCK0 ))
 )
-( :method IFUNLOCK-ONTABLE
+( :method IFUNLOCK3-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK-ONTABLE ?BLOCK0 )
+	:task ( IFUNLOCK3-ONTABLE ?BLOCK0 )
 	:precondition (not  ( FLAGGED-ONTABLE ?BLOCK0 ))
 	:ordered-subtasks (and ( i-UNLOCK-ONTABLE ?BLOCK0 ))
 )
-( :method IFUNLOCK-CLEAR
+( :method IFUNLOCK4-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK-CLEAR ?BLOCK0 )
+	:task ( IFUNLOCK4-CLEAR ?BLOCK0 )
 	:precondition  ( FLAGGED-CLEAR ?BLOCK0 )
 	:ordered-subtasks (and ( i-UNFLAG-CLEAR ?BLOCK0 ))
 )
-( :method IFUNLOCK-CLEAR
+( :method IFUNLOCK5-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK-CLEAR ?BLOCK0 )
+	:task ( IFUNLOCK5-CLEAR ?BLOCK0 )
 	:precondition (not  ( FLAGGED-CLEAR ?BLOCK0 ))
 	:ordered-subtasks (and ( i-UNLOCK-CLEAR ?BLOCK0 ))
 )
-( :method IFUNLOCK-HANDEMPTY
+( :method IFUNLOCK6-HANDEMPTY
 	:parameters ( )
-	:task ( IFUNLOCK-HANDEMPTY )
+	:task ( IFUNLOCK6-HANDEMPTY )
 	:precondition  ( FLAGGED-HANDEMPTY )
 	:ordered-subtasks (and ( i-UNFLAG-HANDEMPTY ))
 )
-( :method IFUNLOCK-HANDEMPTY
+( :method IFUNLOCK7-HANDEMPTY
 	:parameters ( )
-	:task ( IFUNLOCK-HANDEMPTY )
+	:task ( IFUNLOCK7-HANDEMPTY )
 	:precondition (not  ( FLAGGED-HANDEMPTY ))
 	:ordered-subtasks (and ( i-UNLOCK-HANDEMPTY ))
 )
-( :method IFUNLOCK-HOLDING
+( :method IFUNLOCK8-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK-HOLDING ?BLOCK0 )
+	:task ( IFUNLOCK8-HOLDING ?BLOCK0 )
 	:precondition  ( FLAGGED-HOLDING ?BLOCK0 )
 	:ordered-subtasks (and ( i-UNFLAG-HOLDING ?BLOCK0 ))
 )
-( :method IFUNLOCK-HOLDING
+( :method IFUNLOCK9-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK-HOLDING ?BLOCK0 )
+	:task ( IFUNLOCK9-HOLDING ?BLOCK0 )
 	:precondition (not  ( FLAGGED-HOLDING ?BLOCK0 ))
 	:ordered-subtasks (and ( i-UNLOCK-HOLDING ?BLOCK0 ))
 )
-(:method M-DO-ON-UNSTACK0
+(:method M10-DO-ON-UNSTACK0
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task ( DO-ON-UNSTACK0 ?BLOCK0 ?BLOCK1 )
 	:precondition (and  ( ON ?BLOCK0 ?BLOCK1 ))
 	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?BLOCK0 ) ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( IFUNLOCK-CLEAR ?BLOCK0 ) ( UNSTACK ?BLOCK0 ?BLOCK1 ) )
 )
-(:method M-DO-ONTABLE-PICK-UP0
+(:method M11-DO-ONTABLE-PICK-UP0
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task ( DO-ONTABLE-PICK-UP0 ?BLOCK0 )
 	:precondition (and  ( ONTABLE ?BLOCK0 ))
 	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?BLOCK0 ) ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( IFUNLOCK-CLEAR ?BLOCK0 ) ( PICK-UP ?BLOCK0 ) )
 )
-(:method M-DO-CLEAR-STACK1
+(:method M12-DO-CLEAR-STACK1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task ( DO-CLEAR-STACK1 ?BLOCK0 ?BLOCK1 )
 	:precondition (and  ( CLEAR ?BLOCK1 ))
 	:ordered-subtasks (and  ( ACHIEVE-HOLDING ?BLOCK0 ) ( IFUNLOCK-HOLDING ?BLOCK0 ) ( STACK ?BLOCK0 ?BLOCK1 ) )
 )
-(:method M-DO-CLEAR-PICK-UP1
+(:method M13-DO-CLEAR-PICK-UP1
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task ( DO-CLEAR-PICK-UP1 ?BLOCK0 )
 	:precondition (and  ( CLEAR ?BLOCK0 ))
 	:ordered-subtasks (and  ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( PICK-UP ?BLOCK0 ) )
 )
-(:method M-DO-CLEAR-UNSTACK1
+(:method M14-DO-CLEAR-UNSTACK1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task ( DO-CLEAR-UNSTACK1 ?BLOCK0 ?BLOCK1 )
 	:precondition (and  ( CLEAR ?BLOCK0 ))
 	:ordered-subtasks (and  ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( UNSTACK ?BLOCK0 ?BLOCK1 ) )
 )
-(:method M-DO-ON-UNSTACK1
+(:method M15-DO-ON-UNSTACK1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task ( DO-ON-UNSTACK1 ?BLOCK0 ?BLOCK1 )
 	:precondition (and  ( ON ?BLOCK0 ?BLOCK1 ))
 	:ordered-subtasks (and  ( ACHIEVE-CLEAR ?BLOCK0 ) ( ACHIEVE-HANDEMPTY ) ( IFUNLOCK-HANDEMPTY ) ( IFUNLOCK-CLEAR ?BLOCK0 ) ( UNSTACK ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-HOLDING
+( :method M16-ACHIEVE-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-HOLDING ?BLOCK0 )
 	:precondition  ( LOCKED-HOLDING ?BLOCK0 )
 	:ordered-subtasks (and  ( i-FLAG-HOLDING ?BLOCK0 ))
 )
-( :method M-ACHIEVE-HOLDING
+( :method M17-ACHIEVE-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-HOLDING ?BLOCK0 )
 	:precondition (and ( HOLDING ?BLOCK0 ) ( not ( LOCKED-HOLDING ?BLOCK0 )) )
 	:ordered-subtasks (and  ( i-LOCK-HOLDING ?BLOCK0 ))
 )
-( :method M-ACHIEVE-HOLDING
+( :method M18-ACHIEVE-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-HOLDING ?BLOCK0 )
 	:precondition (and ( not ( LOCKED-HOLDING ?BLOCK0 )) ( not ( HOLDING ?BLOCK0 )) )
 	:ordered-subtasks (and ( ACHIEVE-HOLDING0 ?BLOCK0 ) ( i-LOCK-HOLDING ?BLOCK0 ))
 )
-( :method M-ACHIEVE-HOLDING0
+( :method M19-ACHIEVE-HOLDING0
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task ( ACHIEVE-HOLDING0 ?BLOCK0 )
 	:precondition  ( HOLDING ?BLOCK0 )
 	:subtasks ( )
 )
-( :method M-ACHIEVE-HOLDING0
+( :method M20-ACHIEVE-HOLDING0
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK2 - BLOCK)
 	:task  ( ACHIEVE-HOLDING0 ?BLOCK0 )
 	:precondition (and ( not ( HOLDING ?BLOCK0 ) ) ( ON ?BLOCK0 ?BLOCK2 ) )
 	:ordered-subtasks (and  ( DO-ON-UNSTACK0 ?BLOCK0 ?BLOCK2 ) ( ACHIEVE-HOLDING0 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-HOLDING0
+( :method M21-ACHIEVE-HOLDING0
 	:parameters ( ?BLOCK0 - BLOCK)
 	:task  ( ACHIEVE-HOLDING0 ?BLOCK0 )
 	:precondition (and ( not ( HOLDING ?BLOCK0 ) ) ( ONTABLE ?BLOCK0 ) )
 	:ordered-subtasks (and  ( DO-ONTABLE-PICK-UP0 ?BLOCK0 ) ( ACHIEVE-HOLDING0 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-ON0
+( :method M22-ACHIEVE-ON0
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK4 - BLOCK)
 	:task ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK4 ) )
 	:ordered-subtasks (and  ( STACK ?BLOCK0 ?BLOCK4 ) ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-ON0
+( :method M23-ACHIEVE-ON0
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:task ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( HOLDING ?BLOCK0 ) )
 	:ordered-subtasks (and  ( PUT-DOWN ?BLOCK0 ) ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-ON
+( :method M24-ACHIEVE-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task  ( ACHIEVE-ON ?BLOCK0 ?BLOCK1 )
 	:precondition  ( LOCKED-ON ?BLOCK0 ?BLOCK1 )
 	:ordered-subtasks (and  ( i-FLAG-ON ?BLOCK0 ?BLOCK1 ))
 )
-( :method M-ACHIEVE-ON
+( :method M25-ACHIEVE-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task  ( ACHIEVE-ON ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( ON ?BLOCK0 ?BLOCK1 ) ( not ( LOCKED-ON ?BLOCK0 ?BLOCK1 )) )
 	:ordered-subtasks (and  ( i-LOCK-ON ?BLOCK0 ?BLOCK1 ))
 )
-( :method M-ACHIEVE-ON
+( :method M26-ACHIEVE-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task  ( ACHIEVE-ON ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( LOCKED-ON ?BLOCK0 ?BLOCK1 )) ( not ( ON ?BLOCK0 ?BLOCK1 )) )
 	:ordered-subtasks (and ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) ( i-LOCK-ON ?BLOCK0 ?BLOCK1 ))
 )
-( :method M-ACHIEVE-ON0
+( :method M27-ACHIEVE-ON0
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
 	:precondition  ( ON ?BLOCK0 ?BLOCK1 )
 	:subtasks ( )
 )
-( :method M-ACHIEVE-ON0
+( :method M28-ACHIEVE-ON0
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK3 - BLOCK)
 	:task  ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( ON ?BLOCK0 ?BLOCK3 ) )
 	:ordered-subtasks (and  ( DO-ON-UNSTACK0 ?BLOCK0 ?BLOCK3 ) ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-ON0
+( :method M29-ACHIEVE-ON0
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:task  ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( ONTABLE ?BLOCK0 ) )
 	:ordered-subtasks (and  ( DO-ONTABLE-PICK-UP0 ?BLOCK0 ) ( ACHIEVE-ON0 ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-ONTABLE0
+( :method M30-ACHIEVE-ONTABLE0
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK3 - BLOCK)
 	:task ( ACHIEVE-ONTABLE0 ?BLOCK0 )
 	:precondition (and ( not ( ONTABLE ?BLOCK0 ) ) ( HOLDING ?BLOCK0 ) ( CLEAR ?BLOCK3 ) )
 	:ordered-subtasks (and  ( STACK ?BLOCK0 ?BLOCK3 ) ( ACHIEVE-ONTABLE0 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-ONTABLE0
+( :method M31-ACHIEVE-ONTABLE0
 	:parameters ( ?BLOCK0 - BLOCK)
 	:task ( ACHIEVE-ONTABLE0 ?BLOCK0 )
 	:precondition (and ( not ( ONTABLE ?BLOCK0 ) ) ( HOLDING ?BLOCK0 ) )
 	:ordered-subtasks (and  ( PUT-DOWN ?BLOCK0 ) ( ACHIEVE-ONTABLE0 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-ONTABLE0
+( :method M32-ACHIEVE-ONTABLE0
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK2 - BLOCK)
 	:task ( ACHIEVE-ONTABLE0 ?BLOCK0 )
 	:precondition (and ( not ( ONTABLE ?BLOCK0 ) ) ( ON ?BLOCK0 ?BLOCK2 ) )
 	:ordered-subtasks (and  ( DO-ON-UNSTACK0 ?BLOCK0 ?BLOCK2 ) ( ACHIEVE-ONTABLE0 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-ONTABLE
+( :method M33-ACHIEVE-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-ONTABLE ?BLOCK0 )
 	:precondition  ( LOCKED-ONTABLE ?BLOCK0 )
 	:ordered-subtasks (and  ( i-FLAG-ONTABLE ?BLOCK0 ))
 )
-( :method M-ACHIEVE-ONTABLE
+( :method M34-ACHIEVE-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-ONTABLE ?BLOCK0 )
 	:precondition (and ( ONTABLE ?BLOCK0 ) ( not ( LOCKED-ONTABLE ?BLOCK0 )) )
 	:ordered-subtasks (and  ( i-LOCK-ONTABLE ?BLOCK0 ))
 )
-( :method M-ACHIEVE-ONTABLE
+( :method M35-ACHIEVE-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-ONTABLE ?BLOCK0 )
 	:precondition (and ( not ( LOCKED-ONTABLE ?BLOCK0 )) ( not ( ONTABLE ?BLOCK0 )) )
 	:ordered-subtasks (and ( ACHIEVE-ONTABLE0 ?BLOCK0 ) ( i-LOCK-ONTABLE ?BLOCK0 ))
 )
-( :method M-ACHIEVE-ONTABLE0
+( :method M36-ACHIEVE-ONTABLE0
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task ( ACHIEVE-ONTABLE0 ?BLOCK0 )
 	:precondition  ( ONTABLE ?BLOCK0 )
 	:subtasks ( )
 )
-( :method M-ACHIEVE-CLEAR
+( :method M37-ACHIEVE-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-CLEAR ?BLOCK0 )
 	:precondition  ( LOCKED-CLEAR ?BLOCK0 )
 	:ordered-subtasks (and  ( i-FLAG-CLEAR ?BLOCK0 ))
 )
-( :method M-ACHIEVE-CLEAR
+( :method M38-ACHIEVE-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-CLEAR ?BLOCK0 )
 	:precondition (and ( CLEAR ?BLOCK0 ) ( not ( LOCKED-CLEAR ?BLOCK0 )) )
 	:ordered-subtasks (and  ( i-LOCK-CLEAR ?BLOCK0 ))
 )
-( :method M-ACHIEVE-CLEAR
+( :method M39-ACHIEVE-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-CLEAR ?BLOCK0 )
 	:precondition (and ( not ( LOCKED-CLEAR ?BLOCK0 )) ( not ( CLEAR ?BLOCK0 )) )
 	:ordered-subtasks (and ( ACHIEVE-CLEAR1 ?BLOCK0 ) ( i-LOCK-CLEAR ?BLOCK0 ))
 )
-( :method M-ACHIEVE-CLEAR1
+( :method M40-ACHIEVE-CLEAR1
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task ( ACHIEVE-CLEAR1 ?BLOCK0 )
 	:precondition  ( CLEAR ?BLOCK0 )
 	:subtasks ( )
 )
-( :method M-ACHIEVE-CLEAR1
+( :method M41-ACHIEVE-CLEAR1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:task  ( ACHIEVE-CLEAR1 ?BLOCK0 )
 	:precondition (and ( not ( CLEAR ?BLOCK0 ) ) ( ON ?BLOCK1 ?BLOCK0 ) )
 	:ordered-subtasks (and  ( DO-ON-UNSTACK1 ?BLOCK1 ?BLOCK0 ) ( ACHIEVE-CLEAR1 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-CLEAR1
+( :method M42-ACHIEVE-CLEAR1
 	:parameters ( ?BLOCK0 - BLOCK)
 	:task  ( ACHIEVE-CLEAR1 ?BLOCK0 )
 	:precondition (and ( not ( CLEAR ?BLOCK0 ) ) ( HOLDING ?BLOCK0 ) )
 	:ordered-subtasks (and  ( PUT-DOWN ?BLOCK0 ) ( ACHIEVE-CLEAR1 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-ON1
+( :method M43-ACHIEVE-ON1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK3 - BLOCK)
 	:task ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( CLEAR ?BLOCK1 ) )
 	:ordered-subtasks (and  ( DO-CLEAR-STACK1 ?BLOCK3 ?BLOCK1 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-ON1
+( :method M44-ACHIEVE-ON1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:task ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( CLEAR ?BLOCK1 ) ( ONTABLE ?BLOCK1 ) )
 	:ordered-subtasks (and  ( DO-CLEAR-PICK-UP1 ?BLOCK1 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-ON1
+( :method M45-ACHIEVE-ON1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK4 - BLOCK)
 	:task ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( CLEAR ?BLOCK1 ) )
 	:ordered-subtasks (and  ( DO-CLEAR-UNSTACK1 ?BLOCK1 ?BLOCK4 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-ON
+( :method M46-ACHIEVE-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task  ( ACHIEVE-ON ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( LOCKED-ON ?BLOCK0 ?BLOCK1 )) ( not ( ON ?BLOCK0 ?BLOCK1 )) )
 	:ordered-subtasks (and ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) ( i-LOCK-ON ?BLOCK0 ?BLOCK1 ))
 )
-( :method M-ACHIEVE-ON1
+( :method M47-ACHIEVE-ON1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 	:task ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
 	:precondition  ( ON ?BLOCK0 ?BLOCK1 )
 	:subtasks ( )
 )
-( :method M-ACHIEVE-ON1
+( :method M48-ACHIEVE-ON1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK2 - BLOCK)
 	:task  ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( ON ?BLOCK2 ?BLOCK1 ) )
 	:ordered-subtasks (and  ( DO-ON-UNSTACK1 ?BLOCK2 ?BLOCK1 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-ON1
+( :method M49-ACHIEVE-ON1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:task  ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 )
 	:precondition (and ( not ( ON ?BLOCK0 ?BLOCK1 ) ) ( HOLDING ?BLOCK1 ) )
 	:ordered-subtasks (and  ( PUT-DOWN ?BLOCK1 ) ( ACHIEVE-ON1 ?BLOCK0 ?BLOCK1 ) )
 )
-( :method M-ACHIEVE-HOLDING1
+( :method M50-ACHIEVE-HOLDING1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK2 - BLOCK)
 	:task ( ACHIEVE-HOLDING1 ?BLOCK0 )
 	:precondition (and ( not ( HOLDING ?BLOCK0 ) ) ( CLEAR ?BLOCK0 ) )
 	:ordered-subtasks (and  ( DO-CLEAR-STACK1 ?BLOCK2 ?BLOCK0 ) ( ACHIEVE-HOLDING1 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-HOLDING1
+( :method M51-ACHIEVE-HOLDING1
 	:parameters ( ?BLOCK0 - BLOCK)
 	:task ( ACHIEVE-HOLDING1 ?BLOCK0 )
 	:precondition (and ( not ( HOLDING ?BLOCK0 ) ) ( CLEAR ?BLOCK0 ) ( ONTABLE ?BLOCK0 ) )
 	:ordered-subtasks (and  ( DO-CLEAR-PICK-UP1 ?BLOCK0 ) ( ACHIEVE-HOLDING1 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-HOLDING1
+( :method M52-ACHIEVE-HOLDING1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK3 - BLOCK)
 	:task ( ACHIEVE-HOLDING1 ?BLOCK0 )
 	:precondition (and ( not ( HOLDING ?BLOCK0 ) ) ( CLEAR ?BLOCK0 ) )
 	:ordered-subtasks (and  ( DO-CLEAR-UNSTACK1 ?BLOCK0 ?BLOCK3 ) ( ACHIEVE-HOLDING1 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-HOLDING1
+( :method M53-ACHIEVE-HOLDING1
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:task ( ACHIEVE-HOLDING1 ?BLOCK0 )
 	:precondition (and ( not ( HOLDING ?BLOCK0 ) ) ( ON ?BLOCK1 ?BLOCK0 ) )
 	:ordered-subtasks (and  ( DO-ON-UNSTACK1 ?BLOCK1 ?BLOCK0 ) ( ACHIEVE-HOLDING1 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-HOLDING
+( :method M54-ACHIEVE-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-HOLDING ?BLOCK0 )
 	:precondition (and ( not ( LOCKED-HOLDING ?BLOCK0 )) ( not ( HOLDING ?BLOCK0 )) )
 	:ordered-subtasks (and ( ACHIEVE-HOLDING1 ?BLOCK0 ) ( i-LOCK-HOLDING ?BLOCK0 ))
 )
-( :method M-ACHIEVE-HOLDING1
+( :method M55-ACHIEVE-HOLDING1
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task ( ACHIEVE-HOLDING1 ?BLOCK0 )
 	:precondition  ( HOLDING ?BLOCK0 )
 	:subtasks ( )
 )
-( :method M-ACHIEVE-HANDEMPTY
+( :method M56-ACHIEVE-HANDEMPTY
 	:parameters ( )
 	:task  ( ACHIEVE-HANDEMPTY )
 	:precondition  ( LOCKED-HANDEMPTY )
 	:ordered-subtasks (and  ( i-FLAG-HANDEMPTY ))
 )
-( :method M-ACHIEVE-HANDEMPTY
+( :method M57-ACHIEVE-HANDEMPTY
 	:parameters ( )
 	:task  ( ACHIEVE-HANDEMPTY )
 	:precondition (and ( HANDEMPTY ) ( not ( LOCKED-HANDEMPTY )) )
 	:ordered-subtasks (and  ( i-LOCK-HANDEMPTY ))
 )
-( :method M-ACHIEVE-HANDEMPTY
+( :method M58-ACHIEVE-HANDEMPTY
 	:parameters ( )
 	:task  ( ACHIEVE-HANDEMPTY )
 	:precondition (and ( not ( LOCKED-HANDEMPTY )) ( not ( HANDEMPTY )) )
 	:ordered-subtasks (and ( ACHIEVE-HANDEMPTY2 ) ( i-LOCK-HANDEMPTY ))
 )
-( :method M-ACHIEVE-HANDEMPTY2
+( :method M59-ACHIEVE-HANDEMPTY2
 	:parameters ( )
 	:task ( ACHIEVE-HANDEMPTY2 )
 	:precondition  ( HANDEMPTY )
 	:subtasks ( )
 )
-( :method M-ACHIEVE-HANDEMPTY2
+( :method M60-ACHIEVE-HANDEMPTY2
 	:parameters ( ?BLOCK0 - BLOCK)
 	:task  ( ACHIEVE-HANDEMPTY2 )
 	:precondition (and ( not ( HANDEMPTY ) ) ( HOLDING ?BLOCK0 ) )
 	:ordered-subtasks (and  ( PUT-DOWN ?BLOCK0 ) ( ACHIEVE-HANDEMPTY2 ) )
 )
-( :method M-ACHIEVE-HOLDING2
+( :method M61-ACHIEVE-HOLDING2
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:task ( ACHIEVE-HOLDING2 ?BLOCK0 )
 	:precondition (and ( not ( HOLDING ?BLOCK0 ) ) ( HANDEMPTY ) ( CLEAR ?BLOCK1 ) ( ONTABLE ?BLOCK1 ) )
 	:ordered-subtasks (and  ( PICK-UP ?BLOCK1 ) ( ACHIEVE-HOLDING2 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-HOLDING2
+( :method M62-ACHIEVE-HOLDING2
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK ?BLOCK2 - BLOCK)
 	:task ( ACHIEVE-HOLDING2 ?BLOCK0 )
 	:precondition (and ( not ( HOLDING ?BLOCK0 ) ) ( HANDEMPTY ) ( ON ?BLOCK1 ?BLOCK2 ) ( CLEAR ?BLOCK1 ) )
 	:ordered-subtasks (and  ( UNSTACK ?BLOCK1 ?BLOCK2 ) ( ACHIEVE-HOLDING2 ?BLOCK0 ) )
 )
-( :method M-ACHIEVE-HOLDING
+( :method M63-ACHIEVE-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task  ( ACHIEVE-HOLDING ?BLOCK0 )
 	:precondition (and ( not ( LOCKED-HOLDING ?BLOCK0 )) ( not ( HOLDING ?BLOCK0 )) )
 	:ordered-subtasks (and ( ACHIEVE-HOLDING2 ?BLOCK0 ) ( i-LOCK-HOLDING ?BLOCK0 ))
 )
-( :method M-ACHIEVE-HOLDING2
+( :method M64-ACHIEVE-HOLDING2
 	:parameters ( ?BLOCK0 - BLOCK )
 	:task ( ACHIEVE-HOLDING2 ?BLOCK0 )
 	:precondition  ( HOLDING ?BLOCK0 )
 	:subtasks ( )
 )
-( :method M-ACHIEVE-HOLDING2
+( :method M65-ACHIEVE-HOLDING2
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK)
 	:task  ( ACHIEVE-HOLDING2 ?BLOCK0 )
 	:precondition (and ( not ( HOLDING ?BLOCK0 ) ) ( HOLDING ?BLOCK1 ) )
@@ -636,4 +636,4 @@
 	:effect (and
 		 ( not ( FLAGGED-HOLDING ?BLOCK0 ) ))
 )
-))
+)

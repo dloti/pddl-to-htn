@@ -1,6 +1,8 @@
 #include "create_htn.h"
 #include "time.hxx"
 #include <cassert>
+#include <string>
+#include <iostream>
 #define UNORDERED false
 #define LISP false
 #define JSHOP2H false
@@ -20,6 +22,7 @@ bool hasGoalConflicts = false;
 std::ostringstream hddlTasks;
 std::ostringstream hddlMethods;
 std::ostringstream hddlActions;
+int gMethodTag = 0;
 
 void printCondition(std::ostream &out, bool b, Condition &c, const std::string &s, bool z, std::vector<std::string> &v,
 		int invariant_number = -1) {
@@ -162,7 +165,7 @@ void printHDDLDOMethods(Domain &d, std::ostream &out) {
 				   <<")"<<std::endl;
 				hddlMethods<<"(:method ";
 				std::ostringstream ts;
-				ts << d.parametrizeHDDLCondition(a, "M-DO-" + c.name + "-", i->first.a);
+				ts << d.parametrizeHDDLCondition(a, "M"+std::to_string(gMethodTag++)+"-DO-" + c.name + "-", i->first.a);
 				hddlMethods <<ts.str()<< "\n";
 				taskToInvariantMap[ts.str()] = i->first.a;
 				taskToFluentMap[i->first.a][ts.str()] =  d.parametrizeCondition(a, t, "", false);
@@ -233,7 +236,7 @@ std::string printHDDLInnerACHIEVE(Domain &d, int invariant_num, int condition_nu
 	std::ostringstream ts;
 	ts<<d.parametrizeHDDLCondition(c, "ACHIEVE-", invariant_num);
 	hddlTasks<<"(:task "<<ts.str()<<std::endl<<")"<<std::endl;
-	hddlMethods << "( :method "<<"M-"<<ts.str()<<std::endl;
+	hddlMethods << "( :method "<<"M"+std::to_string(gMethodTag++)+"-"<<ts.str()<<std::endl;
 	taskToInvariantMap[ts.str()] = invariant_num;
 	taskToFluentMap[invariant_num][ts.str()] = d.parametrizeCondition(c, "", false);
 	hddlMethods<<"\t:task"<<d.parametrizeCondition(c, "ACHIEVE-",false, invariant_num)<<std::endl;
@@ -469,7 +472,7 @@ void printHDDLTopACHIEVE(Domain& d, std::vector<std::string>& param_types,
 
 		//LOCKED-X, X -> FLAG-X
 		hddlMethods << "( :method ";
-		hddlMethods<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
+		hddlMethods<< d.parametrizeHDDLCondition(c, "M"+std::to_string(gMethodTag++)+"-ACHIEVE-")<<std::endl;
 		hddlMethods << "\t:task ";
 		hddlMethods<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
 		hddlMethods<<"\t:precondition ";
@@ -483,7 +486,7 @@ void printHDDLTopACHIEVE(Domain& d, std::vector<std::string>& param_types,
 
 		//NOT-LOCKED-X, X -> LOCK-X
 		hddlMethods << "( :method ";
-		hddlMethods<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
+		hddlMethods<< d.parametrizeHDDLCondition(c, "M"+std::to_string(gMethodTag++)+"-ACHIEVE-")<<std::endl;
 		hddlMethods << "\t:task ";
 		hddlMethods<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
 		hddlMethods<<"\t:precondition (and";
@@ -499,7 +502,7 @@ void printHDDLTopACHIEVE(Domain& d, std::vector<std::string>& param_types,
 
 	//NOT-LOCKED-X, NOT-X, NOT-ACHIEVING-X -> LIST-OF-TASKS
 	hddlMethods << "( :method ";
-		hddlMethods<< d.parametrizeHDDLCondition(c, "M-ACHIEVE-")<<std::endl;
+		hddlMethods<< d.parametrizeHDDLCondition(c, "M"+std::to_string(gMethodTag++)+"-ACHIEVE-")<<std::endl;
 	hddlMethods << "\t:task ";
 	hddlMethods<< d.parametrizeCondition(c, "ACHIEVE-", false)<<std::endl;
 	hddlMethods<<"\t:precondition (and";
@@ -798,7 +801,8 @@ void printHDDLAuxOps(std::ostream &stream, Domain &d) {
             //d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-VISIT", "VISITED");
 			d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-FLAG", "FLAGGED");
 			d.printHDDLAuxAction(d.preds[i], hddlActions, true, false, "i-UNFLAG", "FLAGGED");
-			d.printHDDLMethod(d.preds[i], hddlTasks, hddlMethods, "IFUNLOCK", "FLAGGED");
+			d.printHDDLMethod(d.preds[i], hddlTasks, hddlMethods, "IFUNLOCK"+std::to_string(gMethodTag++), "FLAGGED");
+			d.printHDDLMethod1(d.preds[i], hddlTasks, hddlMethods, "IFUNLOCK"+std::to_string(gMethodTag++), "FLAGGED");
 			
 		}
 }
@@ -995,7 +999,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 								if (i3->first != j || invs[i].types.size() < invs[i].conds[j].params.size()) {
 									std::ostringstream head;
 									std::set<std::string> typedParams;
-									head << "( :method M-"<<taskName<<std::endl;
+									head << "( :method M"+std::to_string(gMethodTag++)+"-"<<taskName<<std::endl;
 									head <<"\t:parameters (";
 									for ( unsigned pk = 0; pk < params.size(); ++pk )
 										typedParams.insert(" " + params[pk] + " - " + param_types[pk]);
@@ -1072,7 +1076,7 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 									}
 									std::ostringstream head;
 									std::set<std::string> typedParams;
-									head << "( :method M-"<<taskName<<std::endl;
+									head << "( :method M"+std::to_string(gMethodTag++)+"-"<<taskName<<std::endl;
 									head <<"\t:parameters (";
 									for ( unsigned pk = 0; pk < params.size(); ++pk )
 										typedParams.insert(" " + params[pk] + " - " + param_types[pk]);
@@ -1144,7 +1148,6 @@ void printHTN(Domain &d, Instance& ins, std::ostream &out, std::string domain_na
 	out<<hddlTasks.str();
 	out<<hddlMethods.str();
 	out<<hddlActions.str();
-	out << ")";
 	if(JSHOP2H){
 		out<<"\n(\n";
 		printTaskToInv(out);

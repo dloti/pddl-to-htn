@@ -37,6 +37,13 @@ public:
 		       ( name < c.name || name == c.name && params < c.params );
 	}
 
+	std::string tag(){
+		std::ostringstream str;
+		for(int i=0;i<params.size();++i)
+			str<<params[i];
+		return str.str();
+	}
+
 	std::string dbgstr(std::vector<Condition>& types){
 		std::string ret = name+"[";
 		for(int i=0;i<params.size();++i)
