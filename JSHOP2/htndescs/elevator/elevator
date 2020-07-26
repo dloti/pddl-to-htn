@@ -29,13 +29,13 @@
 	( LOCKED-LIFT-AT ?FLOOR0 - FLOOR )
 	( FLAGGED-LIFT-AT ?FLOOR0 - FLOOR )
 )
-(:task IFUNLOCK0-BOARDED
+(:task IFUNLOCK-BOARDED
 	:parameters ( ?PASSENGER0 - PASSENGER )
 )
-(:task IFUNLOCK2-SERVED
+(:task IFUNLOCK-SERVED
 	:parameters ( ?PASSENGER0 - PASSENGER )
 )
-(:task IFUNLOCK4-LIFT-AT
+(:task IFUNLOCK-LIFT-AT
 	:parameters ( ?FLOOR0 - FLOOR )
 )
 (:task DO-BOARDED-DEPART1
@@ -67,37 +67,37 @@
 )
 ( :method IFUNLOCK0-BOARDED
 	:parameters ( ?PASSENGER0 - PASSENGER )
-	:task ( IFUNLOCK0-BOARDED ?PASSENGER0 )
+	:task ( IFUNLOCK-BOARDED ?PASSENGER0 )
 	:precondition  ( FLAGGED-BOARDED ?PASSENGER0 )
 	:ordered-subtasks (and ( i-UNFLAG-BOARDED ?PASSENGER0 ))
 )
 ( :method IFUNLOCK1-BOARDED
 	:parameters ( ?PASSENGER0 - PASSENGER )
-	:task ( IFUNLOCK1-BOARDED ?PASSENGER0 )
+	:task ( IFUNLOCK-BOARDED ?PASSENGER0 )
 	:precondition (not  ( FLAGGED-BOARDED ?PASSENGER0 ))
 	:ordered-subtasks (and ( i-UNLOCK-BOARDED ?PASSENGER0 ))
 )
 ( :method IFUNLOCK2-SERVED
 	:parameters ( ?PASSENGER0 - PASSENGER )
-	:task ( IFUNLOCK2-SERVED ?PASSENGER0 )
+	:task ( IFUNLOCK-SERVED ?PASSENGER0 )
 	:precondition  ( FLAGGED-SERVED ?PASSENGER0 )
 	:ordered-subtasks (and ( i-UNFLAG-SERVED ?PASSENGER0 ))
 )
 ( :method IFUNLOCK3-SERVED
 	:parameters ( ?PASSENGER0 - PASSENGER )
-	:task ( IFUNLOCK3-SERVED ?PASSENGER0 )
+	:task ( IFUNLOCK-SERVED ?PASSENGER0 )
 	:precondition (not  ( FLAGGED-SERVED ?PASSENGER0 ))
 	:ordered-subtasks (and ( i-UNLOCK-SERVED ?PASSENGER0 ))
 )
 ( :method IFUNLOCK4-LIFT-AT
 	:parameters ( ?FLOOR0 - FLOOR )
-	:task ( IFUNLOCK4-LIFT-AT ?FLOOR0 )
+	:task ( IFUNLOCK-LIFT-AT ?FLOOR0 )
 	:precondition  ( FLAGGED-LIFT-AT ?FLOOR0 )
 	:ordered-subtasks (and ( i-UNFLAG-LIFT-AT ?FLOOR0 ))
 )
 ( :method IFUNLOCK5-LIFT-AT
 	:parameters ( ?FLOOR0 - FLOOR )
-	:task ( IFUNLOCK5-LIFT-AT ?FLOOR0 )
+	:task ( IFUNLOCK-LIFT-AT ?FLOOR0 )
 	:precondition (not  ( FLAGGED-LIFT-AT ?FLOOR0 ))
 	:ordered-subtasks (and ( i-UNLOCK-LIFT-AT ?FLOOR0 ))
 )

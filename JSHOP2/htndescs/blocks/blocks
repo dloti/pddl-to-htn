@@ -20,19 +20,19 @@
 	( LOCKED-HOLDING ?BLOCK0 - BLOCK )
 	( FLAGGED-HOLDING ?BLOCK0 - BLOCK )
 )
-(:task IFUNLOCK0-ON
+(:task IFUNLOCK-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
 )
-(:task IFUNLOCK2-ONTABLE
+(:task IFUNLOCK-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
 )
-(:task IFUNLOCK4-CLEAR
+(:task IFUNLOCK-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
 )
-(:task IFUNLOCK6-HANDEMPTY
+(:task IFUNLOCK-HANDEMPTY
 	:parameters ( )
 )
-(:task IFUNLOCK8-HOLDING
+(:task IFUNLOCK-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
 )
 (:task DO-ON-UNSTACK0
@@ -94,61 +94,61 @@
 )
 ( :method IFUNLOCK0-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
-	:task ( IFUNLOCK0-ON ?BLOCK0 ?BLOCK1 )
+	:task ( IFUNLOCK-ON ?BLOCK0 ?BLOCK1 )
 	:precondition  ( FLAGGED-ON ?BLOCK0 ?BLOCK1 )
 	:ordered-subtasks (and ( i-UNFLAG-ON ?BLOCK0 ?BLOCK1 ))
 )
 ( :method IFUNLOCK1-ON
 	:parameters ( ?BLOCK0 - BLOCK ?BLOCK1 - BLOCK )
-	:task ( IFUNLOCK1-ON ?BLOCK0 ?BLOCK1 )
+	:task ( IFUNLOCK-ON ?BLOCK0 ?BLOCK1 )
 	:precondition (not  ( FLAGGED-ON ?BLOCK0 ?BLOCK1 ))
 	:ordered-subtasks (and ( i-UNLOCK-ON ?BLOCK0 ?BLOCK1 ))
 )
 ( :method IFUNLOCK2-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK2-ONTABLE ?BLOCK0 )
+	:task ( IFUNLOCK-ONTABLE ?BLOCK0 )
 	:precondition  ( FLAGGED-ONTABLE ?BLOCK0 )
 	:ordered-subtasks (and ( i-UNFLAG-ONTABLE ?BLOCK0 ))
 )
 ( :method IFUNLOCK3-ONTABLE
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK3-ONTABLE ?BLOCK0 )
+	:task ( IFUNLOCK-ONTABLE ?BLOCK0 )
 	:precondition (not  ( FLAGGED-ONTABLE ?BLOCK0 ))
 	:ordered-subtasks (and ( i-UNLOCK-ONTABLE ?BLOCK0 ))
 )
 ( :method IFUNLOCK4-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK4-CLEAR ?BLOCK0 )
+	:task ( IFUNLOCK-CLEAR ?BLOCK0 )
 	:precondition  ( FLAGGED-CLEAR ?BLOCK0 )
 	:ordered-subtasks (and ( i-UNFLAG-CLEAR ?BLOCK0 ))
 )
 ( :method IFUNLOCK5-CLEAR
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK5-CLEAR ?BLOCK0 )
+	:task ( IFUNLOCK-CLEAR ?BLOCK0 )
 	:precondition (not  ( FLAGGED-CLEAR ?BLOCK0 ))
 	:ordered-subtasks (and ( i-UNLOCK-CLEAR ?BLOCK0 ))
 )
 ( :method IFUNLOCK6-HANDEMPTY
 	:parameters ( )
-	:task ( IFUNLOCK6-HANDEMPTY )
+	:task ( IFUNLOCK-HANDEMPTY )
 	:precondition  ( FLAGGED-HANDEMPTY )
 	:ordered-subtasks (and ( i-UNFLAG-HANDEMPTY ))
 )
 ( :method IFUNLOCK7-HANDEMPTY
 	:parameters ( )
-	:task ( IFUNLOCK7-HANDEMPTY )
+	:task ( IFUNLOCK-HANDEMPTY )
 	:precondition (not  ( FLAGGED-HANDEMPTY ))
 	:ordered-subtasks (and ( i-UNLOCK-HANDEMPTY ))
 )
 ( :method IFUNLOCK8-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK8-HOLDING ?BLOCK0 )
+	:task ( IFUNLOCK-HOLDING ?BLOCK0 )
 	:precondition  ( FLAGGED-HOLDING ?BLOCK0 )
 	:ordered-subtasks (and ( i-UNFLAG-HOLDING ?BLOCK0 ))
 )
 ( :method IFUNLOCK9-HOLDING
 	:parameters ( ?BLOCK0 - BLOCK )
-	:task ( IFUNLOCK9-HOLDING ?BLOCK0 )
+	:task ( IFUNLOCK-HOLDING ?BLOCK0 )
 	:precondition (not  ( FLAGGED-HOLDING ?BLOCK0 ))
 	:ordered-subtasks (and ( i-UNLOCK-HOLDING ?BLOCK0 ))
 )
