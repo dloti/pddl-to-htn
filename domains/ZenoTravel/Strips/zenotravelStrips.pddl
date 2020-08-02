@@ -1,7 +1,9 @@
 (define (domain zeno-travel)
 (:requirements :typing)
-(:types aircraft person city flevel - object)
-(:predicates (at ?x - (either person aircraft) ?c - city)
+(:types either_person_aircraft aircraft person city flevel - object
+        aircraft person - either_person_aircraft
+)
+(:predicates (at ?x - either_person_aircraft ?c - city)
              (in ?p - person ?a - aircraft)
 	     (fuel-level ?a - aircraft ?l - flevel)
 	     (next ?l1 ?l2 - flevel))

@@ -801,8 +801,8 @@ void printHDDLAuxOps(std::ostream &stream, Domain &d) {
             //d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-VISIT", "VISITED");
 			d.printHDDLAuxAction(d.preds[i], hddlActions, false, false, "i-FLAG", "FLAGGED");
 			d.printHDDLAuxAction(d.preds[i], hddlActions, true, false, "i-UNFLAG", "FLAGGED");
-			d.printHDDLMethod(d.preds[i], hddlTasks, hddlMethods, "IFUNLOCK"+std::to_string(gMethodTag++), "FLAGGED");
-			d.printHDDLMethod1(d.preds[i], hddlTasks, hddlMethods, "IFUNLOCK"+std::to_string(gMethodTag++), "FLAGGED");
+			d.printHDDLMethod(d.preds[i], hddlTasks, hddlMethods, "IFUNLOCK", std::to_string(gMethodTag++), "FLAGGED");
+			d.printHDDLMethod1(d.preds[i], hddlTasks, hddlMethods, "IFUNLOCK", std::to_string(gMethodTag++), "FLAGGED");
 			
 		}
 }
