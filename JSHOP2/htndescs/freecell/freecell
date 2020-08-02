@@ -1,6 +1,7 @@
 (define (domain freecell )
 (:requirements :typing)
 (:types
+	CARD NUM SUIT - OBJECT
 )
 (:predicates
 	( ON ?CARD0 - CARD ?CARD1 - CARD )
@@ -37,25 +38,25 @@
 	( LOCKED-SUCCESSOR ?NUM0 - NUM ?NUM1 - NUM )
 	( FLAGGED-SUCCESSOR ?NUM0 - NUM ?NUM1 - NUM )
 )
-(:task IFUNLOCK0-ON
+(:task IFUNLOCK-ON
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD )
 )
-(:task IFUNLOCK2-INCELL
+(:task IFUNLOCK-INCELL
 	:parameters ( ?CARD0 - CARD )
 )
-(:task IFUNLOCK4-CLEAR
+(:task IFUNLOCK-CLEAR
 	:parameters ( ?CARD0 - CARD )
 )
-(:task IFUNLOCK6-CELLSPACE
+(:task IFUNLOCK-CELLSPACE
 	:parameters ( ?NUM0 - NUM )
 )
-(:task IFUNLOCK8-COLSPACE
+(:task IFUNLOCK-COLSPACE
 	:parameters ( ?NUM0 - NUM )
 )
-(:task IFUNLOCK10-HOME
+(:task IFUNLOCK-HOME
 	:parameters ( ?CARD0 - CARD )
 )
-(:task IFUNLOCK12-BOTTOMCOL
+(:task IFUNLOCK-BOTTOMCOL
 	:parameters ( ?CARD0 - CARD )
 )
 (:task DO-ON-MOVE0
@@ -283,87 +284,87 @@
 (:task ACHIEVE-COLSPACE5
 	:parameters ( ?NUM0 - NUM )
 )
-( :method IFUNLOCK0-ON
+( :method IFUNLOCK-0ON
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD )
-	:task ( IFUNLOCK0-ON ?CARD0 ?CARD1 )
+	:task ( IFUNLOCK-ON ?CARD0 ?CARD1 )
 	:precondition  ( FLAGGED-ON ?CARD0 ?CARD1 )
 	:ordered-subtasks (and ( i-UNFLAG-ON ?CARD0 ?CARD1 ))
 )
-( :method IFUNLOCK1-ON
+( :method IFUNLOCK-1ON
 	:parameters ( ?CARD0 - CARD ?CARD1 - CARD )
-	:task ( IFUNLOCK1-ON ?CARD0 ?CARD1 )
+	:task ( IFUNLOCK-ON ?CARD0 ?CARD1 )
 	:precondition (not  ( FLAGGED-ON ?CARD0 ?CARD1 ))
 	:ordered-subtasks (and ( i-UNLOCK-ON ?CARD0 ?CARD1 ))
 )
-( :method IFUNLOCK2-INCELL
+( :method IFUNLOCK-2INCELL
 	:parameters ( ?CARD0 - CARD )
-	:task ( IFUNLOCK2-INCELL ?CARD0 )
+	:task ( IFUNLOCK-INCELL ?CARD0 )
 	:precondition  ( FLAGGED-INCELL ?CARD0 )
 	:ordered-subtasks (and ( i-UNFLAG-INCELL ?CARD0 ))
 )
-( :method IFUNLOCK3-INCELL
+( :method IFUNLOCK-3INCELL
 	:parameters ( ?CARD0 - CARD )
-	:task ( IFUNLOCK3-INCELL ?CARD0 )
+	:task ( IFUNLOCK-INCELL ?CARD0 )
 	:precondition (not  ( FLAGGED-INCELL ?CARD0 ))
 	:ordered-subtasks (and ( i-UNLOCK-INCELL ?CARD0 ))
 )
-( :method IFUNLOCK4-CLEAR
+( :method IFUNLOCK-4CLEAR
 	:parameters ( ?CARD0 - CARD )
-	:task ( IFUNLOCK4-CLEAR ?CARD0 )
+	:task ( IFUNLOCK-CLEAR ?CARD0 )
 	:precondition  ( FLAGGED-CLEAR ?CARD0 )
 	:ordered-subtasks (and ( i-UNFLAG-CLEAR ?CARD0 ))
 )
-( :method IFUNLOCK5-CLEAR
+( :method IFUNLOCK-5CLEAR
 	:parameters ( ?CARD0 - CARD )
-	:task ( IFUNLOCK5-CLEAR ?CARD0 )
+	:task ( IFUNLOCK-CLEAR ?CARD0 )
 	:precondition (not  ( FLAGGED-CLEAR ?CARD0 ))
 	:ordered-subtasks (and ( i-UNLOCK-CLEAR ?CARD0 ))
 )
-( :method IFUNLOCK6-CELLSPACE
+( :method IFUNLOCK-6CELLSPACE
 	:parameters ( ?NUM0 - NUM )
-	:task ( IFUNLOCK6-CELLSPACE ?NUM0 )
+	:task ( IFUNLOCK-CELLSPACE ?NUM0 )
 	:precondition  ( FLAGGED-CELLSPACE ?NUM0 )
 	:ordered-subtasks (and ( i-UNFLAG-CELLSPACE ?NUM0 ))
 )
-( :method IFUNLOCK7-CELLSPACE
+( :method IFUNLOCK-7CELLSPACE
 	:parameters ( ?NUM0 - NUM )
-	:task ( IFUNLOCK7-CELLSPACE ?NUM0 )
+	:task ( IFUNLOCK-CELLSPACE ?NUM0 )
 	:precondition (not  ( FLAGGED-CELLSPACE ?NUM0 ))
 	:ordered-subtasks (and ( i-UNLOCK-CELLSPACE ?NUM0 ))
 )
-( :method IFUNLOCK8-COLSPACE
+( :method IFUNLOCK-8COLSPACE
 	:parameters ( ?NUM0 - NUM )
-	:task ( IFUNLOCK8-COLSPACE ?NUM0 )
+	:task ( IFUNLOCK-COLSPACE ?NUM0 )
 	:precondition  ( FLAGGED-COLSPACE ?NUM0 )
 	:ordered-subtasks (and ( i-UNFLAG-COLSPACE ?NUM0 ))
 )
-( :method IFUNLOCK9-COLSPACE
+( :method IFUNLOCK-9COLSPACE
 	:parameters ( ?NUM0 - NUM )
-	:task ( IFUNLOCK9-COLSPACE ?NUM0 )
+	:task ( IFUNLOCK-COLSPACE ?NUM0 )
 	:precondition (not  ( FLAGGED-COLSPACE ?NUM0 ))
 	:ordered-subtasks (and ( i-UNLOCK-COLSPACE ?NUM0 ))
 )
-( :method IFUNLOCK10-HOME
+( :method IFUNLOCK-10HOME
 	:parameters ( ?CARD0 - CARD )
-	:task ( IFUNLOCK10-HOME ?CARD0 )
+	:task ( IFUNLOCK-HOME ?CARD0 )
 	:precondition  ( FLAGGED-HOME ?CARD0 )
 	:ordered-subtasks (and ( i-UNFLAG-HOME ?CARD0 ))
 )
-( :method IFUNLOCK11-HOME
+( :method IFUNLOCK-11HOME
 	:parameters ( ?CARD0 - CARD )
-	:task ( IFUNLOCK11-HOME ?CARD0 )
+	:task ( IFUNLOCK-HOME ?CARD0 )
 	:precondition (not  ( FLAGGED-HOME ?CARD0 ))
 	:ordered-subtasks (and ( i-UNLOCK-HOME ?CARD0 ))
 )
-( :method IFUNLOCK12-BOTTOMCOL
+( :method IFUNLOCK-12BOTTOMCOL
 	:parameters ( ?CARD0 - CARD )
-	:task ( IFUNLOCK12-BOTTOMCOL ?CARD0 )
+	:task ( IFUNLOCK-BOTTOMCOL ?CARD0 )
 	:precondition  ( FLAGGED-BOTTOMCOL ?CARD0 )
 	:ordered-subtasks (and ( i-UNFLAG-BOTTOMCOL ?CARD0 ))
 )
-( :method IFUNLOCK13-BOTTOMCOL
+( :method IFUNLOCK-13BOTTOMCOL
 	:parameters ( ?CARD0 - CARD )
-	:task ( IFUNLOCK13-BOTTOMCOL ?CARD0 )
+	:task ( IFUNLOCK-BOTTOMCOL ?CARD0 )
 	:precondition (not  ( FLAGGED-BOTTOMCOL ?CARD0 ))
 	:ordered-subtasks (and ( i-UNLOCK-BOTTOMCOL ?CARD0 ))
 )

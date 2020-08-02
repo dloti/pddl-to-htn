@@ -36,7 +36,7 @@
 )
 (:htn
 	:tasks (and
-	(task0 (ACHIEVE-AT PLANE1 CITY2))
+	(task0 (ACHIEVE-AT-AIR PLANE1 CITY2))
 	(task1 (ACHIEVE-AT PERSON1 CITY1))
 	(task2 (ACHIEVE-AT PERSON3 CITY2))
 	)
