@@ -85,7 +85,7 @@
 
 (define (domain freecell)
   (:requirements :strips :typing)  
-  (:types card num suit)
+  (:types card num suit - object)
   (:predicates (on ?c1 - card ?c2 - card)
 	       (incell ?c - card)
 	       (clear ?c - card)
